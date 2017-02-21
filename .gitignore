@@ -1,0 +1,8 @@
+conf/*.yml
+conf/httpd.conf
+conf/crontab
+*.deployed
+.overcommit.yml
+.vagrant
+*.pyc
+web/down.html
