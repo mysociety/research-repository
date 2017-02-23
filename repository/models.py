@@ -69,7 +69,8 @@ class ResearchItem(models.Model):
 
     licence = models.CharField(
         max_length=16,
-        choices=LICENCE_CHOICES
+        choices=LICENCE_CHOICES,
+        blank=True
     )
 
     def author_list(self):

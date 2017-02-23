@@ -15,39 +15,54 @@
 
 <h2>Abstract</h2>
 
-{{ item.abstract }}
+    {{ item.abstract }}
 
 
 {% if item.outputs.all %}
 
-<h2>Documents</h2>
+    <h2>Documents</h2>
 
-{% for output in item.outputs.all %}
+    {% for output in item.outputs.all %}
 
-<h3>{{ output.title }}</h3>
+    <h3>{{ output.title }}</h3>
 
-{% if output.file %}
+    {% if output.file %}
 
-<p><a class="button" href="{{ output.file.url }}">Download</a></p>
+    <p><a class="button" href="{{ output.file.url }}">Download</a></p>
 
-{% elif output.url %}
+    {% elif output.url %}
 
-<p><a class="button" href="{{ output.url }}">Visit Website</a></p>
+    <p><a class="button" href="{{ output.url }}">Visit Website</a></p>
 
-{% else %}
+    {% else %}
 
-<p>Something very unusual has happened.</p>
+    <p>Something very unusual has happened.</p>
+
+    {% endif %}
+
+    {% endfor %}
 
 {% endif %}
 
-{% endfor %}
+
+{% if item.funders %}
+
+    <h2>Funding</h2>
+
+    {{ item.funders }}
 
 {% endif %}
 
-<h2>Licence</h2>
 
-{% with template_name=item.licence|stringformat:"s"|add:".html" %}
-    {% include 'licences/'|add:template_name %}
-{% endwith %}
+{% if item.licence %}
+
+    <h2>Licence</h2>
+
+    {% with template_name=item.licence|stringformat:"s"|add:".html" %}
+        {% include 'licences/'|add:template_name %}
+    {% endwith %}
+
+{% endif %}
+
 
 {% endblock %}
