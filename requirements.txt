@@ -5,9 +5,13 @@
 ### General useful bits
 PyYAML
 psycopg2
+Markdown
 
 ### Django related
 Django
+
+django-autoslug
+django-markitup
 
 ### Asset handling
 django-pipeline

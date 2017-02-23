@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.title }} ({{ item.year }}){% endblock %}
+
+{% block content %}
+
+<h1>{{ item.title }}</h1>
+
+<ul class="item-authors">
+{% for author in item.author_list %}
+<li class="item-author">{{ author.full_name }}</li>
+{% endfor %}
+</ul>
+
+
+<h2>Abstract</h2>
+
+{{ item.abstract }}
+
+
+{% if item.outputs.all %}
+
+<h2>Documents</h2>
+
+{% for output in item.outputs.all %}
+
+<h3>{{ output.title }}</h3>
+
+{% if output.file %}
+
+<p><a class="button" href="{{ output.file.url }}">Download</a></p>
+
+{% elif output.url %}
+
+<p><a class="button" href="{{ output.url }}">Visit Website</a></p>
+
+{% else %}
+
+<p>Something very unusual has happened.</p>
+
+{% endif %}
+
+{% endfor %}
+
+{% endif %}
+
+<h2>License</h2>
+
+{% with template_name=item.license|stringformat:"s"|add:".html" %}
+    {% include 'licenses/'|add:template_name %}
+{% endwith %}
+
+{% endblock %}

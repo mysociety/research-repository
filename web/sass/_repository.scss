@@ -1,0 +1,23 @@
+ul.item-authors {
+    padding-left: 0;
+    font-style: italic;
+}
+
+li.item-author {
+    display: inline;
+    list-style-type: none;
+    padding-right: 23px;
+}
+
+a.button {
+    padding: 6px;
+    border-radius: 3px;
+    border: 1px solid $colour_green;
+    background: lighten($colour_green, 45%);
+    color: $colour_green_dark_2;
+
+    &:hover {
+        background: lighten($colour_green, 35%);
+        text-decoration: none;
+    }
+}

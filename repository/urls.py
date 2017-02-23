@@ -18,11 +18,13 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from .views import HomeView
+from repository import views
 
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
+    url(r'^items/', views.ItemListView.as_view(), name='items'),
+    url(r'^item/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

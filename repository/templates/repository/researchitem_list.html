@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Research{% endblock %}
+
+{% block content %}
+
+<h1>Our Research</h1>
+
+<ul class="research-items">
+
+{% for item in items %}
+
+<h2><a href="{% url 'item' item.slug %}">{{ item.title }}</a></h2>
+
+{{ item.friendly_date }}
+
+<ul class="item-authors">
+{% for author in item.author_list %}
+<li class="item-author">{{ author.full_name }}</li>
+{% endfor %}
+</ul>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

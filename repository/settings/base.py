@@ -49,6 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'pipeline',
+    'autoslug',
+    'markitup',
+
+    'repository',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -232,6 +236,10 @@ if DEBUG:
     EMAIL_HOST_PASSWORD = ''
     EMAIL_PORT = 1025
     EMAIL_USE_TLS = False
+
+
+# MarkItUp settings
+MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 
 
 # mySociety-specific settings

@@ -8,6 +8,7 @@
     <meta charset="utf-8">
 
     <title>{% block fulltitle %}{% block title %}{% endblock %} - mySociety Research{% endblock %}</title>
+
     {% stylesheet 'main' %}
 
     <meta name="viewport" content="initial-scale=1">
@@ -47,10 +48,9 @@
 
         <div class="main-content-column">
           <main role="main" class="main-content">
-            <h1>Welcome to mySociety's developer information.</h1>
-            <p>This is a placeholder for information to help
-  <a href="http://mysociety.org/">mySociety</a> developers and volunteers write better code,
-  open better issues and make pull requests more likely to be accepted.</p>
+
+            {% block content %}
+            {% endblock %}
 
           </main>
         </div>
@@ -58,21 +58,10 @@
         <div class="secondary-content-column">
           <nav class="sidebar">
             <ul>
-              <li><a href="/">Home</a></li>
+              <li><a href="{% url 'home' %}">Home</a></li>
               <li>
-                <a href="/coding-standards.html">Coding Standards</a>
+                <a href="{% url 'items' %}">Our Research</a>
               </li>
-              <li>
-                <a href="/css-guidelines.html">CSS Guidelines</a>
-              </li>
-              <li>
-                <a href="/installation-standards.html">Installation Standards</a>
-              </li>
-              <li>
-                <a href="/internationalization.html">Internationalization</a>
-              </li>
-              <a href="/welcome-to-design.html">Design at mySociety</a>
-              <li><a href="https://github.com/mysociety/mysociety.github.io">GitHub</a></li>
             </ul>
           </nav>
         </div>
