@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from repository import views
+from pages import views as pageViews
 
 admin.autodiscover()
 
@@ -27,4 +28,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^items/', views.ItemListView.as_view(), name='items'),
     url(r'^item/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
+
+    url(r'^page/(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

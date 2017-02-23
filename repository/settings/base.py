@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'markitup',
 
     'repository',
+    'pages',
 ]
 
 MIDDLEWARE_CLASSES = [
