@@ -63,13 +63,13 @@ class ResearchItem(models.Model):
         blank=True
     )
 
-    LICENSE_CHOICES = (
+    LICENCE_CHOICES = (
         ('cc-by-3.0', 'Creative Commons Attribution 3.0 Unported License'),
     )
 
-    license = models.CharField(
+    licence = models.CharField(
         max_length=16,
-        choices=LICENSE_CHOICES
+        choices=LICENCE_CHOICES
     )
 
     def author_list(self):

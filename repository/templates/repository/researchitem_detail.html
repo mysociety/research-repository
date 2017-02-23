@@ -44,10 +44,10 @@
 
 {% endif %}
 
-<h2>License</h2>
+<h2>Licence</h2>
 
-{% with template_name=item.license|stringformat:"s"|add:".html" %}
-    {% include 'licenses/'|add:template_name %}
+{% with template_name=item.licence|stringformat:"s"|add:".html" %}
+    {% include 'licences/'|add:template_name %}
 {% endwith %}
 
 {% endblock %}
