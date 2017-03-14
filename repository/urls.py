@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^items/', views.ItemListView.as_view(), name='items'),
     url(r'^item/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
 
-    url(r'^page/(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
+    url(r'^people/(?P<slug>[-\w]+)$', views.PersonView.as_view(), name='person'),
+    url(r'^people/', views.PersonListView.as_view(), name='people'),
 
     url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

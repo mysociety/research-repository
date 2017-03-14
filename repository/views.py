@@ -15,3 +15,16 @@ class ItemListView(ListView):
 class ItemView(DetailView):
     model = models.ResearchItem
     context_object_name = 'item'
+
+
+class PersonListView(ListView):
+    model = models.Person
+    context_object_name = 'people'
+
+    def get_queryset(self):
+        return models.Person.objects.filter(list_in_people=True)
+
+
+class PersonView(DetailView):
+    model = models.Person
+    context_object_name = 'person'

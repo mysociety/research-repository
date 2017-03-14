@@ -1,0 +1,19 @@
+{% extends 'fullpage.html' %}
+
+{% block title %}People{% endblock %}
+
+{% block content %}
+
+<h1>People</h1>
+
+<ul class="people">
+
+{% for person in people %}
+
+<li class="person"><a href="{% url 'person' person.slug %}">{{ person.full_name }}</a></li>
+
+{% endfor %}
+
+</ul>
+
+{% endblock %}

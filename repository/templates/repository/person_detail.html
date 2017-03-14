@@ -1,0 +1,14 @@
+{% extends 'sidebar.html' %}
+
+{% block title %}{{ person.full_name }}{% if person.institution %} - {{ person.institution }}{% endif %}{% endblock %}
+
+{% block content %}
+
+<h1>{{ person.full_name }}</h1>
+
+{% if person.institution %}{{ person.institution }}{% endif %}
+
+<h2>About {{ person.first_name }}</h2>
+
+{% endblock %}
+

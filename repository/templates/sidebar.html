@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block outer-content %}
+
+<div class="main-content-column">
+  <main role="main" class="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+  </main>
+</div>
+
+<div class="secondary-content-column">
+    <div class="sidebar">
+    {% block sidebar %}
+    {% endblock %}
+    </div>
+</div>
+
+{% endblock %}

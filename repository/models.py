@@ -14,18 +14,45 @@ class Person(models.Model):
     )
     institution = models.CharField(
         max_length=50,
-        help_text='The institution this person works for at time of publication.',
+        help_text='The institution this person works for.',
         blank=True
     )
     orcid = models.CharField(
+        verbose_name='ORCID ID',
         max_length=19,
-        help_text='This person\'s ORCID iD (https://orcid.org/).',
+        help_text='This person\'s ORCID ID (https://orcid.org/).',
         blank=True
     )
     researcherid = models.CharField(
+        verbose_name='ResearcherID',
         max_length=30,
         help_text='This person\'s ResearcherID (https://www.researcherid.com/).',
         blank=True
+    )
+    twitter = models.CharField(
+        max_length=50,
+        help_text='This person\'s Twitter handle.',
+        blank=True
+    )
+    url = models.URLField(
+        help_text='A URL with more information on this person (such as an institutional URL).',
+        blank=True
+    )
+    list_in_people = models.BooleanField(
+        help_text='Should this person be included in the list of people?',
+        blank=True
+    )
+
+    LINK_BEHAVIOUR_CHOICES = (
+        ('profile-page', 'A profile page on research.mysociety.org'),
+        ('url', 'Directly to the person\'s own URL (if known)'),
+        ('none', 'Do not link this name'),
+    )
+
+    link_behaviour = models.CharField(
+        max_length=16,
+        choices=LINK_BEHAVIOUR_CHOICES,
+        help_text='How should we link this person\'s name when given as an author?',
     )
 
     def full_name(self):

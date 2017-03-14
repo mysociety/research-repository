@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'sidebar.html' %}
 
 {% block title %}{{ item.title }} ({{ item.year }}){% endblock %}
 
@@ -64,5 +64,27 @@
 
 {% endif %}
 
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h2>Authors</h2>
+
+{% for author in item.author_list %}
+
+<h3>{{ author.full_name }}</h3>
+
+{% if author.link_behaviour == 'profile-page' %}
+<a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a>
+{% elif author.link_behaviour == 'url' and author.url %}
+<a href="{{ author.url }}">More about {{ author.full_name }}</a>
+{% endif %}
+
+{% if author.institution %}
+{{ author.institution }}
+{% endif %}
+
+{% endfor %}
 
 {% endblock %}

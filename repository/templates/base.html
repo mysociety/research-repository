@@ -37,6 +37,13 @@
       <div class="container">
           <a href="#" class="site-title"><h1>mySociety Research</h1></a>
       </div>
+      <nav role="navigation" class="site-nav">
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'items' %}">Our Research</a></li>
+                <li><a href="{% url 'people' %}">People</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="page-wrapper">
@@ -46,25 +53,8 @@
           <div id="staging_header" class="attention-box warning">This is a staging site &ndash; any data saved here <strong>may be deleted</strong>.</div>
         {% endif %}
 
-        <div class="main-content-column">
-          <main role="main" class="main-content">
-
-            {% block content %}
-            {% endblock %}
-
-          </main>
-        </div>
-
-        <div class="secondary-content-column">
-          <nav class="sidebar">
-            <ul>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li>
-                <a href="{% url 'items' %}">Our Research</a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+        {% block outer-content %}
+        {% endblock %}
 
       </div>
     </div>

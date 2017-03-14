@@ -1,0 +1,9 @@
+<h2><a href="{% url 'item' item.slug %}">{{ item.title }}</a></h2>
+
+{{ item.friendly_date }}
+
+<ul class="item-authors">
+{% for author in item.author_list %}
+<li class="item-author">{{ author.full_name }}</li>
+{% endfor %}
+</ul>
