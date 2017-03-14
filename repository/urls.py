@@ -30,4 +30,6 @@ urlpatterns = [
     url(r'^item/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
 
     url(r'^page/(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
+
+    url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
