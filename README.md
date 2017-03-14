@@ -1,10 +1,9 @@
-[//]: # (you can delete this line, it's a hack from the project template)
-Repository
+Research Repository
 ===========================
 
 [![Installability](http://img.shields.io/badge/installability-gold-ffd700.svg)]()
 
-Put a top-level description of your project here.
+mySociety and its partners do lots of research. This is a place for us to list that research in a coherent manner for easy finding and citation.
 
 Local development
 -----------------
