@@ -2,6 +2,17 @@
 
 {% block title %}{{ item.title }} ({{ item.year }}){% endblock %}
 
+{% block meta-tags %}
+<link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
+<meta name="DC.relation" content="{{ request.build_absolute_uri }}">
+<meta name="DC.title" content="{{ item.title }}">
+{% for author in item.author_list %}
+<meta name="DC.creator" content="{{ author.last_name}}, {{ author.first_name }}">
+{% endfor %}
+<meta name="DC.date" content="{{ item.date|date:'Y-m-d' }}">
+<meta name="DC.rights" content="{{ item.licence }}">
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ item.title }}</h1>
