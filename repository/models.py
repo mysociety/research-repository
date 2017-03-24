@@ -61,15 +61,25 @@ class Person(models.Model):
     def __unicode__(self):
         return self.full_name()
 
+    class Meta:
+        ordering = ['last_name', 'first_name']
+        verbose_name_plural = 'people'
+
 
 class ResearchItem(models.Model):
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=500)
+    subtitle = models.CharField(
+        max_length=1000,
+        blank=True
+    )
 
-    date = models.DateField()
+    date = models.DateField(
+        help_text='The publication date of this item.'
+    )
 
     slug = AutoSlugField(
         unique=True,
@@ -155,7 +165,8 @@ class ResearchOutput(models.Model):
 
     button_text_value = models.CharField(
         max_length=200,
-        blank=True
+        blank=True,
+        help_text='Optional custom text for the button to get this output.'
     )
 
     def button_url(self):
