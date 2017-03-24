@@ -26,6 +26,10 @@
 
     <h3>{{ output.title }}</h3>
 
+    {% if output.subtitle %}
+    <h4>{{ output.subtitle }}</h4>
+    {% endif %}
+
     <p><a class="button" href="{{ output.button_url }}">{{ output.button_text }}</a></p>
 
     {% endfor %}
