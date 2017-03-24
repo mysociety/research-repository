@@ -35,16 +35,16 @@
 
     <header class="site-header">
       <div class="container">
-          <a href="#" class="site-title"><h1>mySociety Research</h1></a>
+          <a href="/" class="site-title"><h1>mySociety Research</h1></a>
+          <nav role="navigation" class="site-nav">
+              <ul>
+                  <li><a href="{% url 'home' %}">Home</a></li>
+                  <li><a href="{% url 'page' 'strategy' %}">Research Strategy</a></li>
+                  <li><a href="{% url 'items' %}">Our Research</a></li>
+              </ul>
+          </nav>
       </div>
-      <nav role="navigation" class="site-nav">
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'items' %}">Our Research</a></li>
-                <li><a href="{% url 'people' %}">People</a></li>
-            </ul>
-        </nav>
-    </header>
+  </header>
 
     <div class="page-wrapper">
       <div class="page">
