@@ -153,5 +153,26 @@ class ResearchOutput(models.Model):
         help_text='If the output is hosted elsewhere (like a journal), what is the URL?'
     )
 
+    button_text_value = models.CharField(
+        max_length=200,
+        blank=True
+    )
+
+    def button_url(self):
+        if self.file:
+            return self.file.url
+        else:
+            return self.file
+
+    def button_text(self):
+        if self.button_text_value:
+            return self.button_text_value
+
+        if self.file:
+            return 'Download File'
+
+        else:
+            return 'Visit Website'
+
     def __unicode__(self):
         return self.title

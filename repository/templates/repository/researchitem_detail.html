@@ -26,19 +26,7 @@
 
     <h3>{{ output.title }}</h3>
 
-    {% if output.file %}
-
-    <p><a class="button" href="{{ output.file.url }}">Download</a></p>
-
-    {% elif output.url %}
-
-    <p><a class="button" href="{{ output.url }}">Visit Website</a></p>
-
-    {% else %}
-
-    <p>Something very unusual has happened.</p>
-
-    {% endif %}
+    <p><a class="button" href="{{ output.button_url }}">{{ output.button_text }}</a></p>
 
     {% endfor %}
 
@@ -75,14 +63,14 @@
 
 <h3>{{ author.full_name }}</h3>
 
-{% if author.link_behaviour == 'profile-page' %}
-<a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a>
-{% elif author.link_behaviour == 'url' and author.url %}
-<a href="{{ author.url }}">More about {{ author.full_name }}</a>
+{% if author.institution %}
+<p>{{ author.institution }}</p>
 {% endif %}
 
-{% if author.institution %}
-{{ author.institution }}
+{% if author.link_behaviour == 'profile-page' %}
+<p><a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a></p>
+{% elif author.link_behaviour == 'url' and author.url %}
+<p><a href="{{ author.url }}">More about {{ author.full_name }}</a></p>
 {% endif %}
 
 {% endfor %}
