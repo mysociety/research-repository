@@ -26,8 +26,9 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
-    url(r'^items/', views.ItemListView.as_view(), name='items'),
-    url(r'^item/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
+
+    url(r'^research/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
+    url(r'^research/', views.ItemListView.as_view(), name='items'),
 
     url(r'^people/(?P<slug>[-\w]+)$', views.PersonView.as_view(), name='person'),
     url(r'^people/', views.PersonListView.as_view(), name='people'),
