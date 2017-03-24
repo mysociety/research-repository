@@ -1,5 +1,4 @@
 python-dev
 python-pip
 python-virtualenv
-postgresql
 libpq-dev
