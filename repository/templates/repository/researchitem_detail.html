@@ -10,7 +10,9 @@
 <meta name="DC.creator" content="{{ author.last_name}}, {{ author.first_name }}">
 {% endfor %}
 <meta name="DC.date" content="{{ item.date|date:'Y-m-d' }}">
+{% if item.licence %}
 <meta name="DC.rights" content="{{ item.licence }}">
+{% endif %}
 {% endblock %}
 
 {% block content %}
