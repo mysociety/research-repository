@@ -5,6 +5,9 @@
 {% block content %}
 
 <h1>{{ item.title }}</h1>
+{% if item.subtitle %}
+    <p class="item-subtitle">{{ item.subtitle }}</p>
+{% endif %}
 
 <ul class="item-authors">
 {% for author in item.author_list %}
@@ -26,16 +29,45 @@
 
     <h3>{{ output.title }}</h3>
 
-    {% if output.subtitle %}
-    <h4>{{ output.subtitle }}</h4>
-    {% endif %}
-
     <p><a class="button" href="{{ output.button_url }}">{{ output.button_text }}</a></p>
 
     {% endfor %}
 
 {% endif %}
 
+
+<h2>Cite This</h2>
+
+<p class="citation-harvard">{% for author in item.author_list %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.last_name }} {{ author.first_name|slice:'1' }}.{% endfor %}
+
+({{ item.date|date:'Y' }}). <i>{{ item.title }}</i>. [online] mySociety Research. Available at: {{ request.build_absolute_uri }} [Accessed {% now 'j M Y' %}].</p>
+
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h2>Authors</h2>
+
+{% for author in item.author_list %}
+
+<div class="sidebar-author-block">
+
+<h3 class="author-name">{{ author.full_name }}</h3>
+
+{% if author.institution %}
+<p class="author-institution">{{ author.institution }}</p>
+{% endif %}
+
+{% if author.link_behaviour == 'profile-page' %}
+<p class="author-more-link"><a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a></p>
+{% elif author.link_behaviour == 'url' and author.url %}
+<p class="author-more-link"><a href="{{ author.url }}">More about {{ author.full_name }}</a></p>
+{% endif %}
+
+</div>
+
+{% endfor %}
 
 {% if item.funders %}
 
@@ -55,28 +87,5 @@
     {% endwith %}
 
 {% endif %}
-
-
-{% endblock %}
-
-{% block sidebar %}
-
-<h2>Authors</h2>
-
-{% for author in item.author_list %}
-
-<h3>{{ author.full_name }}</h3>
-
-{% if author.institution %}
-<p>{{ author.institution }}</p>
-{% endif %}
-
-{% if author.link_behaviour == 'profile-page' %}
-<p><a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a></p>
-{% elif author.link_behaviour == 'url' and author.url %}
-<p><a href="{{ author.url }}">More about {{ author.full_name }}</a></p>
-{% endif %}
-
-{% endfor %}
 
 {% endblock %}

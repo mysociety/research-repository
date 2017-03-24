@@ -301,18 +301,27 @@ blockquote {
     h2 {
         color: $colour_black;
         text-transform: uppercase;
+        text-decoration: underline;
         font-weight: 700;
-        font-size: 0.875em;
+        font-size: 1.2em;
         margin: 0;
+        margin-top: 30px;
         a {
             color: $colour_black;
             font-size: 1em;
-            text-decoration: underline;
         }
+    }
+    h2:first-of-type {
+        margin-top: 0;
+    }
+    h3 {
+        color: $colour_black;
+        font-weight: 700;
+        font-size: 1.1em;
+        margin: 0;
     }
     a {
         color: $colour_dark_grey;
-        font-size: 0.875em;
         &:hover,
         &:active,
         &:focus {

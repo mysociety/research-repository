@@ -21,3 +21,33 @@ a.button {
         text-decoration: none;
     }
 }
+
+.item-subtitle {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: lighten($colour_black, 25%);
+    margin-top: 0px;
+}
+
+.citation-harvard {
+    font-size: 0.8em;
+}
+
+.sidebar {
+
+    font-size: 0.9em;
+
+    .sidebar-author-block {
+        margin: 14px 0;
+    }
+
+    p.author-institution {
+        margin: 0;
+    }
+    p.author-more-link {
+        margin-top: 0;
+        a {
+            font-size: 0.875em;
+        }
+    }
+}
