@@ -8,6 +8,11 @@ class Page(models.Model):
 
     title = models.CharField(max_length=200)
 
+    show_title = models.BooleanField(
+        help_text='Should the template display the page title as well as the content?',
+        default=True
+    )
+
     slug = models.CharField(
         max_length=64,
         unique=True,
