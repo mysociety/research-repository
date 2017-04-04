@@ -173,7 +173,7 @@ class ResearchOutput(models.Model):
         if self.file:
             return self.file.url
         else:
-            return self.file
+            return self.url
 
     def button_text(self):
         if self.button_text_value:
