@@ -15,6 +15,12 @@
 {% endif %}
 {% endblock %}
 
+{% block json-ld %}
+<script type="application/ld+json">
+{{ json_ld_representation|safe }}
+</script>
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ item.title }}</h1>
