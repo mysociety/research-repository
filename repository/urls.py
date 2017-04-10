@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^$', pageViews.PageView.as_view(), {'slug': 'home'}, name='home'),
     url(r'^admin/', admin.site.urls),
 
+    url(r'^sitemap\.xml$', views.SitemapView.as_view(), name='sitemap'),
+
     url(r'^research/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
     url(r'^research/', views.ItemListView.as_view(), name='items'),
 

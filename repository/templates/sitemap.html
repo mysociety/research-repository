@@ -1,0 +1,24 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+<loc>{{ site_base_url }}{% url 'home' %}</loc>
+<changefreq>monthly</changefreq>
+</url>
+<url>
+<loc>{{ site_base_url }}{% url 'page' 'strategy' %}</loc>
+<changefreq>monthly</changefreq>
+</url>
+<url>
+<loc>{{ site_base_url }}{% url 'page' 'become-a-research-partner' %}</loc>
+<changefreq>monthly</changefreq>
+</url>
+<url>
+<loc>{{ site_base_url }}{% url 'items' %}</loc>
+<changefreq>monthly</changefreq>
+</url>
+{% for item in items %}
+<url>
+<loc>{{ item.absolute_url }}</loc>
+<changefreq>yearly</changefreq>
+</url>
+{% endfor %}
+</urlset>

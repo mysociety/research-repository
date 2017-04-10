@@ -1,6 +1,8 @@
 from django.db import models
 from autoslug import AutoSlugField
 from markitup.fields import MarkupField
+from django.conf import settings
+from django.core import urlresolvers
 
 
 class Person(models.Model):
@@ -118,6 +120,9 @@ class ResearchItem(models.Model):
 
     def licence_template_string(self):
         return 'licenses/' + self.licence + '.html'
+
+    def absolute_url(self):
+        return settings.SITE_BASE_URL + urlresolvers.reverse('item', args=[self.slug])
 
     def __unicode__(self):
         return self.title + ' (' + self.friendly_date() + ')'

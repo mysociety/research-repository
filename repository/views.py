@@ -1,10 +1,22 @@
 from django.views.generic import TemplateView, ListView, DetailView
+from django.conf import settings
 
 from repository import models
 
 
-class HomeView(TemplateView):
-    template_name = 'index.html'
+class SitemapView(TemplateView):
+    template_name = 'sitemap.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SitemapView, self).get_context_data(**kwargs)
+        context['site_base_url'] = settings.SITE_BASE_URL
+        context['items'] = models.ResearchItem.objects.all()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+
+        return self.render_to_response(context, content_type="text/xml; charset=utf-8")
 
 
 class ItemListView(ListView):

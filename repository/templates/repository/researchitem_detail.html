@@ -53,7 +53,7 @@
 
 <p class="citation-harvard">{% for author in item.author_list %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.last_name }}, {{ author.first_name|slice:'1' }}.{% endfor %}
 
-({{ item.date|date:'Y' }}). <i>{{ item.title }}</i>. [online] mySociety Research. Available at: {{ request.build_absolute_uri }} [Accessed {% now 'j M Y' %}].</p>
+({{ item.date|date:'Y' }}). <i>{{ item.title }}</i>. [online] mySociety Research. Available at: {{ item.absolute_url }} [Accessed {% now 'j M Y' %}].</p>
 
 
 {% endblock %}

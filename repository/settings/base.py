@@ -245,3 +245,6 @@ MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 
 # mySociety-specific settings
 GOOGLE_ANALYTICS_ACCOUNT = config.get('GOOGLE_ANALYTICS_ACCOUNT')
+
+# mySociety-specific settings
+SITE_BASE_URL = config.get('SITE_BASE_URL')
