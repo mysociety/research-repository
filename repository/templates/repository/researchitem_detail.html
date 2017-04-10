@@ -78,10 +78,8 @@
 <p class="author-institution">{{ author.institution }}</p>
 {% endif %}
 
-{% if author.link_behaviour == 'profile-page' %}
-<p class="author-more-link"><a href="{% url 'person' author.slug %}">More research by {{ author.full_name }}</a></p>
-{% elif author.link_behaviour == 'url' and author.url %}
-<p class="author-more-link"><a href="{{ author.url }}">More about {{ author.full_name }}</a></p>
+{% if author.preferred_url %}
+<p class="author-more-link"><a href="{{ author.preferred_url }}">More about {{ author.full_name }}</a></p>
 {% endif %}
 
 </div>

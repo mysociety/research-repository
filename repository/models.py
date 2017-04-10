@@ -31,6 +31,12 @@ class Person(models.Model):
         help_text='This person\'s ResearcherID (https://www.researcherid.com/).',
         blank=True
     )
+    googlescholar = models.CharField(
+        verbose_name='Google Scholar ID',
+        max_length=30,
+        help_text='This person\'s Google Scholar ID (https://scholar.google.com/).',
+        blank=True
+    )
     twitter = models.CharField(
         max_length=50,
         help_text='This person\'s Twitter handle.',
@@ -59,6 +65,15 @@ class Person(models.Model):
 
     def full_name(self):
         return self.first_name + ' ' + self.last_name
+
+    def absolute_url(self):
+        return settings.SITE_BASE_URL + urlresolvers.reverse('person', args=[self.slug])
+
+    def preferred_url(self):
+        if self.link_behaviour == 'profile-page':
+            return self.absolute_url()
+        elif self.link_behaviour == 'url' and self.url:
+            return self.url
 
     def __unicode__(self):
         return self.full_name()

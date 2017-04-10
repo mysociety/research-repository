@@ -52,8 +52,7 @@ class ItemView(DetailView):
                     "@type": "Person",
                     "familyName": author.last_name,
                     "givenName": author.first_name,
-                    "name": author.full_name(),
-                    "sameAs": []
+                    "name": author.full_name()
                 }
 
             if author.institution:
@@ -62,18 +61,32 @@ class ItemView(DetailView):
                         "name": author.institution,
                     }
 
+            author_alternate_urls = []
+
+            if author.preferred_url():
+                author_representation['url'] = author.preferred_url()
+                author_alternate_urls.append(author.preferred_url())
+
             if author.url:
-                author_representation['url'] = author.url
-                author_representation['sameAs'].append(author.url)
+                author_alternate_urls.append(author.url)
+
+            if author.absolute_url():
+                author_alternate_urls.append(author.absolute_url())
 
             if author.orcid:
-                author_representation['sameAs'].append('http://orcid.org/' + author.orcid)
+                author_alternate_urls.append('http://orcid.org/' + author.orcid)
+
+            if author.googlescholar:
+                author_alternate_urls.append('https://scholar.google.co.uk/citations?user=' + author.googlescholar)
 
             if author.researcherid:
-                author_representation['sameAs'].append('http://www.researcherid.com/rid/' + author.researcherid)
+                author_alternate_urls.append('http://www.researcherid.com/rid/' + author.researcherid)
 
             if author.twitter:
-                author_representation['sameAs'].append('https://twitter.com/' + author.twitter)
+                author_alternate_urls.append('https://twitter.com/' + author.twitter)
+
+            # This exciting line deduplicates the list.
+            author_representation['sameAs'] = list(set(author_alternate_urls))
 
             json_ld_representation['author'].append(author_representation)
 
