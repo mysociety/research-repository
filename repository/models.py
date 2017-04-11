@@ -75,6 +75,54 @@ class Person(models.Model):
         elif self.link_behaviour == 'url' and self.url:
             return self.url
 
+    def json_ld_representation(self):
+
+        json_ld_representation = {
+                "@context": "http://schema.org",
+                "@type": "Person",
+                "familyName": self.last_name,
+                "givenName": self.first_name,
+                "name": self.full_name()
+                }
+
+        if self.institution:
+            json_ld_representation['affiliation'] = {
+                    "@type": "Organization",
+                    "name": self.institution,
+                }
+
+        author_alternate_urls = []
+
+        if self.preferred_url():
+            json_ld_representation['url'] = self.preferred_url()
+            author_alternate_urls.append(self.preferred_url())
+
+        if self.url:
+            author_alternate_urls.append(self.url)
+
+        if self.absolute_url():
+            author_alternate_urls.append(self.absolute_url())
+
+        if self.orcid:
+            author_alternate_urls.append('http://orcid.org/' + self.orcid)
+
+        if self.googlescholar:
+            author_alternate_urls.append('https://scholar.google.co.uk/citations?user=' + self.googlescholar)
+
+        if self.researcherid:
+            author_alternate_urls.append('http://www.researcherid.com/rid/' + self.researcherid)
+
+        if self.twitter:
+            author_alternate_urls.append('https://twitter.com/' + self.twitter)
+
+        # This exciting line deduplicates the list.
+        json_ld_representation['sameAs'] = list(set(author_alternate_urls))
+
+        return json_ld_representation
+
+    def items_list(self):
+        return [items.research_item for items in ItemAuthor.objects.filter(person=self).order_by('-research_item__date')]
+
     def __unicode__(self):
         return self.full_name()
 

@@ -6,13 +6,64 @@
 <meta name="robots" content="noindex">
 {% endblock %}
 
+{% block json-ld %}
+<script type="application/ld+json">
+{{ json_ld_representation|safe }}
+</script>
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ person.full_name }}</h1>
 
 {% if person.institution %}{{ person.institution }}{% endif %}
 
-<h2>About {{ person.first_name }}</h2>
+<h2>Research by {{ person.full_name }}</h2>
+
+<ul class="research-items">
+
+{% for item in person.items_list %}
+
+{% include 'parts/researchitem.html' %}
+
+{% endfor %}
+
+</ul>
 
 {% endblock %}
 
+{% block sidebar %}
+
+{% if person.twitter %}
+
+    <h2>Twitter</h2>
+
+    <p><a href="https://twitter.com/{{ person.twitter }}">{{ person.twitter }}</a></p>
+
+{% endif %}
+
+{% if person.googlescholar %}
+
+    <h2>Google Scholar</h2>
+
+    <p><a href="https://scholar.google.co.uk/citations?user={{ person.googlescholar }}">{{ person.full_name }} at Google Scholar</a></p>
+
+{% endif %}
+
+{% if person.orcid %}
+
+    <h2>ORCID ID</h2>
+
+    <p><a href="http://orcid.org/{{ person.orcid }}">{{ person.orcid }}</a></p>
+
+{% endif %}
+
+{% if person.researcherid %}
+
+    <h2>ResearcherID</h2>
+
+    <p><a href="http://www.researcherid.com/rid/{{ person.researcherid }}">{{ person.researcherid }}</a></p>
+
+{% endif %}
+
+{% endblock %}
