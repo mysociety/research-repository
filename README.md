@@ -8,6 +8,10 @@ mySociety and its partners do lots of research. This is a place for us to list t
 Local development
 -----------------
 
+**Danger Will Robinson!** You must make sure that this repository is cloned into a folder called `repository`. We recommend:
+
+    $ git clone https://github.com/mysociety/research-repository.git research-repository/repository
+
 This project includes a Vagrantfile to make local development easy.
 Simply run:
 
