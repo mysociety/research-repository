@@ -172,3 +172,19 @@
     -ms-flex-wrap: $wrap;
     flex-wrap: $wrap;
 }
+
+@mixin unstyled-list {
+    margin-left: 0;
+    padding-left: 0;
+    list-style: none outside none;
+}
+
+@mixin inline-list {
+    margin-left: -0.5em;
+    margin-bottom: 0;
+    margin-top: 0;
+    li {
+        display: inline-block;
+        margin-left: 0.5em;
+    }
+}
