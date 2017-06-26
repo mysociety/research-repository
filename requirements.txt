@@ -1,5 +1,6 @@
 Django==1.10.5
 Markdown==2.6.8
+Pillow==4.1.1
 PyYAML==3.12
 argparse==1.2.1
 csscompressor==0.9.4
@@ -9,6 +10,7 @@ django-pipeline==1.6.11
 -e git+https://github.com/mysociety/django-pipeline-csscompressor@6a88fde5045d68746f1c7ee816deda86615c5581#egg=django_pipeline_csscompressor-master
 futures==3.0.5
 libsass==0.12.3
+olefile==0.44
 psycopg2==2.6.2
 six==1.10.0
 wsgiref==0.1.2
