@@ -153,6 +153,14 @@ class ResearchItem(models.Model):
         help_text='Used to produce a nice page URL for this item.'
     )
 
+    thumbnail = models.ImageField(
+        upload_to='thumbnails/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="The thumbnail of this research. Recommended ratio is 150x110."
+    )
+
     authors = models.ManyToManyField(
         Person,
         through='ItemAuthor',

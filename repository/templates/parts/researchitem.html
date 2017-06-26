@@ -1,9 +1,20 @@
-<h2><a href="{% url 'item' item.slug %}">{{ item.title }}</a></h2>
+<div class="research-item__thumbnail">
+  <a href="{% url 'item' item.slug %}">
 
-{{ item.friendly_date }}
+    {% if item.thumbnail %}
+        <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" height="150" width="110" />
+    {% else %}
+        <img src="/static/img/report-thumbnail.png" alt="{{ item.title }}" height="150" width="110" />
+    {% endif %}
+  </a>
+</div>
 
-<ul class="item-authors">
+<h2 class="research-item__title"><a href="{% url 'item' item.slug %}">{{ item.title }}</a></h2>
+
+<ul class="research-item__authors">
 {% for author in item.author_list %}
-<li class="item-author">{{ author.full_name }}</li>
+<li class="research-item__author">{{ author.full_name }}</li>
 {% endfor %}
 </ul>
+
+<p class="research-item__pubdate">{{ item.friendly_date }}</p>

@@ -47,6 +47,11 @@ class ItemView(DetailView):
         if item.subtitle:
             json_ld_representation['alternativeHeadline'] = item.subtitle
 
+        if item.thumbnail:
+            json_ld_representation['image'] = settings.SITE_BASE_URL + item.thumbnail.url
+        else:
+            json_ld_representation['image'] = settings.SITE_BASE_URL + '/static/img/report-thumbnail.png'
+
         for author in item.author_list():
 
             json_ld_representation['author'].append(author.json_ld_representation())
