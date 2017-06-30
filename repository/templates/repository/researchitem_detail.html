@@ -23,6 +23,10 @@
 
 {% block content %}
 
+{% if item.hero %}
+<img src="{{ item.hero.url }}">
+{% endif %}
+
 <h1>{{ item.title }}</h1>
 {% if item.subtitle %}
     <p class="item-subtitle">{{ item.subtitle }}</p>

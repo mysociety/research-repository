@@ -2,9 +2,9 @@
   <a href="{% url 'item' item.slug %}">
 
     {% if item.thumbnail %}
-        <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" height="150" width="110" />
+        <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" height="150" width="110">
     {% else %}
-        <img src="/static/img/report-thumbnail.png" alt="{{ item.title }}" height="150" width="110" />
+        <img src="/static/img/report-thumbnail.png" alt="{{ item.title }}" height="150" width="110">
     {% endif %}
   </a>
 </div>
