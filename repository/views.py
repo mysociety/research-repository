@@ -12,7 +12,7 @@ class SitemapView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SitemapView, self).get_context_data(**kwargs)
         context['site_base_url'] = settings.SITE_BASE_URL
-        context['items'] = models.ResearchItem.objects.all()
+        context['items'] = models.ResearchItem.objects.filter(published=True)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -24,6 +24,8 @@ class SitemapView(TemplateView):
 class ItemListView(ListView):
     model = models.ResearchItem
     context_object_name = 'items'
+
+    queryset = models.ResearchItem.objects.filter(published=True)
 
 
 class ItemView(DetailView):

@@ -13,6 +13,9 @@
 {% if item.licence %}
 <meta name="DC.rights" content="{{ item.licence }}">
 {% endif %}
+{% if item.published == False %}
+<meta name="robots" content="noindex">
+{% endif %}
 {% endblock %}
 
 {% block json-ld %}
