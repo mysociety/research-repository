@@ -6,6 +6,15 @@ from repository import models
 import json
 
 
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TemplateView, self).get_context_data(**kwargs)
+        context['featured_items'] = models.ResearchItem.objects.filter(published=True, featured=True)
+        return context
+
+
 class SitemapView(TemplateView):
     template_name = 'sitemap.html'
 
