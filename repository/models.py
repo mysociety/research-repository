@@ -153,6 +153,22 @@ class ResearchItem(models.Model):
         help_text='Used to produce a nice page URL for this item.'
     )
 
+    published = models.BooleanField(
+        help_text='Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL.'
+    )
+
+    featured = models.BooleanField(
+        help_text='Should this item be featured on the homepage?'
+    )
+
+    hero = models.ImageField(
+        upload_to='hero/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680."
+    )
+
     thumbnail = models.ImageField(
         upload_to='thumbnails/',
         null=True,
