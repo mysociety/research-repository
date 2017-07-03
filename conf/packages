@@ -2,3 +2,7 @@ python-dev
 python-pip
 python-virtualenv
 libpq-dev
+git
+libjpeg-dev
+postgresql
+postgresql-contrib

@@ -40,6 +40,9 @@ Vagrant.configure(2) do |config|
 
     cd /vagrant/repository
 
+    #fix dpkg-preconfigure error
+    export DEBIAN_FRONTEND=noninteractive
+    
     # Install the packages from conf/packages
     xargs sudo apt-get install -qq -y < conf/packages
     # Install some of the other things we need that are just for dev
