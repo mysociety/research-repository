@@ -44,12 +44,12 @@
 
     <header class="site-header">
       <div class="container">
-          <a href="/" class="site-title"><h1>mySociety Research</h1></a>
+          <a href="{% url 'home' %}" class="site-title"><h1>mySociety Research</h1></a>
           <nav role="navigation" class="site-nav">
               <ul>
-                  <li><a href="{% url 'home' %}">Home</a></li>
-                  <li><a href="{% url 'page' 'strategy' %}">Research Strategy</a></li>
-                  <li><a href="{% url 'items' %}">Our Research</a></li>
+                  <li><a href="{% url 'items' %}">Publications</a></li>
+                  <li><a href="https://www.mysociety.org/category/research/">Blog</a></li>
+                  <li><a href="http://tictec.mysociety.org/">TICTeC</a></li>
               </ul>
           </nav>
       </div>
@@ -104,7 +104,7 @@
             <div class="col-sm-3">
                 <div class="mysoc-footer__donate">
                     <p>Your donations keep this site and others like it running</p>
-                    <a href="https://mysociety.org/donate?utm_source=whatdotheyknow.com&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button">Donate now</a>
+                    <a href="https://mysociety.org/donate?utm_source=research.mysociety.org&amp;utm_content=footer+donate+now&amp;utm_medium=link&amp;utm_campaign=mysoc_footer" class="mysoc-footer__donate__button">Donate now</a>
                 </div>
             </div>
         </div>
@@ -119,11 +119,11 @@
 
             <div class="col-sm-3">
                 <ul class="mysoc-footer__badges">
-                    <li role="presentation"><a href="https://github.com/mysociety/whatdotheyknow-theme" class="mysoc-footer__badge mysoc-footer__badge--github">Github</a></li>
+                    <li role="presentation"><a href="https://github.com/mysociety/" class="mysoc-footer__badge mysoc-footer__badge--github">Github</a></li>
                     <li role="presentation">
-                      <a href="https://twitter.com/whatdotheyknow" class="mysoc-footer__badge mysoc-footer__badge--twitter" onclick="if (ga) { ga('send','event','Outbound Link','Twitter Exit','Footer link',1) };">@whatdotheyknow</a>
+                      <a href="https://twitter.com/mysociety" class="mysoc-footer__badge mysoc-footer__badge--twitter" onclick="if (ga) { ga('send','event','Outbound Link','Twitter Exit','Footer link',1) };">@mysociety</a>
                     </li>
-                    <li role="presentation"><a href="https://facebook.com/whatdotheyknowcom" class="mysoc-footer__badge mysoc-footer__badge--facebook" onclick="if (ga) { ga('send','event','Outbound Link','Facebook Exit','Footer link',1) };">Facebook</a></li>
+                    <li role="presentation"><a href="https://www.facebook.com/mySociety/" class="mysoc-footer__badge mysoc-footer__badge--facebook" onclick="if (ga) { ga('send','event','Outbound Link','Facebook Exit','Footer link',1) };">mySociety</a></li>
                 </ul>
             </div>
 
