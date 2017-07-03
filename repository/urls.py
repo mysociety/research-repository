@@ -24,7 +24,7 @@ from pages import views as pageViews
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', pageViews.PageView.as_view(), {'slug': 'home'}, name='home'),
+    url(r'^$', pageViews.HomeView.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
 
     url(r'^sitemap\.xml$', views.SitemapView.as_view(), name='sitemap'),
