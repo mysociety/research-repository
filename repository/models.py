@@ -213,7 +213,19 @@ class ResearchItem(models.Model):
 
     def __unicode__(self):
         return self.title + ' (' + self.friendly_date() + ')'
-
+    
+    def share_abstract(self):
+        """
+        reduced version of abstract for sharing
+        """
+        if self.subtitle:
+            text = self.subtitle
+        else:
+            text = self.abstract.raw
+            
+        if len(text) > 140:
+            text = text[:140-4] + "[..]"
+        return text
 
 class ItemAuthor(models.Model):
 
