@@ -76,7 +76,7 @@
 
     <h3>{{ output.title }}</h3>
 
-    <p><a class="button" href="{{ output.button_url }}">{{ output.button_text }}</a></p>
+    <p><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{{ output.button_text }}</a></p>
 
     {% endfor %}
 

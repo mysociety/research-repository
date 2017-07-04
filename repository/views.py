@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.conf import settings
-
+from django.http import HttpResponseRedirect
 from repository import models
 
 import json
@@ -90,3 +90,12 @@ class PersonView(DetailView):
         context['json_ld_representation'] = json.dumps(context['person'].json_ld_representation())
 
         return context
+
+def output_download(request,output_id):
+    """
+    update database and return actual url
+    """
+    item = models.ResearchOutput.objects.get(id=output_id)
+    item.increment_download()
+    return HttpResponseRedirect(item.button_url())
+    
