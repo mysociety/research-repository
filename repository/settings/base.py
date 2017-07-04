@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'pipeline',
     'autoslug',
     'markitup',
-
+    'import_export',
     'repository',
     'pages',
 ]
