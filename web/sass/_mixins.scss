@@ -1,3 +1,29 @@
+@import 'variables';
+
+.button-base {
+    padding: 0.5em 1.25em;
+    border-radius: 3px;
+    display: inline-block;
+    font-weight: 600;
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: none;
+    }
+}
+
+.button {
+    @extend .button-base;
+    color: #fff;
+    background-color: $colour_green;
+    border: none;
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: darken($colour_green, 5%);
+    }
+}
+
 .image-replacement {
     text-indent: -1000%;
     white-space: nowrap;
@@ -33,6 +59,16 @@
 
 .text--center {
     text-align: center;
+}
+
+@function calculateRem($size, $base) {
+  $remSize: $size / $base;
+  @return #{$remSize}rem;
+}
+
+@mixin remSize($size, $property:font-size, $base:$size-font-base) {
+  #{$property}: $size; //Fallback in px
+  #{$property}: calculateRem($size, $base);
 }
 
 @mixin clearfix {

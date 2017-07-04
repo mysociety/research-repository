@@ -1,0 +1,57 @@
+{% extends 'fullpage.html' %}
+
+{% block fulltitle %}mySociety Research{% endblock %}
+
+{% block content %}
+
+{% if page.show_title %}
+<h1>{{ page.title }}</h1>
+{% endif %}
+
+{{ page.content|safe }}
+
+<h2>Featured Research (<a href="{% url 'items' %}">See More</a>):</h2>
+<ul class="research-items">
+    {% for item in publications %}
+        <li class="research-item">
+            {% include 'parts/researchitem.html' %}
+        </li>
+    {% endfor %}
+</ul>
+
+<h2> Recently on the Blog (<a href="https://www.mysociety.org/category/research/">See More</a>):</h2>
+<ul>
+{% for f in feed %}
+<li>
+<a href="{{f.1}}">{{f.0}}</a>
+</li>
+{% endfor %}
+</ul>
+
+        <div class="subscribe__subscription colour-red">
+        <h2>Research newsletter</h2>
+        <div class="subscribe__subscription__meta">
+        <p>
+        Sign up to our mailing list for updates about new publications and events.
+        </p>
+        </div>
+        <form class="subscribe__subscription__action" action="//mysociety.us9.list-manage.com/subscribe/post?u=53d0d2026dea615ed488a8834&amp;id=b79b7a551a" method="POST">
+                      <input class="honeypot" name="b_53d0d2026dea615ed488a8834_b79b7a551a" tabindex="-1">
+            <div class="inline-input">
+                <label for="b79b7a551a_email">Email address</label>
+                <input type="email" id="b79b7a551a_email" name="EMAIL" class="email" placeholder="you@example.com" />
+            </div><div class="inline-button">
+                <input type="submit" class="button" name="subscribe" value="Subscribe">
+            </div>
+            </form>
+        </div>
+
+
+
+<h2>Contact Us</h2>
+
+<p>We are always keen to hear from potential research partners, from anywhere in the world.</p>
+
+Contact: <b>research (at) mysociety dot org</b>
+
+{% endblock %}
