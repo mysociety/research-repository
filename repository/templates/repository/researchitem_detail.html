@@ -13,6 +13,28 @@
 {% if item.licence %}
 <meta name="DC.rights" content="{{ item.licence }}">
 {% endif %}
+
+
+{% endblock %}
+{% block social-meta-tags %}
+<meta property="og:site_name" content="{{settings.SITE_NAME}}"/>
+<meta property="og:title" content="{{item.title}}"/>
+<meta property="og:description" content="{{item.share_abstract}}" />
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'item' item.slug %}" />
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
+<meta name="twitter:title" content="{{item.title}}">
+<meta name="twitter:description" content="{{item.share_abstract}}">
+
+{% if item.thumbnail %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.thumbnail.url}}" />
+<meta name="twitter:image" content={{ request.scheme }}://{{ request.get_host }}"{{item.thumbnail.url}}">
+{% else %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}" />
+<meta name="twitter:image" content={{ request.scheme }}://{{ request.get_host }}"{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endif %}
+
 {% endblock %}
 
 {% block json-ld %}

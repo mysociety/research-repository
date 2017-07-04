@@ -2,6 +2,19 @@
 
 {% block title %}{{ page.title }}{% endblock %}
 
+{% block social-meta-tags %}
+<meta property="og:site_name" content="{{settings.SITE_NAME}}"/>
+<meta property="og:title" content="{{settings.SITE_NAME}} - {{page.title}}"/>
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'page' page.slug %}" />
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
+<meta name="twitter:title" content="{{settings.SITE_NAME}} - {{page.title}}">
+
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}" />
+<meta name="twitter:image" content={{ request.scheme }}://{{ request.get_host }}"{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endblock %}
+
 {% block content %}
 
 {% if page.show_title %}
