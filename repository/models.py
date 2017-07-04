@@ -3,7 +3,7 @@ from autoslug import AutoSlugField
 from markitup.fields import MarkupField
 from django.conf import settings
 from django.core import urlresolvers
-
+from django.db.models import F
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
@@ -244,6 +244,12 @@ class ResearchOutput(models.Model):
         blank=True,
         help_text='Optional custom text for the button to get this output.'
     )
+    
+    download_count = models.IntegerField(default=0)
+
+    def increment_download(self):
+        query = ResearchOutput.objects.filter(id=self.id)
+        query.update(download_count=F('download_count') + 1)
 
     def button_url(self):
         if self.file:
