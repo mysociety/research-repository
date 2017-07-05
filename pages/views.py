@@ -33,7 +33,7 @@ class FeedCache(object):
 
 
 class HomeView(TemplateView):
-    template_name = "pages//home_page.html"
+    template_name = "pages/home_page.html"
     
     def get_context_data(self,**kwargs):
         
