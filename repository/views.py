@@ -82,6 +82,17 @@ class PersonView(DetailView):
 
         return context
 
+
+class TagListView(ListView):
+    model = models.Tag
+    context_object_name = 'tags'
+
+
+class TagView(DetailView):
+    model = models.Tag
+    context_object_name = 'tag'
+
+
 def output_download(request,output_id):
     """
     update database and return actual url

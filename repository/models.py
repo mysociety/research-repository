@@ -5,6 +5,60 @@ from django.conf import settings
 from django.core import urlresolvers
 from django.db.models import F
 
+
+class TagGroup(models.Model):
+    slug = AutoSlugField(
+        unique=True,
+        editable=True,
+        populate_from=('name')
+    )
+
+    name = models.CharField(max_length=30)
+
+    hero = models.ImageField(
+        upload_to='hero/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="A hero image which will be displayed on this tag group's page. Recommended ratio is 1024x350."
+    )
+
+    description = MarkupField()
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+
+
+class Tag(models.Model):
+    slug = models.SlugField(
+        max_length=30,
+        unique=True
+    )
+
+    hero = models.ImageField(
+        upload_to='hero/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="A hero image which will be displayed on this tag's page. Recommended ratio is 1024x350."
+    )
+
+    description = MarkupField(
+        blank=True
+    )
+
+    tag_groups = models.ManyToManyField(TagGroup)
+
+    def __unicode__(self):
+        return self.slug
+
+    class Meta:
+        ordering = ['slug']
+
+
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -199,6 +253,8 @@ class ResearchItem(models.Model):
         blank=True
     )
 
+    tags = models.ManyToManyField(Tag)
+
     def author_list(self):
         return [authors.person for authors in ItemAuthor.objects.filter(research_item=self).order_by('order')]
 
@@ -213,7 +269,7 @@ class ResearchItem(models.Model):
 
     def __unicode__(self):
         return self.title + ' (' + self.friendly_date() + ')'
-    
+
     def share_abstract(self):
         """
         reduced version of abstract for sharing
@@ -222,7 +278,7 @@ class ResearchItem(models.Model):
             text = self.subtitle
         else:
             text = self.abstract.raw
-            
+
         if len(text) > 140:
             text = text[:140-4] + "[..]"
         return text
@@ -272,7 +328,7 @@ class ResearchOutput(models.Model):
         blank=True,
         help_text='Optional custom text for the button to get this output.'
     )
-    
+
     download_count = models.IntegerField(default=0)
 
     def increment_download(self):

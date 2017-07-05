@@ -134,4 +134,19 @@
 
 {% endif %}
 
+
+{% if item.tags %}
+
+    <h2>Tags</h2>
+
+    <ul class="tags">
+    {% for tag in item.tags.all %}
+
+    <li class="tag"><a href="{% url 'tag' tag.slug %}">{{ tag.slug }}</a></li>
+
+    {% endfor %}
+    </ul>
+
+{% endif %}
+
 {% endblock %}

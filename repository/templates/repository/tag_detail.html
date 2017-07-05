@@ -1,0 +1,24 @@
+{% extends 'fullpage.html' %}
+{% load thumbnail %}
+
+{% block title %}{{ tag.slug }}{% endblock %}
+
+{% block content %}
+
+{% thumbnail tag.hero "1024x350" crop="center" as im %}
+<img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+{% endthumbnail %}
+
+<h1>{{ tag.slug }}</h1>
+
+{% if tag.description %}
+
+{{ tag.description }}
+
+<h2>Research tagged with &ldquo;{{ tag.slug }}&rdquo;</h2>
+
+{% endif %}
+
+{% include 'parts/researchlist.html' with items=tag.researchitem_set.all %}
+
+{% endblock %}
