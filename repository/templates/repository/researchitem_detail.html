@@ -38,7 +38,7 @@
 {% endif %}
 
 {% if item.thumbnail %}
-<meta name="twitter:image" content={{ request.scheme }}://{{ request.get_host }}"{{item.thumbnail.url}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.thumbnail.url}}">
 {% else %}
 <meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
 {% endif %}
