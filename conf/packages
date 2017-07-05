@@ -4,5 +4,3 @@ python-virtualenv
 libpq-dev
 git
 libjpeg-dev
-postgresql
-postgresql-contrib
