@@ -28,14 +28,9 @@
 
 {% if featured_items %}
     <h2>Featured Research<small> (<a href="{% url 'items' %}">See More</a>)</small></h2>
-    <ul class="research-items">
 
-        {% for item in featured_items %}
-            <li class="research-item">
-                {% include 'parts/researchitem.html' %}
-            </li>
-        {% endfor %}
-    </ul>
+    {% include 'parts/researchlist.html' with items=featured_items %}
+
 {% endif %}
 
 {% if feed %}

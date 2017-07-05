@@ -22,15 +22,6 @@
 
 <h1>Published Research</h1>
 
-<ul class="research-items">
-
-{% for item in items %}
-<li class="research-item">
-{% include 'parts/researchitem.html' %}
-</li>
-{% endfor %}
-
-
-</ul>
+{% include 'parts/researchlist.html' with items=items %}
 
 {% endblock %}

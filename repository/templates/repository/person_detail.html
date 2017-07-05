@@ -20,15 +20,7 @@
 
 <h2>Research by {{ person.full_name }}</h2>
 
-<ul class="research-items">
-
-{% for item in person.items_list %}
-
-{% include 'parts/researchitem.html' %}
-
-{% endfor %}
-
-</ul>
+{% include 'parts/researchlist.html' with items=person.items_list %}
 
 {% endblock %}
 
