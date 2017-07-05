@@ -2,9 +2,23 @@
 
 {% block title %}Our Research{% endblock %}
 
+{% block social-meta-tags %}
+<meta property="og:site_name" content="{{settings.SITE_NAME}}">
+<meta property="og:title" content="{{settings.SITE_NAME}} &ndash; Publications">
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'items' %}">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
+<meta name="twitter:title" content="{{settings.SITE_NAME}} &ndash; Publications">
+
+<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta name="twitter:image" content={{settings.DEFAULT_SHARE_IMAGE}}">
+{% endblock %}
+
+
 {% block content %}
 
-<h1>Our Research</h1>
+<h1>Published Research</h1>
 
 <ul class="research-items">
 
@@ -13,6 +27,7 @@
 {% include 'parts/researchitem.html' %}
 </li>
 {% endfor %}
+
 
 </ul>
 

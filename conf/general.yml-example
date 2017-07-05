@@ -36,3 +36,8 @@ MEDIA_URL: '/media/'
 # The base URL of this installation, to build out absolute URLs.
 # No trailing slash.
 SITE_BASE_URL: 'http://localhost:8000'
+
+# Settings for populating social cards
+DEFAULT_SHARE_IMAGE: '/static/img/mysociety-bloom@2.png'
+SITE_NAME: 'mySociety Research'
+SITE_TWITTER_HANDLE: '@mysociety'

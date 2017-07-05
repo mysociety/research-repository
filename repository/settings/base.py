@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'pipeline',
     'autoslug',
     'markitup',
-
+    'import_export',
     'repository',
     'pages',
 ]
@@ -248,3 +248,9 @@ GOOGLE_ANALYTICS_ACCOUNT = config.get('GOOGLE_ANALYTICS_ACCOUNT')
 
 # mySociety-specific settings
 SITE_BASE_URL = config.get('SITE_BASE_URL')
+
+#settings for social sharing
+DEFAULT_SHARE_IMAGE = config.get('DEFAULT_SHARE_IMAGE')
+SITE_NAME = config.get('SITE_NAME')
+SITE_TWITTER_HANDLE = config.get('SITE_TWITTER_HANDLE')
+

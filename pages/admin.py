@@ -1,11 +1,13 @@
 from django.contrib import admin
 from pages import models
-
 # tweak to taste - simple at the top and more custom below
+from import_export.admin import ImportExportModelAdmin 
+from useful_inkleby.useful_django.admin import io_admin_register
 
 
-admin.site.register(models.Page)
-
+@io_admin_register(models.Page)
+class PageAdmin(ImportExportModelAdmin):
+    pass
 
 
 # class FooBarAdmin(admin.ModelAdmin):

@@ -1,9 +1,18 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.conf import settings
-
+from django.http import HttpResponseRedirect
 from repository import models
 
 import json
+
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TemplateView, self).get_context_data(**kwargs)
+        context['featured_items'] = models.ResearchItem.objects.filter(published=True, featured=True)
+        return context
 
 
 class SitemapView(TemplateView):
@@ -12,7 +21,7 @@ class SitemapView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SitemapView, self).get_context_data(**kwargs)
         context['site_base_url'] = settings.SITE_BASE_URL
-        context['items'] = models.ResearchItem.objects.all()
+        context['items'] = models.ResearchItem.objects.filter(published=True)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -24,6 +33,8 @@ class SitemapView(TemplateView):
 class ItemListView(ListView):
     model = models.ResearchItem
     context_object_name = 'items'
+
+    queryset = models.ResearchItem.objects.filter(published=True)
 
 
 class ItemView(DetailView):
@@ -79,3 +90,12 @@ class PersonView(DetailView):
         context['json_ld_representation'] = json.dumps(context['person'].json_ld_representation())
 
         return context
+
+def output_download(request,output_id):
+    """
+    update database and return actual url
+    """
+    item = models.ResearchOutput.objects.get(id=output_id)
+    item.increment_download()
+    return HttpResponseRedirect(item.button_url())
+    

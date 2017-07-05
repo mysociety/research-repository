@@ -1,6 +1,6 @@
 {% extends 'sidebar.html' %}
 
-{% block title %}{{ item.title }} ({{ item.year }}){% endblock %}
+{% block title %}{{ item.title }} ({{ item.date.year }}){% endblock %}
 
 {% block meta-tags %}
 <link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
@@ -13,6 +13,36 @@
 {% if item.licence %}
 <meta name="DC.rights" content="{{ item.licence }}">
 {% endif %}
+
+{% if item.published == False %}
+<meta name="robots" content="noindex">
+{% endif %}
+
+
+{% endblock %}
+{% block social-meta-tags %}
+<meta property="og:site_name" content="{{settings.SITE_NAME}}">
+<meta property="og:title" content="{{item.title}}"/>
+<meta property="og:description" content="{{item.share_abstract}}" >
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'item' item.slug %}">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
+<meta name="twitter:title" content="{{item.title}}">
+<meta name="twitter:description" content="{{item.share_abstract}}">
+
+{% if item.hero %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.hero.url}}">
+{% else %}
+<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}" />
+{% endif %}
+
+{% if item.thumbnail %}
+<meta name="twitter:image" content={{ request.scheme }}://{{ request.get_host }}"{{item.thumbnail.url}}">
+{% else %}
+<meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endif %}
+
 {% endblock %}
 
 {% block json-ld %}
@@ -22,6 +52,10 @@
 {% endblock %}
 
 {% block content %}
+
+{% if item.hero %}
+<img src="{{ item.hero.url }}">
+{% endif %}
 
 <h1>{{ item.title }}</h1>
 {% if item.subtitle %}
@@ -42,7 +76,7 @@
 
     <h3>{{ output.title }}</h3>
 
-    <p><a class="button" href="{{ output.button_url }}">{{ output.button_text }}</a></p>
+    <p><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{{ output.button_text }}</a></p>
 
     {% endfor %}
 

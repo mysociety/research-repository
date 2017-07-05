@@ -3,7 +3,7 @@ from autoslug import AutoSlugField
 from markitup.fields import MarkupField
 from django.conf import settings
 from django.core import urlresolvers
-
+from django.db.models import F
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
@@ -153,6 +153,22 @@ class ResearchItem(models.Model):
         help_text='Used to produce a nice page URL for this item.'
     )
 
+    published = models.BooleanField(
+        help_text='Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL.'
+    )
+
+    featured = models.BooleanField(
+        help_text='Should this item be featured on the homepage?'
+    )
+
+    hero = models.ImageField(
+        upload_to='hero/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680."
+    )
+
     thumbnail = models.ImageField(
         upload_to='thumbnails/',
         null=True,
@@ -197,7 +213,19 @@ class ResearchItem(models.Model):
 
     def __unicode__(self):
         return self.title + ' (' + self.friendly_date() + ')'
-
+    
+    def share_abstract(self):
+        """
+        reduced version of abstract for sharing
+        """
+        if self.subtitle:
+            text = self.subtitle
+        else:
+            text = self.abstract.raw
+            
+        if len(text) > 140:
+            text = text[:140-4] + "[..]"
+        return text
 
 class ItemAuthor(models.Model):
 
@@ -244,6 +272,12 @@ class ResearchOutput(models.Model):
         blank=True,
         help_text='Optional custom text for the button to get this output.'
     )
+    
+    download_count = models.IntegerField(default=0)
+
+    def increment_download(self):
+        query = ResearchOutput.objects.filter(id=self.id)
+        query.update(download_count=F('download_count') + 1)
 
     def button_url(self):
         if self.file:

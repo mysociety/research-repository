@@ -6,5 +6,9 @@ def add_settings( request ):
         'settings': {
             'GOOGLE_ANALYTICS_ACCOUNT': settings.GOOGLE_ANALYTICS_ACCOUNT,
             'DEBUG': settings.DEBUG,
+            'DEFAULT_SHARE_IMAGE': settings.DEFAULT_SHARE_IMAGE,
+            'SITE_NAME': settings.SITE_NAME,
+            'SITE_TWITTER_HANDLE': settings.SITE_TWITTER_HANDLE,            
+            
         }
     }
