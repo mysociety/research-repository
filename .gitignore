@@ -6,3 +6,22 @@ conf/crontab
 .vagrant
 *.pyc
 web/down.html
+
+#################
+## Eclipse
+#################
+
+*.pydevproject
+.project
+.metadata
+.gradle
+bin/
+tmp/
+target/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
