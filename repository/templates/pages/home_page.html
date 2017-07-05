@@ -26,26 +26,31 @@
 
 {{ page.content|safe }}
 
-<h2>Featured Research (<a href="{% url 'items' %}">See More</a>):</h2>
-<ul class="research-items">
-    {% for item in publications %}
-        <li class="research-item">
-            {% include 'parts/researchitem.html' %}
-        </li>
-    {% endfor %}
-</ul>
+{% if featured_items %}
+    <h2>Featured Research<small> (<a href="{% url 'items' %}">See More</a>)</small></h2>
+    <ul class="research-items">
 
-<h2> Recently on the Blog (<a href="https://www.mysociety.org/category/research/">See More</a>):</h2>
-<ul>
-{% for f in feed %}
-<li>
-<a href="{{f.1}}">{{f.0}}</a>
-</li>
-{% endfor %}
-</ul>
+        {% for item in featured_items %}
+            <li class="research-item">
+                {% include 'parts/researchitem.html' %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if feed %}
+    <h2>Recently on the Blog<small> (<a href="https://www.mysociety.org/category/research/">See More</a>)</small></h2>
+    <ul>
+        {% for f in feed %}
+            <li>
+            <a href="{{f.1}}">{{f.0}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
         <div class="subscribe__subscription colour-red">
-        <h2>Research newsletter</h2>
+        <h2>Research Newsletter</h2>
         <div class="subscribe__subscription__meta">
         <p>
         Sign up to our mailing list for updates about new publications and events.
