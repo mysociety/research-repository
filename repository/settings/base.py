@@ -243,6 +243,9 @@ if DEBUG:
 # MarkItUp settings
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 
+# Thumbnails
+THUMBNAIL_ALTERNATIVE_RESOLUTIONS = [1.5, 2]
+
 
 # mySociety-specific settings
 GOOGLE_ANALYTICS_ACCOUNT = config.get('GOOGLE_ANALYTICS_ACCOUNT')

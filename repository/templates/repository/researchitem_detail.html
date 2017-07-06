@@ -54,7 +54,7 @@
 
 {% block content %}
 
-{% thumbnail item.hero "1024x680" quality=80 crop=center as im %}
+{% thumbnail item.hero "1024x680" crop="center" as im %}
 <img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
 {% endthumbnail %}
 
