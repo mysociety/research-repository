@@ -1,11 +1,14 @@
+{% load thumbnail %}
+
 <div class="research-item__thumbnail">
   <a href="{% url 'item' item.slug %}">
 
-    {% if item.thumbnail %}
-        <img src="{{ item.thumbnail.url }}" alt="{{ item.title }}" height="150" width="110">
-    {% else %}
+    {% thumbnail item.thumbnail "110x150" quality=75 as im %}
+        <img style="margin:{{ im|margin:"110x150" }}" src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+    {% empty %}
         <img src="/static/img/report-thumbnail.png" alt="{{ item.title }}" height="150" width="110">
-    {% endif %}
+    {% endthumbnail %}
+
   </a>
 </div>
 

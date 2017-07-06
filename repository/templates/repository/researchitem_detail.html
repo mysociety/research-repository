@@ -1,4 +1,5 @@
 {% extends 'sidebar.html' %}
+{% load thumbnail %}
 
 {% block title %}{{ item.title }} ({{ item.date.year }}){% endblock %}
 
@@ -53,9 +54,9 @@
 
 {% block content %}
 
-{% if item.hero %}
-<img src="{{ item.hero.url }}">
-{% endif %}
+{% thumbnail item.hero "1024x680" quality=80 crop=center as im %}
+<img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+{% endthumbnail %}
 
 <h1>{{ item.title }}</h1>
 {% if item.subtitle %}

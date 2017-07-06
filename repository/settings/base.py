@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'autoslug',
     'markitup',
     'import_export',
+    'sorl.thumbnail',
     'repository',
     'pages',
 ]
