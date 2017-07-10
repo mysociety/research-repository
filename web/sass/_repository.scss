@@ -356,7 +356,29 @@ h2.research-item__title {
 
 .research-item__author {
     display: inline;
-    padding-right: 0.5em;
+    font-style: italic;
+    font-size: 0.875em;
+    &:after {
+      content: ',';
+    }
+    &:last-of-type:after {
+      content: '';
+    }
+
+}
+
+.research-item__tags {
+    padding-left: 0;
+    list-style: none outside none;
+    margin-bottom: 0.25em;
+    margin-left: 75px;
+    @media (min-width:$medium-screen)  {
+      margin-left: 130px;
+    }
+}
+
+.research-item__tag {
+    display: inline;
     font-size: 0.875em;
     &:after {
       content: ',';

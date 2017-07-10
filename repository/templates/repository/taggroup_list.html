@@ -4,7 +4,6 @@
 
 {% block meta-tags %}
 <meta name="robots" content="noindex">
-{% endif %}
 
 {% endblock %}
 
@@ -12,14 +11,25 @@
 
 <h1>Tags</h1>
 
+
+
+{% for tg in taggroups %}
+
+<a name="{{tg.slug}}"></a>
+<h2>{{tg.name}}</h2>
+
+{{ tg.description }}
 <ul class="tags">
 
-{% for tag in tags %}
+{% for tag in tg.tags.all %}
 
 <li class="tag"><a href="{% url 'tag' tag.slug %}">{{ tag.slug }}</a></li>
 
 {% endfor %}
 
 </ul>
+{% endfor %}
+
+
 
 {% endblock %}

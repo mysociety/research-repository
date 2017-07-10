@@ -55,6 +55,12 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.slug
 
+    def nice_name(self):
+        if "-" in self.slug:
+            return self.slug.replace("-"," ").title()
+        else:
+            return self.slug
+
     class Meta:
         ordering = ['slug']
 

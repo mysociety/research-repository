@@ -3,21 +3,51 @@
 
 {% block title %}{{ tag.slug }}{% endblock %}
 
+
+{% block social-meta-tags %}
+<meta property="og:site_name" content="{{settings.SITE_NAME}}">
+<meta property="og:title" content="Tag - {{tag.nice_name}}">
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'tag' tag.slug %}">
+<meta property="og:description" content="mySociety Research tagged with {{tag.nice_name}}" >
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
+<meta name="twitter:title" content="Tag - {{tag.nice_name}}">
+<meta name="twitter:description" content="mySociety Research tagged with {{tag.nice_name}}">
+
+<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endblock %}
+
+
 {% block content %}
 
 {% thumbnail tag.hero "1024x350" crop="center" as im %}
 <img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
 {% endthumbnail %}
 
-<h1>{{ tag.slug }}</h1>
+
 
 {% if tag.description %}
 
 {{ tag.description }}
 
-<h2>Research tagged with &ldquo;{{ tag.slug }}&rdquo;</h2>
+{% else %}
+
+<h1>{{ tag.slug }}</h1>
 
 {% endif %}
+
+{% with tag.tag_groups.all as tg %}
+
+{% if tg %}
+
+<p><b>Part of: </b>{% for t in tg %}<a href="{% url 'tags' %}#{{t.slug}}">{{t.name}}</a>{% if not forloop.last %},{% endif %}{% endfor %}</p>
+
+{% endif %}
+{% endwith %}
+
+<h2>Research tagged with &ldquo;{{ tag.slug }}&rdquo;</h2>
 
 {% include 'parts/researchlist.html' with items=tag.researchitem_set.all %}
 

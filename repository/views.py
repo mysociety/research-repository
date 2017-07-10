@@ -84,8 +84,8 @@ class PersonView(DetailView):
 
 
 class TagListView(ListView):
-    model = models.Tag
-    context_object_name = 'tags'
+    model = models.TagGroup
+    context_object_name = 'taggroups'
 
 
 class TagView(DetailView):
