@@ -50,7 +50,7 @@ class Tag(models.Model):
         blank=True
     )
 
-    tag_groups = models.ManyToManyField(TagGroup)
+    tag_groups = models.ManyToManyField(TagGroup,blank=True,related_name="tags")
 
     def __unicode__(self):
         return self.slug
