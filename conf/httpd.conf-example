@@ -15,11 +15,15 @@
 #     Satisfy any
 # </Location>
 
+# # You might need this
+# RedirectMatch 404 /\.git
+
 # Replace the following below:
 #   'example.com', 'exampleuser', 'examplegroup'
 
 Alias /media /data/vhost/example.com/uploads
 Alias /static /data/vhost/example.com/collected_static
+Alias /sites /data/vhost/example.com/sites
 Alias /robots.txt /data/vhost/example.com/repository/web/robots.txt
 Alias /favicon.ico /data/vhost/example.com/repository/web/favicon.ico
 
