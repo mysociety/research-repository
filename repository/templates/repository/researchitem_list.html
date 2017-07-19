@@ -20,8 +20,17 @@
 
 {% block content %}
 
-<h1>Published Research</h1>
+<h1>Research publications</h1>
 
-{% include 'parts/researchlist.html' with items=items %}
+{% regroup items by date.year as year_item_lists %}
+
+{% for year in year_item_lists %}
+
+<h3>{{year.grouper}}</h3>
+<hr>
+
+{% include 'parts/researchlist.html' with items=year.list %}
+
+{% endfor %}
 
 {% endblock %}

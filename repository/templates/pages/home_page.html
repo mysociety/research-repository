@@ -27,14 +27,14 @@
 {{ page.content|safe }}
 
 {% if featured_items %}
-    <h2>Featured Research<small> (<a href="{% url 'items' %}">See More</a>)</small></h2>
+    <h2>Featured research<small> (<a href="{% url 'items' %}">See more</a>)</small></h2>
 
     {% include 'parts/researchlist.html' with items=featured_items %}
 
 {% endif %}
 
 {% if feed %}
-    <h2>Recently on the Blog<small> (<a href="https://www.mysociety.org/category/research/">See More</a>)</small></h2>
+    <h2>Recently on the blog<small> (<a href="https://www.mysociety.org/category/research/">See more</a>)</small></h2>
     <ul>
         {% for f in feed %}
             <li>
@@ -45,7 +45,7 @@
 {% endif %}
 
         <div class="subscribe__subscription colour-red">
-        <h2>Research Newsletter</h2>
+        <h2>Research newsletter</h2>
         <div class="subscribe__subscription__meta">
         <p>
         Sign up to our mailing list for updates about new publications and events.
@@ -64,9 +64,9 @@
 
 
 
-<h2>Contact Us</h2>
+<h2>Contact us</h2>
 
-<p>We are always keen to hear from potential research partners, from anywhere in the world.</p>
+<p>We are always keen to hear from potential research partners, anywhere in the world.</p>
 
 Contact: <b>research (at) mysociety dot org</b>
 
