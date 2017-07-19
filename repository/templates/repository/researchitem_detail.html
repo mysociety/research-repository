@@ -84,7 +84,7 @@
 {% endif %}
 
 
-<h2>Cite This</h2>
+<h2>Cite this</h2>
 
 <p class="citation-harvard">{% for author in item.author_list %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.last_name }}, {{ author.first_name|slice:'1' }}.{% endfor %}
 
