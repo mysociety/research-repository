@@ -20,7 +20,7 @@ from django.contrib import admin
 
 from repository import views
 from pages import views as pageViews
-
+from django.views.generic import RedirectView
 admin.autodiscover()
 
 urlpatterns = [
@@ -30,9 +30,13 @@ urlpatterns = [
 
     url(r'^sitemap\.xml$', views.SitemapView.as_view(), name='sitemap'),
 
-    url(r'^research/outputs/(?P<output_id>[-\w]+$)', views.output_download, name='download'),
-    url(r'^research/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
-    url(r'^research/', views.ItemListView.as_view(), name='items'),
+    url(r'^publications/outputs/(?P<output_id>[-\w]+$)', views.output_download, name='download'),
+    url(r'^publications/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
+    url(r'^publications/', views.ItemListView.as_view(), name='items'),
+
+    url(r'^research/outputs/(?P<output_id>[-\w]+$)', RedirectView.as_view(pattern_name='download', permanent=True)),
+    url(r'^research/(?P<slug>[-\w]+)$', RedirectView.as_view(pattern_name='item', permanent=True)),
+    url(r'^research/', RedirectView.as_view(pattern_name='items', permanent=True)),
 
     url(r'^people/(?P<slug>[-\w]+)$', views.PersonView.as_view(), name='person'),
     url(r'^people/', views.PersonListView.as_view(), name='people'),
