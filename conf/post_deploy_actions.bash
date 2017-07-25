@@ -41,9 +41,9 @@ researchsites_dir='../sites'
 if [ ! -d "$researchsites_dir" ]; then
     mkdir $researchsites_dir
     cd $researchsites_dir
-    git clone --no-checkout ssh://git.mysociety.org/data/git/private/researchsites.git . && git checkout gh-pages
+    git clone --no-checkout ssh://git.mysociety.org/data/git/private/researchsites.git . && git checkout master
 else
     cd $researchsites_dir
     git fetch origin
-    /data/mysociety/bin/git-safe-to-checkout . gh-pages
+    /data/mysociety/bin/git-safe-to-checkout . master
 fi
