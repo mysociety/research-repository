@@ -259,7 +259,7 @@ class ResearchItem(models.Model):
         blank=True
     )
 
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def author_list(self):
         return [authors.person for authors in ItemAuthor.objects.filter(research_item=self).order_by('order')]
