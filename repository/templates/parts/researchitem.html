@@ -22,7 +22,7 @@
 
 <ul class="research-item__tags">
 {% for tag in item.tags.all %}
-<li class="research-item__tag"><a href="{% url 'tag' tag.slug %}">{{ tag.nice_name }}</li>
+<li class="research-item__tag"><a href="{% url 'tag' tag.slug %}">{{ tag.nice_name }}</a></li>
 {% endfor %}
 </ul>
 
