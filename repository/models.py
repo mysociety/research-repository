@@ -261,6 +261,9 @@ class ResearchItem(models.Model):
 
     tags = models.ManyToManyField(Tag, blank=True)
 
+    def ordered_outputs(self):
+        return self.outputs.all().order_by('order')
+
     def author_list(self):
         return [authors.person for authors in ItemAuthor.objects.filter(research_item=self).order_by('order')]
 
@@ -336,6 +339,7 @@ class ResearchOutput(models.Model):
     )
 
     download_count = models.IntegerField(default=0)
+    order = models.IntegerField(default=0)
 
     def increment_download(self):
         query = ResearchOutput.objects.filter(id=self.id)

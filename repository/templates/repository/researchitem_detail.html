@@ -69,11 +69,12 @@
     {{ item.abstract }}
 
 
-{% if item.outputs.all %}
+{% with item.ordered_outputs as oo %}
+{% if oo %}
 
     <h2>Documents</h2>
 
-    {% for output in item.outputs.all %}
+    {% for output in oo %}
 
     <h3>{{ output.title }}</h3>
 
@@ -82,6 +83,7 @@
     {% endfor %}
 
 {% endif %}
+{% endwith %}
 
 
 <h2>Cite this</h2>
