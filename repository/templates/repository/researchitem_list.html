@@ -13,8 +13,8 @@
 <meta name="twitter:title" content="{{settings.SITE_NAME}} &ndash; Publications">
 <meta name="twitter:description" content="mySociety Research Publications">
 
-<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
-<meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
 {% endblock %}
 
 

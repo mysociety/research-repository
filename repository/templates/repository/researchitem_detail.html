@@ -35,13 +35,13 @@
 {% if item.hero %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.hero.url}}">
 {% else %}
-<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}" />
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}" />
 {% endif %}
 
 {% if item.thumbnail %}
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.thumbnail.url}}">
 {% else %}
-<meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
 {% endif %}
 
 {% endblock %}
