@@ -802,77 +802,6 @@ table.table td {
     }
 }
 
-.subscribe__subscription {
-    @include remSize(24px, padding-top);
-    @include remSize(24px, padding-bottom);
-
-    .honeypot, label {
-        display: none;
-    }
-
-    .button {
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-        width: 100%;
-    }
-
-    h3 {
-        @include remSize(9px, margin-bottom);
-    }
-
-    p {
-        color: $colour_dark_grey;
-        margin-bottom: 0;
-    }
-
-    p + p {
-        @include remSize(12px, margin-top);
-    }
-
-    input[type="email"] {
-        border: 1px solid $colour_borders;
-    }
-
-    @media (min-width:$large-screen) {
-        overflow: auto;
-    }
-}
-
-.subscribe__subscription__meta {
-    @media (min-width:$large-screen) {
-        float: left;
-        width: 56%;
-    }
-}
-
-.subscribe__subscription__action {
-    @include remSize(12px, margin-top);
-
-    @media (min-width:$large-screen) {
-        float: right;
-        width: 38%;
-        margin-top: 0;
-    }
-}
-
-.subscribe__subscription__groups {
-    h4 {
-        padding-top: 1em;
-    }
-
-    ul {
-        padding-left: 0;
-
-        label {
-            display: inline;
-        }
-
-        li {
-            list-style: none;
-        }
-    }
-}
-
 .colour-red {
     .hero-background,
     .hero-area,
@@ -911,15 +840,6 @@ table.table td {
     .prev-page-anchor {
         color: $colour_red;
     }
-}
-
-.subscribe__newsletters,
-.subscribe__discussions {
-    @include remSize(48px, margin-top);
-}
-
-.inline-input-and-button {
-
 }
 
 .inline-input {
