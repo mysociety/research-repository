@@ -20,6 +20,8 @@ class Page(models.Model):
     )
 
     content = models.TextField()
+    
+    nav_order = models.IntegerField(default=-1)
 
     def __unicode__(self):
         return self.title

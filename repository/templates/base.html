@@ -47,8 +47,10 @@
           <a href="{% url 'home' %}" class="site-title"><h1>mySociety Research</h1></a>
           <nav role="navigation" class="site-nav">
               <ul>
+                  {% for p in all_pages %}
+                  <li><a href="{% url 'page' p.slug %}">{{p.title}}</a></li>
+                  {% endfor %}
                   <li><a href="{% url 'items' %}">Publications</a></li>
-                  <li><a href="https://www.mysociety.org/category/research/">Blog</a></li>
                   <li><a href="http://tictec.mysociety.org/">TICTeC</a></li>
               </ul>
           </nav>
