@@ -54,9 +54,6 @@
 
 {% block content %}
 
-{% thumbnail item.hero "1024x680" crop="center" as im %}
-<img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
-{% endthumbnail %}
 
 <h1>{{ item.title }}</h1>
 {% if item.subtitle %}
@@ -64,7 +61,29 @@
 {% endif %}
 
 
-<h2>Abstract</h2>
+
+{% thumbnail item.hero "1024x680" crop="center" as im %}
+<img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">
+{% endthumbnail %}
+
+
+<hr>
+
+{% with item.ordered_top_outputs as oo %}
+{% if oo %}
+
+<p>
+    {% for output in oo %}
+
+    <span class="research-item__button" ><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{{ output.title }}</a></span>
+
+    {% endfor %}
+</p>
+{% endif %}
+{% endwith %}
+
+
+<hr>
 
     {{ item.abstract }}
 

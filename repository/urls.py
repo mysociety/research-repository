@@ -41,7 +41,8 @@ urlpatterns = [
     url(r'^people/(?P<slug>[-\w]+)$', views.PersonView.as_view(), name='person'),
     url(r'^people/', views.PersonListView.as_view(), name='people'),
 
-    url(r'^tag/(?P<slug>[-\w]+)$', views.TagView.as_view(), name='tag'),
+    url(r'^section/(?P<slug>[-\w]+)$', views.TagView.as_view(), name='tag'),
+    url(r'^tag/(?P<slug>[-\w]+)$', RedirectView.as_view(pattern_name='tag', permanent=True)),
     url(r'^tags/', views.TagListView.as_view(), name='tags'),
 
     url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),

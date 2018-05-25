@@ -401,3 +401,12 @@ h2.research-item__title {
   }
 
 }
+
+.research-item__button {
+	display:block;
+	padding-top:10px;
+	
+	@media (min-width:$medium-screen)  {
+	display:inline;
+	}
+}

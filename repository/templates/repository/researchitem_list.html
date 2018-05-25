@@ -22,15 +22,7 @@
 
 <h1>Research publications</h1>
 
-{% regroup items by date.year as year_item_lists %}
+{% include 'parts/researchyearlist.html' with items=items %}
 
-{% for year in year_item_lists %}
-
-<h3>{{year.grouper}}</h3>
-<hr>
-
-{% include 'parts/researchlist.html' with items=year.list %}
-
-{% endfor %}
 
 {% endblock %}
