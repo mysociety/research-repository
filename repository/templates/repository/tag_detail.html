@@ -12,13 +12,13 @@
 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
-<meta name="twitter:title" content="Tag - {{tag.nice_name}}">
+<meta name="twitter:title" content="mySociety Research - {{tag.nice_name}}">
 
 <meta property="og:description" content="{{tag.description}}" >
 <meta name="twitter:description" content="{{tag.description}}">
 
-<meta property="og:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
-<meta name="twitter:image" content="{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
 
 {% endblock %}
 
