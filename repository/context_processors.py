@@ -1,5 +1,5 @@
 from django.conf import settings
-from pages.models import Page
+from pages.models import Page, Link
 
 def get_pages_for_nav():
     pages = Page.objects.all().exclude(slug="home")
@@ -10,6 +10,7 @@ def get_pages_for_nav():
 def add_settings( request ):
     """Add some selected settings values to the context"""
     return {
+        'top_links':Link.objects.all().exclude(order=-1).order_by('order'),
         'all_pages':get_pages_for_nav(),
         'settings': {
             'GOOGLE_ANALYTICS_ACCOUNT': settings.GOOGLE_ANALYTICS_ACCOUNT,

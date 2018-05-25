@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Page(models.Model):
 
     class Meta:
@@ -25,3 +24,13 @@ class Page(models.Model):
 
     def __unicode__(self):
         return self.title
+
+class Link(models.Model):
+    
+    label = models.CharField(max_length=200)
+    url = models.URLField()
+    order = models.IntegerField(default=-1)
+    new_window = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.label
