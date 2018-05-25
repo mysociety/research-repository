@@ -20,10 +20,4 @@
 {% endfor %}
 </ul>
 
-<ul class="research-item__tags">
-{% for tag in item.tags.all %}
-<li class="research-item__tag"><a href="{% url 'tag' tag.slug %}">{{ tag.nice_name }}</a></li>
-{% endfor %}
-</ul>
-
 <p class="research-item__pubdate">{{ item.friendly_date }}</p>
