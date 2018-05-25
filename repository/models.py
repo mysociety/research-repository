@@ -33,6 +33,11 @@ class TagGroup(models.Model):
 
 
 class Tag(models.Model):
+    label = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+    
     slug = models.SlugField(
         max_length=30,
         unique=True
@@ -51,15 +56,25 @@ class Tag(models.Model):
     )
 
     tag_groups = models.ManyToManyField(TagGroup,blank=True,related_name="tags")
+    
+    top_bar = models.IntegerField(default=-1,
+        help_text='Should this category appear on the top bar?'
+    )
+
+    display_items_in_years = models.BooleanField(default=True,
+                            help_text='On the tag page - does it display items in years?'
+                                                 )
 
     def __unicode__(self):
-        return self.slug
+        return self.nice_name()
 
     def nice_name(self):
+        if self.label:
+            return self.label
         if "-" in self.slug:
             return self.slug.replace("-"," ").title()
         else:
-            return self.slug
+            return self.slug.title()
 
     class Meta:
         ordering = ['slug']
@@ -262,7 +277,10 @@ class ResearchItem(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     def ordered_outputs(self):
-        return self.outputs.all().order_by('order')
+        return self.outputs.all().exclude(order=-1).order_by('order')
+
+    def ordered_top_outputs(self):
+        return self.outputs.all().exclude(top_order=-1).order_by('top_order')
 
     def author_list(self):
         return [authors.person for authors in ItemAuthor.objects.filter(research_item=self).order_by('order')]
@@ -340,6 +358,8 @@ class ResearchOutput(models.Model):
 
     download_count = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
+    top_order = models.IntegerField(default=-1,
+                                    help_text='Order for under image link')
 
     def increment_download(self):
         query = ResearchOutput.objects.filter(id=self.id)
@@ -356,10 +376,10 @@ class ResearchOutput(models.Model):
             return self.button_text_value
 
         if self.file:
-            return 'Download File'
+            return 'Download'
 
         else:
-            return 'Visit Website'
+            return 'View Online'
 
     def __unicode__(self):
         return self.title

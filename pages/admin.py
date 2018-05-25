@@ -9,6 +9,10 @@ from useful_inkleby.useful_django.admin import io_admin_register
 class PageAdmin(ImportExportModelAdmin):
     pass
 
+@io_admin_register(models.Link)
+class LinkAdmin(ImportExportModelAdmin):
+    pass
+
 
 # class FooBarAdmin(admin.ModelAdmin):
 #     prepopulated_fields = {"slug": ["name"]}
