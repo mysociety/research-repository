@@ -43,10 +43,10 @@
 {% endwith %}
 
 {% if tag.display_items_in_years %}
-	{% include 'parts/researchyearlist.html' with items=tag.researchitem_set.all %}
+	{% include 'parts/researchyearlist.html' with items=tag.get_research_items %}
 {% else %}
 	<hr>
-	{% include 'parts/researchlist.html' with items=tag.researchitem_set.all %}
+	{% include 'parts/researchlist.html' with items=tag.get_research_items %}
 {% endif %}
 
 {% endblock %}

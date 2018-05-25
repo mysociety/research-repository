@@ -68,6 +68,9 @@ class Tag(models.Model):
     def __unicode__(self):
         return self.nice_name()
 
+    def get_research_items(self):
+        return self.items.all().filter(published=True).order_by('date')
+
     def nice_name(self):
         if self.label:
             return self.label
@@ -274,7 +277,7 @@ class ResearchItem(models.Model):
         blank=True
     )
 
-    tags = models.ManyToManyField(Tag, blank=True)
+    tags = models.ManyToManyField(Tag, blank=True,related_name="items")
 
     def ordered_outputs(self):
         return self.outputs.all().exclude(order=-1).order_by('order')
