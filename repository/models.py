@@ -69,7 +69,7 @@ class Tag(models.Model):
         return self.nice_name()
 
     def get_research_items(self):
-        return self.items.all().filter(published=True).order_by('date')
+        return self.items.all().filter(published=True).order_by('-date')
 
     def nice_name(self):
         if self.label:
