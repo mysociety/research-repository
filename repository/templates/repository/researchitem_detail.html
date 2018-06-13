@@ -97,7 +97,7 @@
 
     <h3>{{ output.title }}</h3>
 
-    <p><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{{ output.button_text }}</a></p>
+    <p><a class="button" rel="nofollow" href="{% url 'download' output.id %}" onclick="ga('send', 'event', '{{item.slug}}', 'download - bottom', '{{output.title|slugify}}','{{output.id}}')">{{ output.button_text }}</a></p>
 
     {% endfor %}
 
@@ -115,6 +115,20 @@
 {% endblock %}
 
 {% block sidebar %}
+
+<h2>Download/Access</h2>
+
+{% with item.ordered_top_outputs as oo %}
+{% if oo %}
+
+<p>
+    {% for output in oo %}
+	<h3 class="author-name"><a href="{% url 'download' output.id %}" rel="nofollow" onclick="ga('send', 'event', '{{item.slug}}', 'download - right', '{{output.title|slugify}}','{{output.id}}')">{{ output.title }}</a></h3>
+    {% endfor %}
+</p>
+{% endif %}
+{% endwith %}
+
 
 <h2>Authors</h2>
 
