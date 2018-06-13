@@ -194,7 +194,7 @@
     <h2>Tags</h2>
 
     <ul class="tags">
-    {% for tag in item.tags.all %}
+    {% for tag in item.visible_tags %}
 
     <li class="tag"><a href="{% url 'tag' tag.slug %}">{{ tag.slug }}</a></li>
 

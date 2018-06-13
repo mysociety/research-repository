@@ -58,6 +58,8 @@ class Tag(models.Model):
 
     tag_groups = models.ManyToManyField(TagGroup,blank=True,related_name="tags")
     
+    display = models.BooleanField(default=True)
+    
     top_bar = models.IntegerField(default=-1,
         help_text='Should this category appear on the top bar?'
     )
@@ -283,6 +285,9 @@ class ResearchItem(models.Model):
     custom_cite = MarkupField(blank=True,default="")
 
     tags = models.ManyToManyField(Tag, blank=True,related_name="items")
+
+    def visible_tags(self):
+        return self.tags.filter(display=True)
 
     def ordered_outputs(self):
         return self.outputs.all().exclude(order=-1).order_by('order')
