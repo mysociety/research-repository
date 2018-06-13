@@ -13,7 +13,6 @@ class ItemAuthorInline(admin.TabularInline):
     model = models.ItemAuthor
     extra = 1
 
-
 class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
@@ -26,3 +25,4 @@ class ResearchItemAdmin(ImportExportModelAdmin):
 
 admin.site.register(models.Tag)
 admin.site.register(models.TagGroup)
+admin.site.register(models.Site)

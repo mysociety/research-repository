@@ -3,15 +3,15 @@
 {% block title %}Our Research{% endblock %}
 
 {% block social-meta-tags %}
-<meta property="og:site_name" content="{{settings.SITE_NAME}}">
-<meta property="og:title" content="{{settings.SITE_NAME}} &ndash; Publications">
+<meta property="og:site_name" content="{{site.site_title}}">
+<meta property="og:title" content="{{site.site_title}} &ndash; Publications">
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'items' %}">
-<meta property="og:description" content="mySociety Research Publications" >
+<meta property="og:description" content="{{site.site_title}} Publications" >
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
-<meta name="twitter:title" content="{{settings.SITE_NAME}} &ndash; Publications">
-<meta name="twitter:description" content="mySociety Research Publications">
+<meta name="twitter:site" content="{{site.twitter}}">
+<meta name="twitter:title" content="{{site.site_title}} &ndash; Publications">
+<meta name="twitter:description" content="{{site.site_title}} Publications">
 
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">

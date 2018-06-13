@@ -6,8 +6,7 @@
   <head>
 
     <meta charset="utf-8">
-
-    <title>{% block fulltitle %}{% block title %}{% endblock %} - mySociety Research{% endblock %}</title>
+    <title>{% block fulltitle %}{% block title %}{% endblock %} - {{site.site_title}}{% endblock %}</title>
 
     {% stylesheet 'main' %}
 
@@ -44,7 +43,7 @@
 
     <header class="site-header">
       <div class="container">
-          <a href="{% url 'home' %}" class="site-title"><h1>mySociety Research</h1></a>
+          <a href="{% url 'home' %}" class="site-title"><h1>{{site.site_title}}</h1></a>
           <nav role="navigation" class="site-nav">
               <ul>
                   {% for p in top_tags %}

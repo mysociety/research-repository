@@ -5,14 +5,14 @@
 
 
 {% block social-meta-tags %}
-<meta property="og:site_name" content="{{settings.SITE_NAME}}">
-<meta property="og:title" content="mySociety Research - {{tag.nice_name}}">
+<meta property="og:site_name" content="{{site.site_title}}">
+<meta property="og:title" content="{{site.site_title}} - {{tag.nice_name}}">
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'tag' tag.slug %}">
 
 
 <meta name="twitter:card" content="summary">
-<meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
-<meta name="twitter:title" content="mySociety Research - {{tag.nice_name}}">
+<meta name="twitter:site" content="{{site.twitter}}">
+<meta name="twitter:title" content="{{site.site_title}} - {{tag.nice_name}}">
 
 <meta property="og:description" content="{{tag.description}}" >
 <meta name="twitter:description" content="{{tag.description}}">

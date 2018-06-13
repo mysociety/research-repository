@@ -6,6 +6,7 @@ from django.core import urlresolvers
 from django.db.models import F
 
 
+
 class TagGroup(models.Model):
     slug = AutoSlugField(
         unique=True,
@@ -386,3 +387,25 @@ class ResearchOutput(models.Model):
 
     def __unicode__(self):
         return self.title
+
+
+class Site(models.Model):
+    """
+    Holds site level information
+    - should only have one entry
+    """
+    site_title = models.CharField(max_length=30,default="")
+    default_tag = models.ForeignKey(Tag,null=True,blank=True)
+    twitter = models.CharField(max_length=30,default="")
+    description =  models.CharField(max_length=255,default="")
+    
+    
+    @classmethod
+    def get_default(cls):
+        try:
+            return cls.objects.all()[0]
+        except Exception:
+            s = Site()
+            s.save()
+            return s
+    
