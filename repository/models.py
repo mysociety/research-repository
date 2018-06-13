@@ -322,7 +322,7 @@ class ResearchItem(models.Model):
         """
         find similar based on overlapping number of tags
         """
-        minimum_score = 1
+        minimum_score = 2
         
         tags = list(self.tags.all())
         ids = set([x.id for x in tags])
