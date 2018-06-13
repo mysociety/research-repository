@@ -277,6 +277,10 @@ class ResearchItem(models.Model):
         choices=LICENCE_CHOICES,
         blank=True
     )
+    
+    show_citation = models.BooleanField(default=True)
+    
+    custom_cite = MarkupField(blank=True,default="")
 
     tags = models.ManyToManyField(Tag, blank=True,related_name="items")
 

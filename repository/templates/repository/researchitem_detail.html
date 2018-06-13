@@ -105,14 +105,25 @@
 {% endwith %}
 
 
+{% if item.show_citation %}
+
+
 <h2>Cite this</h2>
 
-<p class="citation-harvard">{% for author in item.author_list %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.last_name }}, {{ author.first_name|slice:'1' }}.{% endfor %}
+{% if item.custom_cite %}
 
+<p class="citation-harvard">{{item.custom_cite|safe}}</p>
+
+{% else %}
+<p class="citation-harvard">{% for author in item.author_list %}{% if not forloop.first %}{% if forloop.last %} and {% else %}, {% endif %}{% endif %}{{ author.last_name }}, {{ author.first_name|slice:'1' }}.{% endfor %}
 ({{ item.date|date:'Y' }}). <i>{{ item.title }}</i>. [online] {{site.site_title}}. Available at: {{ item.absolute_url }} [Accessed {% now 'j M Y' %}].</p>
 
+{% endif %}
+
+{% endif %}
 
 {% endblock %}
+
 
 {% block sidebar %}
 
