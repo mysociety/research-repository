@@ -82,9 +82,17 @@
 {% endif %}
 {% endwith %}
 
-
+{% with item.author_list as authors %}
+{% if authors %}
+	<hr>
+	<p>
+	{% for author in item.author_list %}
+	{% if author.preferred_url %}<a href="{{author.preferred_url}}">{% endif %}{{ author.full_name }}{% if author.institution %} ({{ author.institution }}){% endif %}{% if author.preferred_url %}</a>{%endif%}{% if forloop.last == False %}, {% endif %}
+	{% endfor %}
+	</p>
+{% endif %}
+{% endwith %}
 <hr>
-
     {{ item.abstract }}
 
 
@@ -127,18 +135,7 @@
 
 {% block sidebar %}
 
-<h2>Download/Access</h2>
 
-{% with item.ordered_top_outputs as oo %}
-{% if oo %}
-
-<p>
-    {% for output in oo %}
-	<h3 class="author-name"><a href="{% url 'download' output.id %}" rel="nofollow" onclick="ga('send', 'event', '{{item.slug}}', 'download - right', '{{output.title|slugify}}','{{output.id}}')">{{ output.title }}</a></h3>
-    {% endfor %}
-</p>
-{% endif %}
-{% endwith %}
 
 
 <h2>Authors</h2>
@@ -194,5 +191,18 @@
     </ul>
 
 {% endif %}
+
+<h2>Download/Access</h2>
+
+{% with item.ordered_top_outputs as oo %}
+{% if oo %}
+
+<p>
+    {% for output in oo %}
+	<p class="author-name"><a href="{% url 'download' output.id %}" rel="nofollow" onclick="ga('send', 'event', '{{item.slug}}', 'download - right', '{{output.title|slugify}}','{{output.id}}')">{{ output.title }}</a></p>
+    {% endfor %}
+</p>
+{% endif %}
+{% endwith %}
 
 {% endblock %}
