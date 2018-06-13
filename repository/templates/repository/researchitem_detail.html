@@ -87,7 +87,7 @@
 	<hr>
 	<p>
 	{% for author in item.author_list %}
-	{% if author.preferred_url %}<a href="{{author.preferred_url}}">{% endif %}{{ author.full_name }}{% if author.institution %} ({{ author.institution }}){% endif %}{% if author.preferred_url %}</a>{%endif%}{% if forloop.last == False %}, {% endif %}
+	{% if author.preferred_url %}<a href="{{author.preferred_url}}">{% endif %}{{ author.full_name }}{% if author.preferred_url %}</a>{%endif%}{% if forloop.last == False %}, {% endif %}
 	{% endfor %}
 	</p>
 {% endif %}
