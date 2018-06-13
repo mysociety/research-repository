@@ -95,7 +95,18 @@
 <hr>
     {{ item.abstract }}
 
+	{% with item.similar_items as similar %}
+	
+	{% if similar %}
+		
+	<h2>Related Items:</h2>
 
+	{% include 'parts/researchlist.html' with items=similar %}
+	
+	{% endif %}
+	{% endwith %}
+	
+	
 {% with item.ordered_outputs as oo %}
 {% if oo %}
 

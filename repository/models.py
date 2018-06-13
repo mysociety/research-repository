@@ -317,6 +317,32 @@ class ResearchItem(models.Model):
         if len(text) > 140:
             text = text[:140-4] + "[..]"
         return text
+    
+    def similar_items(self):
+        """
+        find similar based on overlapping number of tags
+        """
+        minimum_score = 1
+        
+        tags = list(self.tags.all())
+        ids = set([x.id for x in tags])
+        all_items = ResearchItem.objects.filter(tags__in=tags,published=True).exclude(id=self.id).prefetch_related('tags')
+        all_items = all_items.distinct()
+        all_items = list(all_items)
+        
+        for i in all_items:
+            our_ids = set([x.id for x in i.tags.all()])
+            i.overlap = len(ids.intersection(our_ids))
+         
+        all_items.sort(key=lambda x:x.date, reverse=True)   
+        all_items.sort(key=lambda x:x.overlap, reverse=True)
+        all_items = [x for x in all_items if x.overlap >= minimum_score]
+            
+            
+        return all_items[:2]
+    
+        
+        
 
 class ItemAuthor(models.Model):
 
