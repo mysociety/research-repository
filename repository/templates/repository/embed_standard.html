@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% load pipeline %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    {% stylesheet 'main' %}
+	</head>
+
+<body>
+{% include 'parts/researchlist.html' with items=items %}
+</body>

@@ -44,6 +44,6 @@ urlpatterns = [
     url(r'^section/(?P<slug>[-\w]+)$', views.TagView.as_view(), name='tag'),
     url(r'^tag/(?P<slug>[-\w]+)$', RedirectView.as_view(pattern_name='tag', permanent=True)),
     url(r'^tags/', views.TagListView.as_view(), name='tags'),
-
+    url(r'^embed/(?P<options>.+)', views.snippet_view, name='embed'),
     url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

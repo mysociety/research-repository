@@ -2,9 +2,59 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from repository import models
+from django.shortcuts import render
+from django.db.models import Q
 
 import json
 
+def snippet_view(request,options):
+    """
+    create embeddable snippet page
+    
+    options:
+    
+    seperate OR slugs with /
+    require AND slugs with +
+    
+    control options
+    
+    limit:2 - display 2
+    related:slug - item slug, displays related items
+    template:template name - referencs a embed_BLAH.html as the template
+    
+    
+    """
+    
+    limit = 100
+    related_items = None
+    template = 'standard'
+    
+    master = Q()
+    
+    for op in options.split("/"):
+        if ":" in op:
+            option, value = op.split(":")
+            if option == "limit":
+                limit = value
+            if option == "related":
+                related_items = value
+            if option == "template":
+                template = value
+        else:
+            q = Q()
+            for o in op.split("+"):
+                q &= Q(tags__slug=o)
+            master |= q
+    
+    if related_items:
+        items = models.ResearchItem.objects.get(slug=related_items).similar_items()[:limit]
+    else:
+        items = models.ResearchItem.objects.filter(master).filter(published=True)
+        items = items.distinct().order_by('-date')[:limit]
+    
+    context = {'items':items}
+    
+    return render(request, 'repository/embed_' + template + ".html", context) 
 
 class SitemapView(TemplateView):
     template_name = 'sitemap.html'
