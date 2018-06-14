@@ -1,7 +1,7 @@
 {% load thumbnail %}
 
 <div class="research-item__thumbnail">
-  <a href="{% url 'item' item.slug %}" {% if embed %} target="_parent" {% endif %}>
+  <a href="{% url 'item' item.slug %}"{% if embed %} target="_parent" {% endif %}>
 
     {% thumbnail item.thumbnail "110x150" format="PNG" as im %}
         <img style="margin:{{ im|margin:"110x150" }}" src="{{ im.url }}" srcset="{{ im.url|resolution:"1.5x" }} 1.5x, {{ im.url|resolution:"2x" }} 2x" width="{{ im.x }}" height="{{ im.y }}">
@@ -12,7 +12,7 @@
   </a>
 </div>
 
-<h2 class="research-item__title"><a href="{% url 'item' item.slug %}">{{ item.title }}</a></h2>
+<h2 class="research-item__title"><a href="{% url 'item' item.slug %}"{% if embed %} target="_parent" {% endif %}>{{ item.title }}</a></h2>
 
 <ul class="research-item__authors">
 {% for author in item.author_list %}
