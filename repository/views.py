@@ -13,8 +13,11 @@ def snippet_view(request,options):
     
     options:
     
-    seperate OR slugs with /
-    require AND slugs with +
+    each 
+    
+    use multiple tags to do AND
+    
+    'featured' - uses featured option rather than tag
     
     control options
     
@@ -23,36 +26,43 @@ def snippet_view(request,options):
     template:template name - referencs a embed_BLAH.html as the template
     
     
+    e.g.
+    
+    /embed/fms/our-research/limit:2
+    
+    - two items in fms and our_research
+    
     """
     
     limit = 100
     related_items = None
     template = 'standard'
-    
-    master = Q()
+
+    items = models.ResearchItem.objects.filter(published=True)
     
     for op in options.split("/"):
-        if ":" in op:
-            option, value = op.split(":")
-            if option == "limit":
-                limit = value
-            if option == "related":
-                related_items = value
-            if option == "template":
-                template = value
-        else:
-            q = Q()
-            for o in op.split("+"):
-                q &= Q(tags__slug=o)
-            master |= q
+        if op:
+            if ":" in op:
+                option, value = op.split(":")
+                if option == "limit":
+                    limit = value
+                if option == "related":
+                    related_items = value
+                if option == "template":
+                    template = value
+            else:
+                if op == "featured":
+                    items = items.filter(featured=True)
+                else:
+                    items = items.filter(tags__slug=op)
     
     if related_items:
         items = models.ResearchItem.objects.get(slug=related_items).similar_items()[:limit]
     else:
-        items = models.ResearchItem.objects.filter(master).filter(published=True)
         items = items.distinct().order_by('-date')[:limit]
     
-    context = {'items':items}
+    context = {'items':items,
+               'embed':True}
     
     return render(request, 'repository/embed_' + template + ".html", context) 
 
