@@ -106,23 +106,6 @@
 	{% endif %}
 	{% endwith %}
 	
-	
-{% with item.ordered_outputs as oo %}
-{% if oo %}
-
-    <h2>Documents</h2>
-
-    {% for output in oo %}
-
-    <h3>{{ output.title }}</h3>
-
-    <p><a class="button" rel="nofollow" href="{% url 'download' output.id %}" onclick="ga('send', 'event', '{{item.slug}}', 'download - bottom', '{{output.title|slugify}}','{{output.id}}')">{{ output.button_text }}</a></p>
-
-    {% endfor %}
-
-{% endif %}
-{% endwith %}
-
 
 {% if item.show_citation %}
 
@@ -205,7 +188,7 @@
 
 <h2>Download/Access</h2>
 
-{% with item.ordered_top_outputs as oo %}
+{% with item.ordered_outputs as oo %}
 {% if oo %}
 
 <p>
