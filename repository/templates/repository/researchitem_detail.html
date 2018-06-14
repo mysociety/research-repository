@@ -206,7 +206,7 @@
     <ul class="tags">
     {% for tag in item.visible_tags %}
 
-    <li class="tag"><a href="{% url 'tag' tag.slug %}">{{ tag.slug }}</a></li>
+    <li class="tag"><a href="{% url 'tag' tag.slug %}">{{ tag.label }}</a></li>
 
     {% endfor %}
     </ul>
