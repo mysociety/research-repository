@@ -93,7 +93,14 @@
 {% endif %}
 {% endwith %}
 <hr>
-{{ item.abstract }}
+{{ item.rendered_abstract }}
+
+{% if "$TOC" not in item.abstract.raw and item.table_of_contents_cache %}
+<hr>
+<h2>Contents</h2>
+{% include 'parts/researchtoc.html' with items=similar %}
+{% endif %}
+
 
 {% with item.similar_items as similar %}
 

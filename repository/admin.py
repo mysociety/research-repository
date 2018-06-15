@@ -22,6 +22,9 @@ class ResearchItemAdmin(ImportExportModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = (ItemAuthorInline, ResearchOutputInline)
 
+    def save_model(self, request, obj, form, change):
+        obj.fetch_toc(save=False)
+        super(ImportExportModelAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(models.Tag)
 admin.site.register(models.TagGroup)

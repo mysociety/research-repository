@@ -4,7 +4,9 @@ from markitup.fields import MarkupField
 from django.conf import settings
 from django.core import urlresolvers
 from django.db.models import F
-
+from django.utils.safestring import mark_safe
+import urllib, json
+from django.template import loader
 
 
 class TagGroup(models.Model):
@@ -285,6 +287,38 @@ class ResearchItem(models.Model):
     custom_cite = MarkupField(blank=True,default="")
 
     tags = models.ManyToManyField(Tag, blank=True,related_name="items")
+    
+    table_of_contents_url = models.URLField(blank=True,default="")
+    table_of_contents_cache = models.TextField(blank=True,default="", editable=False)
+    
+
+    def fetch_toc(self,save=True):
+        if self.table_of_contents_url:
+            try:
+                response = urllib.urlopen(self.table_of_contents_url)
+                self.table_of_contents_cache = response.read()
+            except Exception:
+                pass
+            if save:
+                self.save()
+
+    def json_toc(self):
+        print self.table_of_contents_cache
+        return json.loads(self.table_of_contents_cache)
+    
+    def rendered_toc(self):
+        template = loader.get_template('parts/researchtoc.html')
+        return template.render({'item':self})
+        
+    def rendered_abstract(self):
+        """
+        allows keywords to be specified in abstract and replaced by database
+        values
+        """
+        abstract = self.abstract.rendered
+        if "$TOC" in abstract:
+            abstract = abstract.replace("<p>$TOC</p>",self.rendered_toc())
+        return mark_safe(abstract)
 
     def visible_tags(self):
         return self.tags.filter(display=True)
@@ -318,6 +352,8 @@ class ResearchItem(models.Model):
             text = self.subtitle
         else:
             text = self.abstract.raw
+
+        text = text.replace("$TOC","")
 
         if len(text) > 140:
             text = text[:140-4] + "[..]"

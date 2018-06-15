@@ -1,0 +1,17 @@
+{% with item.json_toc as toc %}
+{% if toc %}
+<ol>
+{% for i in toc %}
+<li><a href="{{i.link}}">{{i.name}}</a>
+{% if i.children %}
+<ol>
+{% for c in i.children %}
+<li><a href="{{c.link}}">{{c.name}}</a></li>
+{% endfor %}
+</ol>
+{% endif %}
+</li>
+{% endfor %}
+</ol>
+{% endif %}
+{% endwith %}
