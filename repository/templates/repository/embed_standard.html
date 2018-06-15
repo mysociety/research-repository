@@ -9,5 +9,14 @@
 	</head>
 
 <body>
+
+{% if display_text %}
+
+{% if related %}
+<h2>Related items:</h2>
+{% endif %}
+
+{% endif %}
+
 {% include 'parts/researchlist.html' with items=items %}
 </body>

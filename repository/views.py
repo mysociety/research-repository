@@ -34,9 +34,11 @@ def snippet_view(request,options):
     
     """
     
-    limit = 100
+    limit = 4
     related_items = None
     template = 'standard'
+    related = False
+    display_text = False
 
     items = models.ResearchItem.objects.filter(published=True)
     
@@ -48,8 +50,14 @@ def snippet_view(request,options):
                     limit = value
                 if option == "related":
                     related_items = value
+                    related = True
                 if option == "template":
                     template = value
+                if option == "text":
+                    if value.lower() in ["true","t","y","yes"]:
+                        display_text = True
+                    else:
+                        display_text = False
             else:
                 if op == "featured":
                     items = items.filter(featured=True)
@@ -57,12 +65,14 @@ def snippet_view(request,options):
                     items = items.filter(tags__slug=op)
     
     if related_items:
-        items = models.ResearchItem.objects.get(slug=related_items).similar_items()[:limit]
+        items = models.ResearchItem.objects.get(slug=related_items).similar_items(limit)
     else:
         items = items.distinct().order_by('-date')[:limit]
     
     context = {'items':items,
-               'embed':True}
+               'embed':True,
+               'display_text':display_text,
+               'related':related}
     
     return render(request, 'repository/embed_' + template + ".html", context) 
 

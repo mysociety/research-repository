@@ -359,7 +359,7 @@ class ResearchItem(models.Model):
             text = text[:140-4] + "[..]"
         return text
     
-    def similar_items(self):
+    def similar_items(self,limit=2):
         """
         find similar based on overlapping number of tags
         """
@@ -380,7 +380,7 @@ class ResearchItem(models.Model):
         all_items = [x for x in all_items if x.overlap >= minimum_score]
             
             
-        return all_items[:2]
+        return all_items[:limit]
     
         
         
