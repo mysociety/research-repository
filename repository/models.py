@@ -303,8 +303,15 @@ class ResearchItem(models.Model):
                 self.save()
 
     def json_toc(self):
-        print self.table_of_contents_cache
-        return json.loads(self.table_of_contents_cache)
+        j = json.loads(self.table_of_contents_cache)
+        for item in j:
+            if "&amp;" in item["name"]:
+                item["name"] = item["name"].replace("&amp;","&")
+            for c in item["children"]:
+                if "&amp;" in c["name"]:
+                    c["name"] = c["name"].replace("&amp;","&")
+        return j
+        
     
     def rendered_toc(self):
         template = loader.get_template('parts/researchtoc.html')
