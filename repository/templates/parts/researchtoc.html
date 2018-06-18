@@ -2,11 +2,11 @@
 {% if toc %}
 <ol>
 {% for i in toc %}
-<li><a href="{{i.link}}">{{i.name}}</a>
+<li><a href="{{i.link}}" onclick="ga('send', 'event', '{{item.slug}}', 'table of contents click', '{{i.link}}')">{{i.name}}</a>
 {% if i.children %}
 <ol>
 {% for c in i.children %}
-<li><a href="{{c.link}}">{{c.name}}</a></li>
+<li><a href="{{c.link}}" onclick="ga('send', 'event', '{{item.slug}}', 'table of contents click', '{{i.link}}')">{{c.name}}</a></li>
 {% endfor %}
 </ol>
 {% endif %}
