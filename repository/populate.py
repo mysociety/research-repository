@@ -1,11 +1,13 @@
 '''
 Creates tests data for testing framework
 '''
-from models import Tag, Person, ResearchItem, ItemAuthor, ResearchOutput, Site
+from models import (Tag, Person, ResearchItem, ItemAuthor, ResearchOutput, 
+                    Site, TagDisplayFilter)
 from pages.models import Page
 from django.contrib.auth.models import User
 from datetime import datetime
 import random
+
 
 def prepare_people():
     print "preparing people"
@@ -28,23 +30,33 @@ def prepare_people():
 def prepare_tags():
     print "preparing tags"
     gc = Tag.objects.get_or_create
+    tgc = TagDisplayFilter.objects.get_or_create
     
-    gc(label = "Our Research",
+    r,c = gc(label = "Our Research",
       slug = "research",
       description = "Test Site Research",
       top_bar=1)
 
-    gc(label = "Papers/Reports",
+    t,c = gc(label = "Papers/Reports",
        slug = "papers",
        description = "Test Papers and Reports")
-  
-    gc(label = "Blog Posts",
+    
+    tgc(parent=r, #create TagDisplayFilter examples
+        tag=t)
+    
+    t,c = gc(label = "Blog Posts",
        slug = "blog_posts",
        description = "Test Blog Posts")
+    
+    tgc(parent=r,
+        tag=t)
 
-    gc(label = "Exploration Sites",
+    t,c = gc(label = "Exploration Sites",
        slug = "minisites",
        description = "Test Mini Sites")
+    
+    tgc(parent=r,
+        tag=t)
 
     gc(label = "Hidden Category",
        slug = "hidden",
