@@ -23,11 +23,11 @@ Simply run:
 
 In Windows run the command prompt as administrator. 
     
-To get a fully configured vagrant development environment. The code is
-installed into `/vagrant/repository` inside the VM, and you can run
-the Django dev server with:
-
-    $ source ../virtualenv-repository/bin/activate
-    $ python manage.py runserver 0.0.0.0:8000
+	Once in the vagrant, to populate the database with test data (and create an 'admin'/'admin' superuser) - run:
+	$ script/populate
+	
+	Then to run the server:
+	
+	$ script/server
 
 The website will then be running at http://localhost:8000
