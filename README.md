@@ -27,7 +27,6 @@ To get a fully configured vagrant development environment. The code is
 installed into `/vagrant/repository` inside the VM, and you can run
 the Django dev server with:
 
-    $ cd /vagrant/repository
     $ source ../virtualenv-repository/bin/activate
     $ python manage.py runserver 0.0.0.0:8000
 
