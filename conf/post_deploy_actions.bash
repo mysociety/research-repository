@@ -43,6 +43,8 @@ if [ ! -d "$researchsites_dir" ]; then
     cd $researchsites_dir
     git clone --no-checkout ssh://git.mysociety.org/data/git/private/researchsites.git . && git checkout master
 else
-    cd $researchsites_dir
-    /data/mysociety/bin/git-safe-to-checkout . master && git pull
+	if [ -d "/data/mysociety/bin/git-safe-to-checkout" ]; then
+		cd $researchsites_dir
+		/data/mysociety/bin/git-safe-to-checkout . master && git pull
+	fi
 fi
