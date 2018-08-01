@@ -25,7 +25,7 @@
 
 {% block content %}
 
-<h1>{{ tag.nice_name }}</h1>
+<h1>{{ tag.nice_name }}{% if tag.secondary_tag %} - {{tag.secondary_tag.nice_name}}{% endif %}</h1>
 {% if request.user.is_staff %}
 <p><a href="{% url 'admin:repository_tag_change' tag.id %}">Edit This Tag</a></p>
 {% endif %}
@@ -45,11 +45,24 @@
 {% endif %}
 {% endwith %}
 
-{% if tag.display_items_in_years %}
-	{% include 'parts/researchyearlist.html' with items=tag.get_research_items %}
+{% if tag.filters %}
+
+{% for f in tag.filters %}
+	<ul>
+		<li {% if f.id == tag.secondary_tag.id %}class="active"{% endif %}><a href="{% url 'tag' tag.slug f.slug %}">{{f.label}} ({{f.count}})</a>
+		</li>
+	</ul>
+{% endfor %}
+
+{% endif %}
+
+
+
+{% if tag.display_items_in_years or tag.secondary_tag.display_items_in_years %}
+	{% include 'parts/researchyearlist.html' with items=tag.selected_items %}
 {% else %}
 	<hr>
-	{% include 'parts/researchlist.html' with items=tag.get_research_items %}
+	{% include 'parts/researchlist.html' with items=tag.selected_items %}
 {% endif %}
 
 {% endblock %}
