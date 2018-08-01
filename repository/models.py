@@ -131,7 +131,8 @@ class Person(models.Model):
     )
     list_in_people = models.BooleanField(
         help_text='Should this person be included in the list of people?',
-        blank=True
+        blank=True,
+        default=False
     )
 
     LINK_BEHAVIOUR_CHOICES = (
@@ -144,6 +145,7 @@ class Person(models.Model):
         max_length=16,
         choices=LINK_BEHAVIOUR_CHOICES,
         help_text='How should we link this person\'s name when given as an author?',
+        default="none"
     )
 
     def full_name(self):
@@ -241,7 +243,8 @@ class ResearchItem(models.Model):
     )
 
     featured = models.BooleanField(
-        help_text='Should this item be featured on the homepage?'
+        help_text='Should this item be featured on the homepage?',
+        default=False
     )
 
     hero = models.ImageField(
