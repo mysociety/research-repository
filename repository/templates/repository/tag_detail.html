@@ -26,6 +26,9 @@
 {% block content %}
 
 <h1>{{ tag.nice_name }}</h1>
+{% if request.user.is_staff %}
+<p><a href="{% url 'admin:repository_tag_change' tag.id %}">Edit This Tag</a></p>
+{% endif %}
 
 {% thumbnail tag.hero "1024x350" crop="center" as im %}
 <img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}">

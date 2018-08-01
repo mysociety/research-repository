@@ -59,7 +59,9 @@
 {% if item.subtitle %}
     <p class="item-subtitle">{{ item.subtitle }}</p>
 {% endif %}
-
+{% if request.user.is_staff %}
+<p><a href="{% url 'admin:repository_researchitem_change' item.id %}">Edit This Item</a></p>
+{% endif %}
 
 
 {% thumbnail item.hero "1024x680" crop="center" as im %}
