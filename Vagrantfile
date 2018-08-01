@@ -35,6 +35,7 @@ Vagrant.configure(2) do |config|
   end
 
   # Provision the vagrant box
+  config.vm.provision "shell", path: "conf/provisioner.sh", privileged: false
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
 
