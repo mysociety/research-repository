@@ -4,17 +4,25 @@
 
 {% block social-meta-tags %}
 <meta property="og:site_name" content="{{settings.SITE_NAME}}">
-<meta property="og:title" content="{{settings.SITE_NAME}} &ndash; {{page.title}}">
+<meta property="og:title" content="{{page.get_social_title}}">
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'page' page.slug %}">
-<meta property="og:description" content="{{page.title}}" >
+<meta property="og:description" content="{{page.get_social_desc}}" >
+{% if page.social_big_image %}
+<meta name="twitter:card" content="summary_large_image">
+{% else %}
 <meta name="twitter:card" content="summary">
+{% endif %}
 <meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
-<meta name="twitter:title" content="{{settings.SITE_NAME}} &ndash; {{page.title}}">
-<meta name="twitter:description" content="{{page.title}}">
+<meta name="twitter:title" content="{{page.get_social_title}}">
+<meta name="twitter:description" content="{{page.get_social_desc}}">
 
-
+{% if page.social_image %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.MEDIA_URL}}{{page.social_image.url}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{MEDIA_URL}}{{page.social_image.url}}">
+{% else %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endif %}
 {% endblock %}
 
 {% block content %}

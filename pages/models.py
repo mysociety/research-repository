@@ -21,6 +21,30 @@ class Page(models.Model):
     content = models.TextField()
     
     nav_order = models.IntegerField(default=-1)
+    
+    social_image = models.ImageField(
+        upload_to='social/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="Image to be used on social shares of the site"
+    )
+    
+    social_title = models.CharField(max_length=200,default="",null=True,blank=True)
+    social_description = models.CharField(max_length=200,null=True,blank=True)
+    social_big_image = models.BooleanField(default=False)
+
+    def get_social_title(self):
+        if self.social_title:
+            return self.social_title
+        else:
+            return self.title
+
+    def get_social_desc(self):
+        if self.social_description:
+            return self.social_description
+        else:
+            return self.title
 
     def __unicode__(self):
         return self.title
