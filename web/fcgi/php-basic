@@ -1,0 +1,2 @@
+#!/bin/sh
+PHP_FCGI_CHILDREN=0 PHPRC=/etc/php/7.0/fcgi exec /usr/bin/php-cgi
