@@ -5,6 +5,8 @@ from repository import models
 from django.shortcuts import render
 from django.db.models import Q
 
+from collections import Counter
+
 import json
 
 def snippet_view(request,options):
@@ -196,6 +198,28 @@ class TagView(DetailView):
             if main_tag.secondary_tag not in main_tag.filters:
                 main_tag.secondary_tag.count = main_tag.selected_items.count()
                 main_tag.filters = [main_tag.secondary_tag] + main_tag.filters 
+        
+        
+        #group consecutive years with only one item
+        main_tag.selected_items = list(main_tag.selected_items)
+        main_tag.selected_items.sort(key=lambda x:x.date)
+        
+        count = Counter([x.date.year for x in main_tag.selected_items])
+        
+        for x,item in enumerate(main_tag.selected_items):
+            item.grouped_year = str(item.date.year)
+            if x == 0:
+                continue
+            prev = main_tag.selected_items[x-1]
+            prev_count = count[prev.date.year]
+            current_count = count[item.date.year]
+            if "-" not in prev.grouped_year:
+                if prev_count + current_count == 2:
+                    year = "{0} - {1}".format(prev.date.year,item.date.year)
+                    prev.grouped_year = year
+                    item.grouped_year = year
+        
+        main_tag.selected_items = main_tag.selected_items[::-1] #reverse chron
         
         return main_tag
     
