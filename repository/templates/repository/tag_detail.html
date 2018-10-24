@@ -45,7 +45,6 @@
 <li role = "presentation"{% if f.id == tag.secondary_tag.id %}class="active"{% endif %}><a href="{% url 'tag' tag.slug f.slug %}">{{f.label}} ({{f.count}})</a></li>
 {% endfor %}
 	</ul>
-<hr>
 {% endif %}
 
 {% if tag.description %}
