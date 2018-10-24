@@ -2,6 +2,7 @@
 @import 'variables';
 @import 'mixins';
 @import 'pygment_trac';
+@import "bootstrap-compat";
 
 *, *:before, *:after {
     -moz-box-sizing: border-box;
@@ -264,6 +265,12 @@ blockquote {
         border-top: none;
     }
 
+}
+
+
+h2.no-border {
+        border-top: none;
+        padding-top: 0;
 }
 
 .secondary-content-column {
