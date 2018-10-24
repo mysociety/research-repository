@@ -161,7 +161,44 @@ class TagListView(ListView):
 class TagView(DetailView):
     model = models.Tag
     context_object_name = 'tag'
+    
+    def get_object(self, queryset=None):
+        
+        queryset = self.get_queryset()    
+        
+        main_tag = queryset.filter(slug=self.kwargs["slug1"]).get()
+        main_tag.selected_items = main_tag.get_research_items()
+        filters = list(main_tag.display_filters.all().prefetch_related('tag'))
+        main_tag.filters = []
+        if filters:
+            for d in filters:
+                q = d.tag.get_research_items()
+                q = q & main_tag.selected_items
+                d.tag.count = q.count()
+            
+            filters.sort(key=lambda x:x.tag.count,reverse=True)
+            filters.sort(key=lambda x:x.order)
+            
+            main_tag.filters = [x.tag for x in filters]
+        
+        main_tag.secondary_tag = None
+        if "slug2" in self.kwargs:
+            secondary_tag = queryset.filter(slug=self.kwargs["slug2"]).get()
+            main_tag.secondary_tag = secondary_tag
+        else:
+            if main_tag.filters:
+                main_tag.secondary_tag = main_tag.filters[0]
 
+        if main_tag.secondary_tag:
+            main_tag.display_items_in_years = main_tag.secondary_tag.display_items_in_years
+            secondary_items = main_tag.secondary_tag.get_research_items()
+            main_tag.selected_items = main_tag.selected_items & secondary_items
+            if main_tag.secondary_tag not in main_tag.filters:
+                main_tag.secondary_tag.count = main_tag.selected_items.count()
+                main_tag.filters = [main_tag.secondary_tag] + main_tag.filters 
+        
+        return main_tag
+    
 
 def output_download(request,output_id):
     """

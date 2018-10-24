@@ -87,6 +87,13 @@ class Tag(models.Model):
     class Meta:
         ordering = ['slug']
 
+class TagDisplayFilter(models.Model):
+    """
+    model to manage when secondary tags should be part of the tag navigation
+    """
+    parent = models.ForeignKey(Tag,related_name="display_filters")
+    tag = models.ForeignKey(Tag)
+    order = models.IntegerField(default=0)
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
