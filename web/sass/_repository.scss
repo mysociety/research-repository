@@ -11,6 +11,16 @@ a.button {
         background: lighten($colour_green, 35%);
         text-decoration: none;
     }
+	
+	width: 100%;
+	text-align:center;
+	margin-bottom:10px;
+		
+	@media screen and (min-width:$mediumish-screen) {
+	width: auto;
+	margin-bottom: inherit;
+	}
+	
 }
 
 .item-subtitle {
