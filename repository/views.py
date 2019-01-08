@@ -163,11 +163,18 @@ class TagListView(ListView):
 class TagView(DetailView):
     model = models.Tag
     context_object_name = 'tag'
-    
+
+    def get_context_data(self, **kwargs):
+        context = super(TagView, self).get_context_data(**kwargs)
+        top_tags = models.Tag.objects.filter(top_bar__gte=0)
+        top_tags = top_tags.order_by('top_bar')
+        context["top_tags"] = top_tags
+        return context
+
     def get_object(self, queryset=None):
-        
-        queryset = self.get_queryset()    
-        
+
+        queryset = self.get_queryset()
+
         main_tag = queryset.filter(slug=self.kwargs["slug1"]).get()
         main_tag.selected_items = main_tag.get_research_items()
         filters = list(main_tag.display_filters.all().prefetch_related('tag'))

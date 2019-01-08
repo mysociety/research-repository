@@ -47,9 +47,7 @@
           <a href="{% url 'home' %}" class="site-title"><h1>{{site.site_title}}</h1></a>
           <nav role="navigation" class="site-nav">
               <ul>
-                  {% for p in top_tags %}
-                  <li><a href="{% url 'tag' p.slug %}">{{p.nice_name}}</a></li>
-                  {% endfor %}
+				   <li><a href="{% url 'tag' site.default_tag.slug %}">Research</a></li>
                   {% for p in all_pages %}
                   <li><a href="{% url 'page' p.slug %}">{{p.title}}</a></li>
                   {% endfor %}
