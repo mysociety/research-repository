@@ -5,7 +5,8 @@ from django.conf import settings
 from django.core import urlresolvers
 from django.db.models import F
 from django.utils.safestring import mark_safe
-import urllib, json
+import urllib
+import json
 from django.template import loader
 
 
@@ -40,7 +41,7 @@ class Tag(models.Model):
         max_length=30,
         blank=True,
     )
-    
+
     slug = models.SlugField(
         max_length=30,
         unique=True
@@ -58,16 +59,17 @@ class Tag(models.Model):
         blank=True
     )
 
-    tag_groups = models.ManyToManyField(TagGroup,blank=True,related_name="tags")
-    
+    tag_groups = models.ManyToManyField(
+        TagGroup, blank=True, related_name="tags")
+
     display = models.BooleanField(default=True)
-    
+
     top_bar = models.IntegerField(default=-1,
-        help_text='Should this category appear on the top bar?'
-    )
+                                  help_text='Should this category appear on the top bar?'
+                                  )
 
     display_items_in_years = models.BooleanField(default=True,
-                            help_text='On the tag page - does it display items in years?'
+                                                 help_text='On the tag page - does it display items in years?'
                                                  )
 
     def __unicode__(self):
@@ -76,24 +78,29 @@ class Tag(models.Model):
     def get_research_items(self):
         return self.items.all().filter(published=True).order_by('-date')
 
+    def count(self):
+        return self.get_research_items().count()
+
     def nice_name(self):
         if self.label:
             return self.label
         if "-" in self.slug:
-            return self.slug.replace("-"," ").title()
+            return self.slug.replace("-", " ").title()
         else:
             return self.slug.title()
 
     class Meta:
         ordering = ['slug']
 
+
 class TagDisplayFilter(models.Model):
     """
     model to manage when secondary tags should be part of the tag navigation
     """
-    parent = models.ForeignKey(Tag,related_name="display_filters")
+    parent = models.ForeignKey(Tag, related_name="display_filters")
     tag = models.ForeignKey(Tag)
     order = models.IntegerField(default=0)
+
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30)
@@ -170,18 +177,18 @@ class Person(models.Model):
     def json_ld_representation(self):
 
         json_ld_representation = {
-                "@context": "http://schema.org",
-                "@type": "Person",
-                "familyName": self.last_name,
-                "givenName": self.first_name,
-                "name": self.full_name()
-                }
+            "@context": "http://schema.org",
+            "@type": "Person",
+            "familyName": self.last_name,
+            "givenName": self.first_name,
+            "name": self.full_name()
+        }
 
         if self.institution:
             json_ld_representation['affiliation'] = {
-                    "@type": "Organization",
-                    "name": self.institution,
-                }
+                "@type": "Organization",
+                "name": self.institution,
+            }
 
         author_alternate_urls = []
 
@@ -199,10 +206,12 @@ class Person(models.Model):
             author_alternate_urls.append('http://orcid.org/' + self.orcid)
 
         if self.googlescholar:
-            author_alternate_urls.append('https://scholar.google.co.uk/citations?user=' + self.googlescholar)
+            author_alternate_urls.append(
+                'https://scholar.google.co.uk/citations?user=' + self.googlescholar)
 
         if self.researcherid:
-            author_alternate_urls.append('http://www.researcherid.com/rid/' + self.researcherid)
+            author_alternate_urls.append(
+                'http://www.researcherid.com/rid/' + self.researcherid)
 
         if self.twitter:
             author_alternate_urls.append('https://twitter.com/' + self.twitter)
@@ -291,18 +300,18 @@ class ResearchItem(models.Model):
         choices=LICENCE_CHOICES,
         blank=True
     )
-    
+
     show_citation = models.BooleanField(default=True)
-    
-    custom_cite = MarkupField(blank=True,default="")
 
-    tags = models.ManyToManyField(Tag, blank=True,related_name="items")
-    
-    table_of_contents_url = models.URLField(blank=True,default="")
-    table_of_contents_cache = models.TextField(blank=True,default="", editable=False)
-    
+    custom_cite = MarkupField(blank=True, default="")
 
-    def fetch_toc(self,save=True):
+    tags = models.ManyToManyField(Tag, blank=True, related_name="items")
+
+    table_of_contents_url = models.URLField(blank=True, default="")
+    table_of_contents_cache = models.TextField(
+        blank=True, default="", editable=False)
+
+    def fetch_toc(self, save=True):
         if self.table_of_contents_url:
             try:
                 response = urllib.urlopen(self.table_of_contents_url)
@@ -316,17 +325,16 @@ class ResearchItem(models.Model):
         j = json.loads(self.table_of_contents_cache)
         for item in j:
             if "&amp;" in item["name"]:
-                item["name"] = item["name"].replace("&amp;","&")
+                item["name"] = item["name"].replace("&amp;", "&")
             for c in item["children"]:
                 if "&amp;" in c["name"]:
-                    c["name"] = c["name"].replace("&amp;","&")
+                    c["name"] = c["name"].replace("&amp;", "&")
         return j
-        
-    
+
     def rendered_toc(self):
         template = loader.get_template('parts/researchtoc.html')
-        return template.render({'item':self})
-        
+        return template.render({'item': self})
+
     def rendered_abstract(self):
         """
         allows keywords to be specified in abstract and replaced by database
@@ -334,7 +342,7 @@ class ResearchItem(models.Model):
         """
         abstract = self.abstract.rendered
         if "$TOC" in abstract:
-            abstract = abstract.replace("<p>$TOC</p>",self.rendered_toc())
+            abstract = abstract.replace("<p>$TOC</p>", self.rendered_toc())
         return mark_safe(abstract)
 
     def visible_tags(self):
@@ -370,37 +378,35 @@ class ResearchItem(models.Model):
         else:
             text = self.abstract.raw
 
-        text = text.replace("$TOC","")
+        text = text.replace("$TOC", "")
 
         if len(text) > 140:
-            text = text[:140-4] + "[..]"
+            text = text[:140 - 4] + "[..]"
         return text
-    
-    def similar_items(self,limit=2):
+
+    def similar_items(self, limit=2):
         """
         find similar based on overlapping number of tags
         """
         minimum_score = 2
-        
+
         tags = list(self.tags.all())
         ids = set([x.id for x in tags])
-        all_items = ResearchItem.objects.filter(tags__in=tags,published=True).exclude(id=self.id).prefetch_related('tags')
+        all_items = ResearchItem.objects.filter(
+            tags__in=tags, published=True).exclude(id=self.id).prefetch_related('tags')
         all_items = all_items.distinct()
         all_items = list(all_items)
-        
+
         for i in all_items:
             our_ids = set([x.id for x in i.tags.all()])
             i.overlap = len(ids.intersection(our_ids))
-         
-        all_items.sort(key=lambda x:x.date, reverse=True)   
-        all_items.sort(key=lambda x:x.overlap, reverse=True)
+
+        all_items.sort(key=lambda x: x.date, reverse=True)
+        all_items.sort(key=lambda x: x.overlap, reverse=True)
         all_items = [x for x in all_items if x.overlap >= minimum_score]
-            
-            
+
         return all_items[:limit]
-    
-        
-        
+
 
 class ItemAuthor(models.Model):
 
@@ -482,12 +488,11 @@ class Site(models.Model):
     Holds site level information
     - should only have one entry
     """
-    site_title = models.CharField(max_length=30,default="")
-    default_tag = models.ForeignKey(Tag,null=True,blank=True)
-    twitter = models.CharField(max_length=30,default="")
-    description =  models.CharField(max_length=255,default="")
-    
-    
+    site_title = models.CharField(max_length=30, default="")
+    default_tag = models.ForeignKey(Tag, null=True, blank=True)
+    twitter = models.CharField(max_length=30, default="")
+    description = models.CharField(max_length=255, default="")
+
     @classmethod
     def get_default(cls):
         try:
@@ -496,4 +501,3 @@ class Site(models.Model):
             s = Site()
             s.save()
             return s
-    

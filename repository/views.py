@@ -9,33 +9,34 @@ from collections import Counter
 
 import json
 
-def snippet_view(request,options):
+
+def snippet_view(request, options):
     """
     create embeddable snippet page
-    
+
     options:
-    
+
     each 
-    
+
     use multiple tags to do AND
-    
+
     'featured' - uses featured option rather than tag
-    
+
     control options
-    
+
     limit:2 - display 2
     related:slug - item slug, displays related items
     template:template name - referencs a embed_BLAH.html as the template
-    
-    
+
+
     e.g.
-    
+
     /embed/fms/our-research/limit:2
-    
+
     - two items in fms and our_research
-    
+
     """
-    
+
     limit = 4
     related_items = None
     template = 'standard'
@@ -43,7 +44,7 @@ def snippet_view(request,options):
     display_text = False
 
     items = models.ResearchItem.objects.filter(published=True)
-    
+
     for op in options.split("/"):
         if op:
             if ":" in op:
@@ -56,7 +57,7 @@ def snippet_view(request,options):
                 if option == "template":
                     template = value
                 if option == "text":
-                    if value.lower() in ["true","t","y","yes"]:
+                    if value.lower() in ["true", "t", "y", "yes"]:
                         display_text = True
                     else:
                         display_text = False
@@ -65,18 +66,20 @@ def snippet_view(request,options):
                     items = items.filter(featured=True)
                 else:
                     items = items.filter(tags__slug=op)
-    
+
     if related_items:
-        items = models.ResearchItem.objects.get(slug=related_items).similar_items(limit)
+        items = models.ResearchItem.objects.get(
+            slug=related_items).similar_items(limit)
     else:
         items = items.distinct().order_by('-date')[:limit]
-    
-    context = {'items':items,
-               'embed':True,
-               'display_text':display_text,
-               'related':related}
-    
-    return render(request, 'repository/embed_' + template + ".html", context) 
+
+    context = {'items': items,
+               'embed': True,
+               'display_text': display_text,
+               'related': related}
+
+    return render(request, 'repository/embed_' + template + ".html", context)
+
 
 class SitemapView(TemplateView):
     template_name = 'sitemap.html'
@@ -109,26 +112,29 @@ class ItemView(DetailView):
         item = context['item']
 
         json_ld_representation = {
-                "@context": "http://schema.org",
-                "@type": "ScholarlyArticle",
-                "headline": item.title,
-                "datePublished": item.date.isoformat(),
-                "description": item.abstract.raw,
-                "author": [],
-                "url": item.absolute_url()
-            }
+            "@context": "http://schema.org",
+            "@type": "ScholarlyArticle",
+            "headline": item.title,
+            "datePublished": item.date.isoformat(),
+            "description": item.abstract.raw,
+            "author": [],
+            "url": item.absolute_url()
+        }
 
         if item.subtitle:
             json_ld_representation['alternativeHeadline'] = item.subtitle
 
         if item.thumbnail:
-            json_ld_representation['image'] = settings.SITE_BASE_URL + item.thumbnail.url
+            json_ld_representation['image'] = settings.SITE_BASE_URL + \
+                item.thumbnail.url
         else:
-            json_ld_representation['image'] = settings.SITE_BASE_URL + '/static/img/report-thumbnail.png'
+            json_ld_representation['image'] = settings.SITE_BASE_URL + \
+                '/static/img/report-thumbnail.png'
 
         for author in item.author_list():
 
-            json_ld_representation['author'].append(author.json_ld_representation())
+            json_ld_representation['author'].append(
+                author.json_ld_representation())
 
         context['json_ld_representation'] = json.dumps(json_ld_representation)
 
@@ -150,7 +156,8 @@ class PersonView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PersonView, self).get_context_data(**kwargs)
 
-        context['json_ld_representation'] = json.dumps(context['person'].json_ld_representation())
+        context['json_ld_representation'] = json.dumps(
+            context['person'].json_ld_representation())
 
         return context
 
@@ -184,12 +191,12 @@ class TagView(DetailView):
                 q = d.tag.get_research_items()
                 q = q & main_tag.selected_items
                 d.tag.count = q.count()
-            
-            filters.sort(key=lambda x:x.tag.count,reverse=True)
-            filters.sort(key=lambda x:x.order)
-            
+
+            filters.sort(key=lambda x: x.tag.count, reverse=True)
+            filters.sort(key=lambda x: x.order)
+
             main_tag.filters = [x.tag for x in filters]
-        
+
         main_tag.secondary_tag = None
         if "slug2" in self.kwargs:
             secondary_tag = queryset.filter(slug=self.kwargs["slug2"]).get()
@@ -204,38 +211,37 @@ class TagView(DetailView):
             main_tag.selected_items = main_tag.selected_items & secondary_items
             if main_tag.secondary_tag not in main_tag.filters:
                 main_tag.secondary_tag.count = main_tag.selected_items.count()
-                main_tag.filters = [main_tag.secondary_tag] + main_tag.filters 
-        
-        
-        #group consecutive years with only one item
+                main_tag.filters = [main_tag.secondary_tag] + main_tag.filters
+
+        # group consecutive years with only one item
         main_tag.selected_items = list(main_tag.selected_items)
-        main_tag.selected_items.sort(key=lambda x:x.date)
-        
+        main_tag.selected_items.sort(key=lambda x: x.date)
+
         count = Counter([x.date.year for x in main_tag.selected_items])
-        
-        for x,item in enumerate(main_tag.selected_items):
+
+        for x, item in enumerate(main_tag.selected_items):
             item.grouped_year = str(item.date.year)
             if x == 0:
                 continue
-            prev = main_tag.selected_items[x-1]
+            prev = main_tag.selected_items[x - 1]
             prev_count = count[prev.date.year]
             current_count = count[item.date.year]
             if "-" not in prev.grouped_year:
                 if prev_count + current_count == 2:
-                    year = "{0} - {1}".format(prev.date.year,item.date.year)
+                    year = "{0} - {1}".format(prev.date.year, item.date.year)
                     prev.grouped_year = year
                     item.grouped_year = year
-        
-        main_tag.selected_items = main_tag.selected_items[::-1] #reverse chron
-        
-        return main_tag
-    
 
-def output_download(request,output_id):
+        # reverse chron
+        main_tag.selected_items = main_tag.selected_items[::-1]
+
+        return main_tag
+
+
+def output_download(request, output_id):
     """
     update database and return actual url
     """
     item = models.ResearchOutput.objects.get(id=output_id)
     item.increment_download()
     return HttpResponseRedirect(item.button_url())
-
