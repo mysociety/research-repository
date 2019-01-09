@@ -103,6 +103,9 @@
 {% include 'parts/researchtoc.html' with items=similar %}
 {% endif %}
 
+{% if item.show_disclaimer %}
+<p><i>All external research linked on this page give the views of the author(s), and not the position of mySociety</i></p>
+{% endif %}
 
 {% with item.similar_items as similar %}
 

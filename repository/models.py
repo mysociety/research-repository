@@ -302,6 +302,7 @@ class ResearchItem(models.Model):
     )
 
     show_citation = models.BooleanField(default=True)
+    show_disclaimer = models.BooleanField(default=False)
 
     custom_cite = MarkupField(blank=True, default="")
 
