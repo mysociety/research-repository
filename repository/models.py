@@ -389,12 +389,13 @@ class ResearchItem(models.Model):
         """
         find similar based on overlapping number of tags
         """
-        minimum_score = 2
+        minimum_score = 1
 
         tags = list(self.tags.all())
         ids = set([x.id for x in tags])
         all_items = ResearchItem.objects.filter(
-            tags__in=tags, published=True).exclude(id=self.id).prefetch_related('tags')
+            tags__in=tags, published=True)
+        all_items = all_items.exclude(id=self.id).prefetch_related('tags')
         all_items = all_items.distinct()
         all_items = list(all_items)
 
