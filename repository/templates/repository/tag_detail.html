@@ -70,4 +70,28 @@
 	{% include 'parts/researchlist.html' with items=tag.selected_items %}
 {% endif %}
 
+<div class="colour-red" style="margin: 2em 0;">
+    <h2>Research newsletter</h2>
+    <p>
+        Sign up to our mailing list for updates about new publications and events.
+    </p>
+    <form style="max-width: 24em" action="//mysociety.us9.list-manage.com/subscribe/post?u=53d0d2026dea615ed488a8834&amp;id=287dc28511" method="POST">
+        <div style="position: absolute; left: -5000px;">
+            <input name="b_53d0d2026dea615ed488a8834_287dc28511" tabindex="-1" value="" type="text">
+        </div>
+        <input name="group[11745][16]" value="1" type="hidden">
+        <div class="inline-input">
+            <input name="EMAIL" placeholder="you@email.com" aria-label="Email address" type="email">
+        </div><div class="inline-button">
+            <input type="submit" class="button" name="subscribe" value="Subscribe" onclick="ga('send', 'event', 'Newsletter', 'Signup', '{{item.slug}}')">
+        </div>
+        <p>
+            <label>
+                <input name="group[11745][32]" value="1" type="checkbox" style="vertical-align: 0.1em; margin-right: 0.3em;">
+                Also sign up to general mySociety news
+            </label>
+        </p>
+    </form>
+</div>
+
 {% endblock %}
