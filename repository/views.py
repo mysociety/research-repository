@@ -174,7 +174,10 @@ class TagView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
         top_tags = models.Tag.objects.filter(top_bar__gte=0)
-        top_tags = top_tags.order_by('top_bar')
+        top_tags = list(top_tags.order_by('top_bar'))
+        if context["tag"] not in top_tags:
+            top_tags = []
+        
         context["top_tags"] = top_tags
         return context
 
