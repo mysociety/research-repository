@@ -64,6 +64,8 @@ class Tag(models.Model):
 
     display = models.BooleanField(default=True)
 
+    is_project = models.BooleanField(default=False)
+
     top_bar = models.IntegerField(default=-1,
                                   help_text='Should this category appear on the top bar?'
                                   )
@@ -311,6 +313,9 @@ class ResearchItem(models.Model):
     table_of_contents_url = models.URLField(blank=True, default="")
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
+
+    def projects(self):
+        return self.tags.filter(is_project=True)
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:

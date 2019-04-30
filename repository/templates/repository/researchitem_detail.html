@@ -94,6 +94,14 @@
 	</p>
 {% endif %}
 {% endwith %}
+
+{% with item.projects as projects %}
+{% if projects %}
+<hr>
+<p>Part of: {% for p in projects %}<a href="{% url 'tag' p.slug %}">{{ p.label }}</a>{% if not forloop.last%}, {% endif %}{% endfor %}</p>
+{% endif %}
+{% endwith %}
+
 <hr>
 {{ item.rendered_abstract }}
 
