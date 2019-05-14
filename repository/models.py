@@ -328,7 +328,10 @@ class ResearchItem(models.Model):
                 self.save()
 
     def json_toc(self):
-        j = json.loads(self.table_of_contents_cache)
+        try:
+            j = json.loads(self.table_of_contents_cache)
+        except ValueError:
+            return []
         for item in j:
             if "&amp;" in item["name"]:
                 item["name"] = item["name"].replace("&amp;", "&")
