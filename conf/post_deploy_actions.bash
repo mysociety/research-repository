@@ -46,3 +46,9 @@ else
     cd $researchsites_dir
     /data/mysociety/bin/git-safe-to-checkout . master && git pull
 fi
+
+#create zip archive if absent
+zip_archive_dir='../zip_uploads'
+if [ ! -d "$zip_archive_dir" ]; then
+    mkdir $zip_archive_dir
+fi
