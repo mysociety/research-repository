@@ -13,19 +13,25 @@ class ItemAuthorInline(admin.TabularInline):
     model = models.ItemAuthor
     extra = 1
 
+
 class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
+
 @io_admin_register(models.ResearchItem)
 class ResearchItemAdmin(ImportExportModelAdmin):
-    list_display = ('title', 'friendly_date', 'author_list', 'published', 'featured')
+    list_display = ('title', 'friendly_date',
+                    'author_list', 'published', 'featured')
     prepopulated_fields = {'slug': ('title',)}
     inlines = (ItemAuthorInline, ResearchOutputInline)
     filter_horizontal = ('tags',)
-    
+
     def save_model(self, request, obj, form, change):
-        obj.fetch_toc(save=False)
-        super(ImportExportModelAdmin, self).save_model(request, obj, form, change)
+        super(ImportExportModelAdmin, self).save_model(
+            request, obj, form, change)
+        if 'zip_archive' in form.changed_data:
+            obj.unpack_archive()
+        obj.fetch_toc()
 
 
 class TagDisplayFilterInline(admin.TabularInline):

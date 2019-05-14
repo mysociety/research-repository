@@ -8,7 +8,8 @@ from django.utils.safestring import mark_safe
 import urllib
 import json
 from django.template import loader
-
+import zipfile
+import os
 
 class TagGroup(models.Model):
     slug = AutoSlugField(
@@ -314,8 +315,56 @@ class ResearchItem(models.Model):
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
 
+    zip_archive = models.FileField(
+        upload_to='zips/',
+        blank=True,
+        null=True,
+        help_text='Upload a stringprint document as a zip'
+    )
+
     def projects(self):
         return self.tags.filter(is_project=True)
+
+    def unpack_archive(self):
+        """
+        extracts zip archive to holding directory
+        """
+        if self.zip_archive is None:
+            return None
+        zip_location = self.zip_archive.path
+        dest = os.path.join(settings.ZIP_ROOT, self.slug)
+        url_path = settings.SITE_BASE_URL + settings.ZIP_URL + self.slug + "/"
+        zip_ref = zipfile.ZipFile(zip_location, 'r')
+        zip_ref.extractall(dest)
+        zip_ref.close()
+
+        # connect values if absent
+
+        if not self.table_of_contents_url:
+            if os.path.exists(os.path.join(dest, "toc.json")):
+                self.table_of_contents_url = url_path + "toc.json"
+        if not self.outputs.filter(title="Read Online").exists():
+            if os.path.join(dest, "index.html"):
+                ResearchOutput(title="Read Online",
+                               research_item=self,
+                               url=url_path,
+                               order=0,
+                               top_order=0).save()
+        if not self.outputs.filter(title="Plain Text").exists():
+            if os.path.exists(os.path.join(dest, "plain.html")):
+                ResearchOutput(title="Plain Text",
+                               research_item=self,
+                               url=url_path + "plain.html",
+                               order=1,
+                               top_order=1).save()
+        if not self.outputs.filter(title="Kindle .mobi").exists():
+            kindle_file = "{0}.mobi".format(self.slug)
+            if os.path.exists(os.path.join(dest, kindle_file)):
+                ResearchOutput(title="Kindle .mobi",
+                               research_item=self,
+                               url=url_path + kindle_file,
+                               order=2,
+                               top_order=2).save()
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:
