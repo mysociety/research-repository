@@ -281,6 +281,14 @@ class ResearchItem(models.Model):
         help_text="The thumbnail of this research. Recommended ratio is 150x110."
     )
 
+    social_large = models.ImageField(
+        upload_to='social/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="The thumbnail of this research. Recommended ratio is 1200*630"
+    )
+
     authors = models.ManyToManyField(
         Person,
         through='ItemAuthor',

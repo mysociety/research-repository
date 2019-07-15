@@ -27,21 +27,29 @@
 <meta property="og:description" content="{{item.share_abstract}}" >
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'item' item.slug %}">
 
+{% if item.social_large %}
+<meta name="twitter:card" content="summary_large_image">
+{% else %}
 <meta name="twitter:card" content="summary">
+{% endif %}
 <meta name="twitter:site" content="{{settings.SITE_TWITTER_HANDLE}}">
 <meta name="twitter:title" content="{{item.title}}">
 <meta name="twitter:description" content="{{item.share_abstract}}">
 
+{% if item.social_large %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.social_large.url}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.social_large.url}}">
+{% else %}
 {% if item.hero %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.hero.url}}">
 {% else %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}" />
 {% endif %}
-
 {% if item.thumbnail %}
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{item.thumbnail.url}}">
 {% else %}
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endif %}
 {% endif %}
 
 {% endblock %}
