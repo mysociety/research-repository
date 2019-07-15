@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from repository import models
 from django.shortcuts import render
 from django.db.models import Q
-
+from django.http import JsonResponse
 from collections import Counter
 
 import json
@@ -42,6 +42,7 @@ def snippet_view(request, options):
     template = 'standard'
     related = False
     display_text = False
+    render_json = False
 
     items = models.ResearchItem.objects.filter(published=True)
 
@@ -61,6 +62,8 @@ def snippet_view(request, options):
                         display_text = True
                     else:
                         display_text = False
+                if option == "format" and value == "json":
+                    render_json = True
             else:
                 if op == "featured":
                     items = items.filter(featured=True)
@@ -72,6 +75,10 @@ def snippet_view(request, options):
             slug=related_items).similar_items(limit)
     else:
         items = items.distinct().order_by('-date')[:limit]
+
+    if render_json:
+        contents = [x.json() for x in items]
+        return JsonResponse({"items": contents})
 
     context = {'items': items,
                'embed': True,

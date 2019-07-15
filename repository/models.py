@@ -297,6 +297,10 @@ class ResearchItem(models.Model):
 
     abstract = MarkupField()
 
+    social_description = models.CharField(max_length=255,
+                                          null=True,
+                                          blank=True)
+
     funders = MarkupField(
         blank=True
     )
@@ -321,6 +325,40 @@ class ResearchItem(models.Model):
     table_of_contents_url = models.URLField(blank=True, default="")
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
+
+    def get_social_description(self):
+        if self.social_description:
+            return self.social_description
+        else:
+            abstract = self.abstract.raw
+            if len(self.abstract) > 250:
+                return self.abstract[:250] + "[...]"
+            else:
+                return self.abstract
+
+    def json(self):
+        """
+        return a json version of item for export
+        """
+
+        def url_if_exists(v):
+            if v:
+                return settings.SITE_BASE_URL + v.url
+            else:
+                return ""
+
+        di = {"title": self.title,
+              "subtitle": self.subtitle,
+              "slug": self.slug,
+              "date": self.date.isoformat(),
+              "thumbnail": url_if_exists(self.thumbnail),
+              "hero_image": url_if_exists(self.hero),
+              "url": self.absolute_url(),
+              "desc": self.get_social_description(),
+              }
+        authors = self.authors.all()
+        di["authors"] = [x.json_ld_representation() for x in authors]
+        return di
 
     def projects(self):
         return self.tags.filter(is_project=True)
