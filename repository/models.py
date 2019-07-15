@@ -331,10 +331,10 @@ class ResearchItem(models.Model):
             return self.social_description
         else:
             abstract = self.abstract.raw
-            if len(self.abstract) > 250:
-                return self.abstract[:250] + "[...]"
+            if len(abstract) > 250:
+                return abstract[:250] + "[...]"
             else:
-                return self.abstract
+                return abstract
 
     def json(self):
         """
