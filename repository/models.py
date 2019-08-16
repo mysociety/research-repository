@@ -283,7 +283,7 @@ class ResearchItem(models.Model):
                         ("R", "Report"),
                         ("P", "Policy"),
                         ("C", "Consultation"),
-                        ("M", "Blog"),
+                        ("M", "Minisite"),
                         ]
 
     generate_thumbnail = models.CharField(
