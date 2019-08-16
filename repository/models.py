@@ -319,13 +319,16 @@ class ResearchItem(models.Model):
     )
 
     show_citation = models.BooleanField(default=True)
-    show_disclaimer = models.BooleanField(default=False)
+    show_disclaimer = models.BooleanField(default=False,
+                                          help_text='Shows external author disclaimer.')
 
-    custom_cite = MarkupField(blank=True, default="")
+    custom_cite = MarkupField(blank=True, default="",
+                              help_text='Replaces the automatically generate citation with a manual one.')
 
     tags = models.ManyToManyField(Tag, blank=True, related_name="items")
 
-    table_of_contents_url = models.URLField(blank=True, default="")
+    table_of_contents_url = models.URLField(blank=True, default="",
+                                            help_text='External .json to create TOC')
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
 
