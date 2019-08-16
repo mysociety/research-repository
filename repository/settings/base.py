@@ -31,9 +31,12 @@ DATABASES = {
 
 SECRET_KEY = config.get('DJANGO_SECRET_KEY')
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
+ADMINS = ()
+
+if 'ADMIN_NAME' in config:
+    ADMINS = (
+        (config.get('ADMIN_NAME'), config.get('ADMIN_EMAIL')),
+    )
 
 MANAGERS = ADMINS
 
