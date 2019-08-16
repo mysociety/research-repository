@@ -474,7 +474,8 @@ class ItemAuthor(models.Model):
     )
     order = models.IntegerField(
         verbose_name='Order',
-        help_text='Where in the list of authors should this person appear?'
+        help_text='Where in the list of authors should this person appear?',
+        default=0
     )
 
     def __unicode__(self):
@@ -509,7 +510,7 @@ class ResearchOutput(models.Model):
 
     download_count = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
-    top_order = models.IntegerField(default=-1,
+    top_order = models.IntegerField(default=0,
                                     help_text='Order for under image link')
 
     def increment_download(self):
