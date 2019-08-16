@@ -249,6 +249,7 @@ MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 # Thumbnails
 THUMBNAIL_ALTERNATIVE_RESOLUTIONS = [1.5, 2]
 
+THUMBNAIL_FONT = config.get("THUMBNAIL_FONT")
 
 # mySociety-specific settings
 GOOGLE_ANALYTICS_ACCOUNT = config.get('GOOGLE_ANALYTICS_ACCOUNT')

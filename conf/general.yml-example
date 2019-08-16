@@ -44,3 +44,5 @@ SITE_TWITTER_HANDLE: '@mysociety'
 
 ADMIN_NAME: ''
 ADMIN_EMAIL: ''
+
+THUMBNAIL_FONT: 'web/fonts/SourceSansPro-Bold.ttf'

@@ -38,9 +38,7 @@ class ThumbNailCreator(object):
     writing_colours = [MYSOC_OFF_WHITE,
                        MYSOC_BLACK]
 
-    font_location = os.path.join(settings.STATICFILES_DIRS[0],
-                                 "fonts",
-                                 "SourceSansPro-Bold.ttf")
+    font_location = settings.THUMBNAIL_FONT
 
     @classmethod
     def color_distance(cls, rgb1, rgb2):
