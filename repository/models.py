@@ -8,6 +8,9 @@ from django.utils.safestring import mark_safe
 import urllib
 import json
 from django.template import loader
+from django.core.files.base import ContentFile
+from image_processor import ThumbNailCreator
+from django.core.exceptions import ValidationError
 
 
 class TagGroup(models.Model):
@@ -276,6 +279,22 @@ class ResearchItem(models.Model):
         help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680."
     )
 
+    GENERATE_CHOICES = [("B", "Blog"),
+                        ("R", "Report"),
+                        ("P", "Policy"),
+                        ("C", "Consultation"),
+                        ("M", "Blog"),
+                        ]
+
+    generate_thumbnail = models.CharField(
+        choices=GENERATE_CHOICES,
+        max_length=2,
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="Generate a thumbnail from the hero image"
+    )
+
     thumbnail = models.ImageField(
         upload_to='thumbnails/',
         null=True,
@@ -331,6 +350,11 @@ class ResearchItem(models.Model):
                                             help_text='External .json to create TOC')
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
+
+    def has_thumbnail(self):
+        if self.thumbnail:
+            return True
+        return False
 
     def get_social_description(self):
         if self.social_description:
@@ -466,6 +490,29 @@ class ResearchItem(models.Model):
 
         return all_items[:limit]
 
+    def clean(self):
+        if self.generate_thumbnail and not self.hero:
+            raise ValidationError("Trying to generate a thumbnail, but no hero uplaoded.")
+
+    def generate_thumbnail_from_hero(self):
+        """
+        generate thumbnail from hero image
+        """
+        if not self.generate_thumbnail and self.hero:
+            return None
+
+        hero_path = self.hero.path
+        print hero_path
+        tc = ThumbNailCreator()
+        tcf = tc.convert_hero_image_to_thumbnail
+
+        tempfile = tcf(hero_path,
+                       text=self.generate_thumbnail)
+
+        cf = ContentFile(tempfile.getvalue())
+        filename = "{0}-{1}.png".format(self.slug,
+                                        "thumbnail")
+        self.thumbnail.save(filename, cf, save=True)
 
 class ItemAuthor(models.Model):
 

@@ -1,6 +1,6 @@
 Django==1.11.23
 Markdown==2.6.8
-Pillow==4.1.1
+Pillow==6.1.0
 pyyaml==4.2b1
 argparse==1.2.1
 csscompressor==0.9.4
@@ -18,3 +18,4 @@ feedparser==5.2.1
 django-import-export==0.5.1
 useful_inkleby==0.3
 -e git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail
+colorthief
