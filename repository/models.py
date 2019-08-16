@@ -163,6 +163,9 @@ class Person(models.Model):
         help_text='How should we link this person\'s name when given as an author?',
         default="none"
     )
+    
+    class Meta:
+        ordering = ['last_name']
 
     def full_name(self):
         return self.first_name + ' ' + self.last_name
