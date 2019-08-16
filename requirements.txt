@@ -1,6 +1,6 @@
 Django==1.11.23
 Markdown==2.6.8
-Pillow==6.1.0
+Pillow==4.1.1
 pyyaml==4.2b1
 argparse==1.2.1
 csscompressor==0.9.4
