@@ -4,6 +4,25 @@ import os
 from colorthief import ColorThief
 from django.conf import settings
 
+def round_to(x, base=5):
+    return int(base * round(float(x) / base))
+
+def make_positive(v):
+    if v < 0:
+        return 0 - v
+    return v
+
+def interestingness(color):
+    """
+    colors further from 'grey' (equal distance)
+    get more points
+    """
+    rounded = [round_to(x, 10) for x in color]
+    value = 0
+    value += make_positive(rounded[0] - rounded[1])
+    value += make_positive(rounded[0] - rounded[2])
+    value += make_positive(rounded[1] - rounded[2])
+    return value
 
 class ThumbNailCreator(object):
 
@@ -66,9 +85,11 @@ class ThumbNailCreator(object):
         """
         img = Image.open(source)
 
-        # get the complimentary colour for the background
+        # get the most 'interesting' color for background
         color_thief = ColorThief(source)
-        color = color_thief.get_color(quality=color_match_quality)
+        colors = color_thief.get_palette(color_count=4)
+        colors.sort(key=lambda x: interestingness(x), reverse=True)
+        color = colors[0]
 
         base_image = Image.new('RGB', (110, 150), color=color)
 
