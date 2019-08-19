@@ -348,6 +348,9 @@ class ResearchItem(models.Model):
     table_of_contents_cache = models.TextField(
         blank=True, default="", editable=False)
 
+    photo_credit = MarkupField(blank=True, default="",
+                               help_text='Photo credit for image')
+
     def has_thumbnail(self):
         if self.thumbnail:
             return True
