@@ -32,11 +32,12 @@ class ResearchItemAdmin(ImportExportModelAdmin):
         # update
 
         obj.fetch_toc(save=False)
-        if obj.generate_thumbnail and not obj.thumbnail:
-            obj.generate_thumbnail_from_hero()
 
         super(ImportExportModelAdmin, self).save_model(
             request, obj, form, change)
+        if obj.generate_thumbnail and not obj.thumbnail:
+            obj.generate_thumbnail_from_hero()
+            obj.save()
 
 
 class TagDisplayFilterInline(admin.TabularInline):
