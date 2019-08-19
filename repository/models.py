@@ -12,6 +12,7 @@ from django.core.files.base import ContentFile
 from image_processor import ThumbNailCreator
 from django.core.exceptions import ValidationError
 
+from markdown import markdown
 
 class TagGroup(models.Model):
     slug = AutoSlugField(
@@ -346,7 +347,8 @@ class ResearchItem(models.Model):
     table_of_contents_url = models.URLField(blank=True, default="",
                                             help_text='External .json to create TOC')
     table_of_contents_cache = models.TextField(
-        blank=True, default="", editable=False)
+        blank=True, default="", editable=True,
+        help_text='Stores retrieved json site stucture - can also be used as a markdown field for the contents list')
 
     photo_credit = MarkupField(blank=True, default="",
                                help_text='Photo credit for image')
@@ -403,6 +405,13 @@ class ResearchItem(models.Model):
             if save:
                 self.save()
 
+    def is_json_toc(self):
+        try:
+            j = json.loads(self.table_of_contents_cache)
+        except ValueError as e:
+            return False
+        return True
+
     def json_toc(self):
         j = json.loads(self.table_of_contents_cache)
         for item in j:
@@ -414,8 +423,11 @@ class ResearchItem(models.Model):
         return j
 
     def rendered_toc(self):
-        template = loader.get_template('parts/researchtoc.html')
-        return template.render({'item': self})
+        if self.is_json_toc():
+            template = loader.get_template('parts/researchtoc.html')
+            return template.render({'item': self})
+        else:
+            return mark_safe(markdown(self.table_of_contents_cache))
 
     def rendered_abstract(self):
         """
