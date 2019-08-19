@@ -445,6 +445,14 @@ class ResearchItem(models.Model):
     def ordered_outputs(self):
         return self.outputs.all().exclude(order=-1).order_by('order')
 
+    def default_top_output(self):
+        options = self.outputs.all()
+        options = options.exclude(top_order=-1).order_by('top_order')
+        if options.exists():
+            return options[0].output_url()
+        else:
+            return "#"
+
     def ordered_top_outputs(self):
         return self.outputs.all().exclude(top_order=-1).order_by('top_order')
 
@@ -577,6 +585,9 @@ class ResearchOutput(models.Model):
     order = models.IntegerField(default=0)
     top_order = models.IntegerField(default=0,
                                     help_text='Order for under image link')
+
+    def output_url(self):
+        return urlresolvers.reverse('download', args=[self.id])
 
     def increment_download(self):
         query = ResearchOutput.objects.filter(id=self.id)
