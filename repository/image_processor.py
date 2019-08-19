@@ -120,8 +120,8 @@ class ThumbNailCreator(object):
             draw.text((19, 22), "response", font_color, font=font)
         if text == cls.MINISITE:
             font = ImageFont.truetype(cls.font_location, 30)
-            draw.text((24, -1), "mini", font_color, font=font)
-            draw.text((31, 25), "site", font_color, font=font)
+            draw.text((24, -3), "mini", font_color, font=font)
+            draw.text((31, 23), "site", font_color, font=font)
 
         if dest:
             base_image.save(dest, quality=95)
