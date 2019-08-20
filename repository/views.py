@@ -51,7 +51,7 @@ def snippet_view(request, options):
             if ":" in op:
                 option, value = op.split(":")
                 if option == "limit":
-                    limit = value
+                    limit = int(value)
                 if option == "related":
                     related_items = value
                     related = True
