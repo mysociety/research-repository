@@ -42,6 +42,7 @@ class ThumbNailCreator(object):
     POLICY = "P"
     CONSULTATION = "C"
     MINISITE = "M"
+    SERIES = "S"
 
     mysoc_colors = [MYSOC_BLUE,
                     MYSOC_GREEN,
@@ -122,7 +123,9 @@ class ThumbNailCreator(object):
             font = ImageFont.truetype(cls.font_location, 30)
             draw.text((24, -3), "mini", font_color, font=font)
             draw.text((31, 23), "site", font_color, font=font)
-
+        if text == cls.SERIES:
+            font = ImageFont.truetype(cls.font_location, 35)
+            draw.text((9, 0), "series", font_color, font=font)
         if dest:
             base_image.save(dest, quality=95)
         else:
