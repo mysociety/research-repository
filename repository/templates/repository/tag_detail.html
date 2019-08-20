@@ -10,15 +10,33 @@
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'tag' tag.slug %}">
 
 
+{% if item.social_large %}
+<meta name="twitter:card" content="summary_large_image">
+{% else %}
 <meta name="twitter:card" content="summary">
+{% endif %}
+
 <meta name="twitter:site" content="{{site.twitter}}">
 <meta name="twitter:title" content="{{site.site_title}} - {{tag.nice_name}}">
 
-<meta property="og:description" content="{{tag.description}}" >
-<meta name="twitter:description" content="{{tag.description}}">
+<meta property="og:description" content="{{tag.get_social_description}}" >
+<meta name="twitter:description" content="{{tag.get_social_description}}">
 
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+{% if tag.social_large %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{tag.social_large.url}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{tag.social_large.url}}">
+{% else %}
+{% if tag.hero %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{tag.hero.url}}">
+{% else %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}" />
+{% endif %}
+{% if tag.thumbnail %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{tag.thumbnail.url}}">
+{% else %}
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+{% endif %}
+{% endif %}
 
 {% endblock %}
 

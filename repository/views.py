@@ -66,7 +66,14 @@ def snippet_view(request, options):
                     render_json = True
             else:
                 if op == "featured":
-                    items = items.filter(featured=True)
+                    featured_tags = models.Tag.objects.filter(
+                        featured=True
+                    )
+                    featured_items = models.ResearchItem.objects.filter(
+                        published=True,
+                        featured=True
+                    )
+                    items = list(featured_items) + list(featured_tags)
                 else:
                     items = items.filter(tags__slug=op)
 
@@ -74,7 +81,11 @@ def snippet_view(request, options):
         items = models.ResearchItem.objects.get(
             slug=related_items).similar_items(limit)
     else:
-        items = items.distinct().order_by('-date')[:limit]
+        if isinstance(items, list):
+            items.sort(key=lambda x: x.date, reverse=True)
+            items = items[:limit]
+        else:
+            items = items.distinct().order_by('-date')[:limit]
 
     if render_json:
         contents = [x.json() for x in items]

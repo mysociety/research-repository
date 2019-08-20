@@ -14,6 +14,46 @@ from django.core.exceptions import ValidationError
 
 from markdown import markdown
 
+GENERATE_CHOICES = [("B", "Blog"),
+                    ("R", "Report"),
+                    ("P", "Policy"),
+                    ("C", "Consultation"),
+                    ("M", "Minisite"),
+                    ("S", "Series"),
+                    ]
+
+
+class ThumbnailMixIn(object):
+    """
+    mixin for tags and researchitems to generate thumbnails
+    """
+
+    def clean(self):
+        if self.generate_thumbnail and not self.hero:
+            raise ValidationError(
+                "Trying to generate a thumbnail, but no hero uplaoded.")
+
+    def generate_thumbnail_from_hero(self):
+        """
+        generate thumbnail from hero image
+        """
+        if not self.generate_thumbnail and self.hero:
+            return None
+
+        hero_path = self.hero.path
+        print hero_path
+        tc = ThumbNailCreator()
+        tcf = tc.convert_hero_image_to_thumbnail
+
+        tempfile = tcf(hero_path,
+                       text=self.generate_thumbnail)
+
+        cf = ContentFile(tempfile.getvalue())
+        filename = "{0}-{1}.png".format(self.slug,
+                                        "thumbnail")
+        self.thumbnail.save(filename, cf, save=True)
+
+
 class TagGroup(models.Model):
     slug = AutoSlugField(
         unique=True,
@@ -40,15 +80,24 @@ class TagGroup(models.Model):
         ordering = ['name']
 
 
-class Tag(models.Model):
+class Tag(models.Model, ThumbnailMixIn):
     label = models.CharField(
         max_length=30,
         blank=True,
     )
 
-    slug = models.SlugField(
-        max_length=30,
-        unique=True
+    slug = AutoSlugField(
+        unique=True,
+        editable=True,
+        populate_from=('label',),
+        help_text='Used to produce a nice page URL for this item.'
+    )
+
+    featured = models.BooleanField(default=False)
+    date = models.DateField(
+        help_text='The publication date of this tag.',
+        null=True,
+        blank=True
     )
 
     hero = models.ImageField(
@@ -57,6 +106,23 @@ class Tag(models.Model):
         blank=True,
         editable=True,
         help_text="A hero image which will be displayed on this tag's page. Recommended ratio is 1024x350."
+    )
+
+    generate_thumbnail = models.CharField(
+        choices=GENERATE_CHOICES,
+        max_length=2,
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="Generate a thumbnail from the hero image"
+    )
+
+    thumbnail = models.ImageField(
+        upload_to='thumbnails/',
+        null=True,
+        blank=True,
+        editable=True,
+        help_text="The thumbnail of this research. Recommended ratio is 150x110."
     )
 
     description = MarkupField(
@@ -68,7 +134,8 @@ class Tag(models.Model):
 
     display = models.BooleanField(default=True)
 
-    is_project = models.BooleanField(default=False)
+    is_project = models.BooleanField(default=False,
+                                     help_text="creates the 'part of' message in all members")
 
     top_bar = models.IntegerField(default=-1,
                                   help_text='Should this category appear on the top bar?'
@@ -77,6 +144,56 @@ class Tag(models.Model):
     display_items_in_years = models.BooleanField(default=True,
                                                  help_text='On the tag page - does it display items in years?'
                                                  )
+
+    social_description = models.CharField(max_length=255,
+                                          null=True,
+                                          blank=True)
+
+    def get_social_description(self):
+        if self.social_description:
+            return self.social_description
+        else:
+            abstract = self.description.raw
+            if len(abstract) > 250:
+                return abstract[:250] + "[...]"
+            else:
+                return abstract
+
+    def json(self):
+        """
+        return a json version of tag for export
+        """
+
+        def url_if_exists(v):
+            if v:
+                return settings.SITE_BASE_URL + v.url
+            else:
+                return ""
+
+        di = {"title": self.title,
+              "subtitle": "",
+              "slug": self.slug,
+              "date": self.date.isoformat(),
+              "thumbnail": url_if_exists(self.thumbnail),
+              "hero_image": url_if_exists(self.hero),
+              "url": self.absolute_url(),
+              "desc": self.get_social_description(),
+              }
+        di["authors"] = []
+        return di
+
+    def absolute_url(self):
+        return settings.SITE_BASE_URL + urlresolvers.reverse('tag', args=[self.slug])
+
+    @property
+    def title(self):
+        return self.label
+
+    def friendly_date(self):
+        if self.date:
+            return self.date.strftime("%B %Y")
+        else:
+            return ""
 
     def __unicode__(self):
         return self.nice_name()
@@ -94,6 +211,9 @@ class Tag(models.Model):
             return self.slug.replace("-", " ").title()
         else:
             return self.slug.title()
+
+    def url(self):
+        return urlresolvers.reverse('tag', args=[self.slug])
 
     class Meta:
         ordering = ['slug']
@@ -238,7 +358,7 @@ class Person(models.Model):
         verbose_name_plural = 'people'
 
 
-class ResearchItem(models.Model):
+class ResearchItem(models.Model, ThumbnailMixIn):
 
     class Meta:
         ordering = ['-date']
@@ -276,13 +396,6 @@ class ResearchItem(models.Model):
         editable=True,
         help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680."
     )
-
-    GENERATE_CHOICES = [("B", "Blog"),
-                        ("R", "Report"),
-                        ("P", "Policy"),
-                        ("C", "Consultation"),
-                        ("M", "Minisite"),
-                        ]
 
     generate_thumbnail = models.CharField(
         choices=GENERATE_CHOICES,
@@ -352,6 +465,9 @@ class ResearchItem(models.Model):
 
     photo_credit = MarkupField(blank=True, default="",
                                help_text='Photo credit for image')
+
+    def url(self):
+        return urlresolvers.reverse('item', args=[self.slug])
 
     def has_thumbnail(self):
         if self.thumbnail:
@@ -510,29 +626,6 @@ class ResearchItem(models.Model):
 
         return all_items[:limit]
 
-    def clean(self):
-        if self.generate_thumbnail and not self.hero:
-            raise ValidationError("Trying to generate a thumbnail, but no hero uplaoded.")
-
-    def generate_thumbnail_from_hero(self):
-        """
-        generate thumbnail from hero image
-        """
-        if not self.generate_thumbnail and self.hero:
-            return None
-
-        hero_path = self.hero.path
-        print hero_path
-        tc = ThumbNailCreator()
-        tcf = tc.convert_hero_image_to_thumbnail
-
-        tempfile = tcf(hero_path,
-                       text=self.generate_thumbnail)
-
-        cf = ContentFile(tempfile.getvalue())
-        filename = "{0}-{1}.png".format(self.slug,
-                                        "thumbnail")
-        self.thumbnail.save(filename, cf, save=True)
 
 class ItemAuthor(models.Model):
 

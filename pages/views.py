@@ -43,10 +43,19 @@ class HomeView(TemplateView):
         context['feed'] = FeedCache.fetch_feed()
         context['page'] = models.Page.objects.get_or_create(slug="home")[0]
 
-        context['featured_items'] = repository_models.ResearchItem.objects.filter(
+        featured_items = repository_models.ResearchItem.objects.filter(
             published=True,
             featured=True
-        ).order_by('-date')
+        )
+
+        featured_tags = repository_models.Tag.objects.filter(
+            featured=True
+        )
+        featured = list(featured_items) + list(featured_tags)
+
+        featured.sort(key=lambda x: x.date, reverse=True)
+
+        context['featured_items'] = featured
 
         return context
 

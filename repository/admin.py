@@ -40,15 +40,18 @@ class ResearchItemAdmin(ImportExportModelAdmin):
             obj.save()
 
 
-class TagDisplayFilterInline(admin.TabularInline):
-    model = models.TagDisplayFilter
-    fk_name = "parent"
-    extra = 3
-
-
 @io_admin_register(models.Tag)
 class TagItemAdmin(ImportExportModelAdmin):
-    inlines = (TagDisplayFilterInline,)
+    
+    def save_model(self, request, obj, form, change):
+        # if value of generate thumbnail has changed
+        # update
+        super(ImportExportModelAdmin, self).save_model(
+            request, obj, form, change)
+        if obj.generate_thumbnail and not obj.thumbnail:
+            obj.generate_thumbnail_from_hero()
+            obj.save()
+
 
 
 admin.site.register(models.TagGroup)
