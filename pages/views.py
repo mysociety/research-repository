@@ -6,6 +6,7 @@ from repository import models as repository_models
 import feedparser
 import datetime
 
+
 class FeedCache(object):
     """
     basic cacher for imported rss feed
@@ -13,7 +14,7 @@ class FeedCache(object):
     _feed = []
     _time = None
     feed_url = "https://www.mysociety.org/category/research/feed"
-    timeout = 15*60
+    timeout = 15 * 60
 
     @classmethod
     def is_time(cls):
@@ -29,7 +30,7 @@ class FeedCache(object):
             cls._time = datetime.datetime.now()
 
         for e in cls._feed["entries"][:5]:
-            yield e["title"],e["link"]
+            yield e["title"], e["link"]
 
 
 class HomeView(TemplateView):
