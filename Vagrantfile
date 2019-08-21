@@ -11,7 +11,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
 
   # Enable NFS access to the disk
-  config.vm.synced_folder "..", "/vagrant", :nfs => true
+  config.vm.synced_folder ".", "/vagrant/repository/", :nfs => true
 
   # Speed up DNS lookups
   config.vm.provider "virtualbox" do |vb|
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
   # Give the VM a bit more power to speed things up
   config.vm.provider "virtualbox" do |v|
     v.memory = 2048
-    v.cpus = 2
+    v.cpus = 1
   end
 
   # Provision the vagrant box
@@ -62,6 +62,9 @@ Vagrant.configure(2) do |config|
     # Run post-deploy actions script to update the virtualenv, install the
     # python packages we need, migrate the db and generate the sass etc
     conf/post_deploy_actions.bash
+	
+	# give permissions to vagrant user on all the packages
+	sudo chmod -R ugo+rwx /vagrant
   SHELL
 
   # Start mailcatcher every time we start the VM
