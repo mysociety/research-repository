@@ -137,9 +137,11 @@ USE_TZ = True
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = os.path.join(PARENT_DIR, 'collected_static')
+ZIP_ROOT = os.path.join(PARENT_DIR, 'zip_uploads')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
+ZIP_URL = '/html/'
 STATIC_URL = '/static/'
 
 # Additional locations of static files

@@ -32,17 +32,18 @@ class ResearchItemAdmin(ImportExportModelAdmin):
         # update
 
         obj.fetch_toc(save=False)
-
         super(ImportExportModelAdmin, self).save_model(
             request, obj, form, change)
         if obj.generate_thumbnail and not obj.thumbnail:
             obj.generate_thumbnail_from_hero()
             obj.save()
+        if 'zip_archive' in form.changed_data:
+            obj.unpack_archive()
 
 
 @io_admin_register(models.Tag)
 class TagItemAdmin(ImportExportModelAdmin):
-    
+
     def save_model(self, request, obj, form, change):
         # if value of generate thumbnail has changed
         # update
@@ -51,7 +52,6 @@ class TagItemAdmin(ImportExportModelAdmin):
         if obj.generate_thumbnail and not obj.thumbnail:
             obj.generate_thumbnail_from_hero()
             obj.save()
-
 
 
 admin.site.register(models.TagGroup)
