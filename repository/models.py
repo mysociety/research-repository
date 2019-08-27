@@ -1,6 +1,7 @@
 
 import os
 import zipfile
+import shutil
 
 from django.db import models
 from autoslug import AutoSlugField
@@ -15,6 +16,7 @@ from django.template import loader
 from django.core.files.base import ContentFile
 from image_processor import ThumbNailCreator
 from django.core.exceptions import ValidationError
+from django.core.files.storage import FileSystemStorage
 
 from markdown import markdown
 
@@ -27,6 +29,11 @@ GENERATE_CHOICES = [("B", "Blog"),
                     ("S", "Series"),
                     ]
 
+class OverwriteStorage(FileSystemStorage):
+
+    def get_available_name(self, name, max_length=None):
+        self.delete(name)
+        return name
 
 class ThumbnailMixIn(object):
     """
@@ -517,7 +524,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         upload_to='zips/',
         blank=True,
         null=True,
-        help_text='Upload a stringprint document as a zip'
+        help_text='Upload a stringprint document as a zip',
+        storage=OverwriteStorage()
     )
 
     def projects(self):
@@ -527,42 +535,44 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         """
         extracts zip archive to holding directory
         """
-        if self.zip_archive is None:
+        if not self.zip_archive:
             return None
         zip_location = self.zip_archive.path
-        dest = os.path.join(settings.ZIP_ROOT, self.slug)
-        url_path = settings.SITE_BASE_URL + settings.ZIP_URL + self.slug + "/"
+        upload_name = os.path.split(zip_location)[1]
+        upload_slug = os.path.splitext(upload_name)[0]
+        dest = os.path.join(settings.ZIP_ROOT, upload_slug)
+        if os.path.exists(dest):
+            shutil.rmtree(dest)
+        url_path = settings.SITE_BASE_URL + settings.ZIP_URL + upload_slug + "/"
         zip_ref = zipfile.ZipFile(zip_location, 'r')
         zip_ref.extractall(dest)
         zip_ref.close()
 
         # connect values if absent
+        gc = ResearchOutput.objects.get_or_create
 
         if not self.table_of_contents_url:
             if os.path.exists(os.path.join(dest, "toc.json")):
                 self.table_of_contents_url = url_path + "toc.json"
-        if not self.outputs.filter(title="Read Online").exists():
-            if os.path.join(dest, "index.html"):
-                ResearchOutput(title="Read Online",
-                               research_item=self,
-                               url=url_path,
-                               order=0,
-                               top_order=0).save()
-        if not self.outputs.filter(title="Plain Text").exists():
-            if os.path.exists(os.path.join(dest, "plain.html")):
-                ResearchOutput(title="Plain Text",
-                               research_item=self,
-                               url=url_path + "plain.html",
-                               order=1,
-                               top_order=1).save()
-        if not self.outputs.filter(title="Kindle .mobi").exists():
-            kindle_file = "{0}.mobi".format(self.slug)
-            if os.path.exists(os.path.join(dest, kindle_file)):
-                ResearchOutput(title="Kindle .mobi",
-                               research_item=self,
-                               url=url_path + kindle_file,
-                               order=2,
-                               top_order=2).save()
+        if os.path.join(dest, "index.html"):
+            item, created = gc(title="Read Online", research_item=self)
+            item.url = url_path
+            item.order = 0
+            item.top_order = 0
+            item.save()
+        if os.path.exists(os.path.join(dest, "plain.html")):
+            item, created = gc(title="Plain Text", research_item=self)
+            item.url = url_path + "plain.html"
+            item.order = 1
+            item.top_order = 1
+            item.save()
+        kindle_file = "{0}.mobi".format(upload_slug)
+        if os.path.exists(os.path.join(dest, kindle_file)):
+                item, created = gc(title="Kindle .mobi", research_item=self)
+                item.url = url_path + kindle_file
+                item.order = 2
+                item.top_order = 2
+                item.save()
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:
