@@ -68,20 +68,22 @@ Order - controls the outputs on the righthand bar (generally less important).
 
 ### Tag
 Tags are the way ResearchItems and their display are managed on the site. They are many-to-many, but their exact role is modified by their properties. They have a page that shows their associated items at /section/[tagslug]
-Display - unchecking allows hidden categories that are used for internal management but do not appear in sidebar of items (e.g. creating associations for embedding on other pages, or to raise the association of items for the purpose of the related items detector). 
-Top order - if the category should appear as one of the options in the top bar of the ‘research’ page. 
-Is series - adds a ‘part of [tag]’ near the top of a research item, for more tightly connected groups of ResearchItems. 
-Display with years - if unticked, will not separate items by year (looks better if a category only has a few items). 
-Featured - tags can also be featured, this displays on the featured page on the home page and embedded pages like a Researchitem (This is the one place the thumbnail or date is used). 
+
+- Display - unchecking allows hidden categories that are used for internal management but do not appear in sidebar of items (e.g. creating associations for embedding on other pages, or to raise the association of items for the purpose of the related items detector). 
+- Top order - if the category should appear as one of the options in the top bar of the ‘research’ page. 
+- Is series - adds a ‘part of [tag]’ near the top of a research item, for more tightly connected groups of ResearchItems. 
+- Display with years - if unticked, will not separate items by year (looks better if a category only has a few items). 
+- Featured - tags can also be featured, this displays on the featured page on the home page and embedded pages like a Researchitem (This is the one place the thumbnail or date is used). 
 
 The default tag (where the research link on the top bar leads - is set in the one ‘Site’ object). 
 
 ### Pages App
 
 Content on the rest of the site is also customisable via the admin. 
-The single ‘site’ object controls the title, twitter handle and site description, as well as the default tag for displaying research. 
-Page objects allow for non-research item pages of material. The html is embedded in the admin and has a customisable social image and description. A nav order above 0 will put it in the top bar. 
-Links allow links to external sites to be put in the top bar.
+
+- The single ‘site’ object controls the title, twitter handle and site description, as well as the default tag for displaying research. 
+- Page objects allow for non-research item pages of material. The html is embedded in the admin and has a customisable social image and description. A nav order above 0 will put it in the top bar. 
+- Links allow links to external sites to be put in the top bar.
 
 ### Embedding in external sites
 
