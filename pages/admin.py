@@ -14,6 +14,10 @@ class LinkAdmin(ImportExportModelAdmin):
     pass
 
 
+@io_admin_register(models.OptOut)
+class OptOutAdmin(ImportExportModelAdmin):
+    pass
+
 # class FooBarAdmin(admin.ModelAdmin):
 #     prepopulated_fields = {"slug": ["name"]}
 #     list_display  = [ 'slug', 'name', ]

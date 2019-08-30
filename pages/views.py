@@ -2,9 +2,10 @@ from django.views.generic import DetailView, TemplateView
 
 from pages import models
 from repository import models as repository_models
-
+from django.http.response import HttpResponse
 import feedparser
 import datetime
+
 
 
 class FeedCache(object):
@@ -63,3 +64,12 @@ class HomeView(TemplateView):
 class PageView(DetailView):
     model = models.Page
     context_object_name = 'page'
+
+def opt_out_view(request,experiment,user_id):
+    allowed_experiments = ["ps1"]
+    if experiment in allowed_experiments:
+        model, created = models.OptOut.objects.get_or_create(experiment=experiment,user_id=user_id)
+        return HttpResponse("ID {0} opted-out. Contact research@mysociety.org with further questions.".format(user_id))
+    else:
+        return HttpResponse("{0} is not a registered experiment. Contact research@mysociety.org".format(experiment))
+    

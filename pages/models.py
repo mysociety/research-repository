@@ -58,3 +58,14 @@ class Link(models.Model):
 
     def __unicode__(self):
         return self.label
+    
+class OptOut(models.Model):
+    """
+    Used to record opt-outs from non-mailchimp surveys
+    """
+    experiment = models.CharField(max_length=200)
+    user_id = models.CharField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True,null=True)
+    
+    def __unicode__(self):
+        return self.user_id
