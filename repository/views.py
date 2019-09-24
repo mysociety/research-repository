@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from repository import models
 from django.shortcuts import render
 from django.db.models import Q
@@ -263,6 +263,9 @@ def output_download(request, output_id):
     """
     update database and return actual url
     """
-    item = models.ResearchOutput.objects.get(id=output_id)
+    item = models.ResearchOutput.objects.filter(id=output_id)
+    if item.exists() is False:
+        return HttpResponse("Download does not exist")
+    item = item[0]
     item.increment_download()
     return HttpResponseRedirect(item.button_url())
