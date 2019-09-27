@@ -37,6 +37,7 @@ Admin password is available on the wiki - can then create a user account on the 
 
 https://research.mysociety.org/admin/ 
 
+To create a token to use the remote zip upload, use `script/token <username>`
 
 ## Models and concepts
 
@@ -98,3 +99,5 @@ Creates a json with the 6 most recent featured items. ‘Featured’ can also be
 Excluding ‘format:json’ just displays a webpage, that can be used in an iframe (how the stringprint sites show related items). 
 
 Authors - fairly self-explanatory but have a lot of different options and allow author names to be transformed into links to their site via a customisable link behaviour. Some references in here to an authors page that was never created. 
+
+

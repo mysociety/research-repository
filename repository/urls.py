@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
@@ -27,9 +27,8 @@ urlpatterns = [
 
     url(r'^$', pageViews.HomeView.as_view(), name='home'),
     url(r'^admin/', admin.site.urls),
-
+    url('^api/', include('repository.api_views')),
     url(r'^sitemap\.xml$', views.SitemapView.as_view(), name='sitemap'),
-
     url(r'^publications/outputs/(?P<output_id>[-\w]+$)', views.output_download, name='download'),
     url(r'^publications/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
     url(r'^publications/', views.ItemListView.as_view(), name='items'),
@@ -48,5 +47,5 @@ urlpatterns = [
     url(r'^embed/(?P<options>.+)', views.snippet_view, name='embed'),
     url(r'^optout/(?P<experiment>[-\w]+)/(?P<user_id>[-\w]+)$', pageViews.opt_out_view, name='page'),
     url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
-    
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

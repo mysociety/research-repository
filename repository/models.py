@@ -478,6 +478,14 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     photo_credit = MarkupField(blank=True, default="",
                                help_text='Photo credit for image')
 
+    zip_archive = models.FileField(
+        upload_to='zips/',
+        blank=True,
+        null=True,
+        help_text='Upload a stringprint document as a zip',
+        storage=OverwriteStorage()
+    )
+
     def url(self):
         return urlresolvers.reverse('item', args=[self.slug])
 
@@ -520,14 +528,6 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         di["authors"] = [x.json_ld_representation() for x in authors]
         return di
 
-    zip_archive = models.FileField(
-        upload_to='zips/',
-        blank=True,
-        null=True,
-        help_text='Upload a stringprint document as a zip',
-        storage=OverwriteStorage()
-    )
-
     def projects(self):
         return self.tags.filter(is_project=True)
 
@@ -554,7 +554,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if not self.table_of_contents_url:
             if os.path.exists(os.path.join(dest, "toc.json")):
                 self.table_of_contents_url = url_path + "toc.json"
-                self.fetch_toc()
+                self.fetch_toc(save=True)
         if os.path.join(dest, "index.html"):
             item, created = gc(title="Read Online", research_item=self)
             item.url = url_path
@@ -574,6 +574,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
                 item.order = 2
                 item.top_order = 2
                 item.save()
+        self.save()
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:
