@@ -551,10 +551,9 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         # connect values if absent
         gc = ResearchOutput.objects.get_or_create
 
-        if not self.table_of_contents_url:
-            if os.path.exists(os.path.join(dest, "toc.json")):
-                self.table_of_contents_url = url_path + "toc.json"
-                self.fetch_toc(save=True)
+        if os.path.exists(os.path.join(dest, "toc.json")):
+            self.table_of_contents_url = url_path + "toc.json"
+            self.fetch_toc(save=True)
         if os.path.join(dest, "index.html"):
             item, created = gc(title="Read Online", research_item=self)
             item.url = url_path
