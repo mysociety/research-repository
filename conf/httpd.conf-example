@@ -21,6 +21,8 @@
 # Replace the following below:
 #   'example.com', 'exampleuser', 'examplegroup'
 
+WSGIPassAuthorization On
+
 Alias /media /data/vhost/example.com/uploads
 Alias /static /data/vhost/example.com/collected_static
 Alias /sites/ /data/vhost/example.com/sites/
