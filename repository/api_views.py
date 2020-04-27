@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 from rest_framework import authentication, permissions
 from django.conf.urls import url
-from models import ResearchItem
+from .models import ResearchItem
 
 
 class FileUploadView(APIView):
@@ -26,7 +26,7 @@ class FileUploadView(APIView):
         except ResearchItem.DoesNotExist:
             return Response({"Message": "Slug does not match item"}, status=400)
         file_obj = request.FILES['file']
-        print(file_obj.name)
+        print((file_obj.name))
         item.zip_archive.save(file_obj.name, file_obj)
         item.unpack_archive()
         return Response({"Message": "Upload Complete"}, status=201)

@@ -47,5 +47,6 @@ urlpatterns = [
     url(r'^embed/(?P<options>.+)', views.snippet_view, name='embed'),
     url(r'^optout/(?P<experiment>[-\w]+)/(?P<user_id>[-\w]+)$', pageViews.opt_out_view, name='page'),
     url(r'^(?P<slug>[-\w]+)$', pageViews.PageView.as_view(), name='page'),
+    url(r'^markitup/', include('markitup.urls'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

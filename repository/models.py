@@ -7,14 +7,14 @@ from django.db import models
 from autoslug import AutoSlugField
 from markitup.fields import MarkupField
 from django.conf import settings
-from django.core import urlresolvers
+from django.urls import reverse
 from django.db.models import F
 from django.utils.safestring import mark_safe
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import json
 from django.template import loader
 from django.core.files.base import ContentFile
-from image_processor import ThumbNailCreator
+from .image_processor import ThumbNailCreator
 from django.core.exceptions import ValidationError
 from django.core.files.storage import FileSystemStorage
 
@@ -53,7 +53,7 @@ class ThumbnailMixIn(object):
             return None
 
         hero_path = self.hero.path
-        print hero_path
+        print(hero_path)
         tc = ThumbNailCreator()
         tcf = tc.convert_hero_image_to_thumbnail
 
@@ -195,7 +195,7 @@ class Tag(models.Model, ThumbnailMixIn):
         return di
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + urlresolvers.reverse('tag', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse('tag', args=[self.slug])
 
     @property
     def title(self):
@@ -225,7 +225,7 @@ class Tag(models.Model, ThumbnailMixIn):
             return self.slug.title()
 
     def url(self):
-        return urlresolvers.reverse('tag', args=[self.slug])
+        return reverse('tag', args=[self.slug])
 
     class Meta:
         ordering = ['slug']
@@ -235,8 +235,8 @@ class TagDisplayFilter(models.Model):
     """
     model to manage when secondary tags should be part of the tag navigation
     """
-    parent = models.ForeignKey(Tag, related_name="display_filters")
-    tag = models.ForeignKey(Tag)
+    parent = models.ForeignKey(Tag, related_name="display_filters", on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
 
@@ -304,7 +304,7 @@ class Person(models.Model):
         return self.first_name + ' ' + self.last_name
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + urlresolvers.reverse('person', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse('person', args=[self.slug])
 
     def preferred_url(self):
         if self.link_behaviour == 'profile-page':
@@ -487,7 +487,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     )
 
     def url(self):
-        return urlresolvers.reverse('item', args=[self.slug])
+        return reverse('item', args=[self.slug])
 
     def has_thumbnail(self):
         if self.thumbnail:
@@ -578,7 +578,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:
             try:
-                response = urllib.urlopen(self.table_of_contents_url)
+                response = urllib.request.urlopen(self.table_of_contents_url)
                 self.table_of_contents_cache = response.read()
             except Exception:
                 pass
@@ -649,7 +649,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         return 'licenses/' + self.licence + '.html'
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + urlresolvers.reverse('item', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse('item', args=[self.slug])
 
     def __unicode__(self):
         return self.title + ' (' + self.friendly_date() + ')'
@@ -700,10 +700,10 @@ class ItemAuthor(models.Model):
         ordering = ['order']
 
     person = models.ForeignKey(
-        Person
+        Person, on_delete=models.CASCADE
     )
     research_item = models.ForeignKey(
-        ResearchItem
+        ResearchItem, on_delete=models.CASCADE
     )
     order = models.IntegerField(
         verbose_name='Order',
@@ -721,7 +721,8 @@ class ResearchOutput(models.Model):
 
     research_item = models.ForeignKey(
         ResearchItem,
-        related_name='outputs'
+        related_name='outputs',
+        on_delete=models.CASCADE
     )
 
     file = models.FileField(
@@ -747,7 +748,7 @@ class ResearchOutput(models.Model):
                                     help_text='Order for under image link')
 
     def output_url(self):
-        return urlresolvers.reverse('download', args=[self.id])
+        return reverse('download', args=[self.id])
 
     def increment_download(self):
         query = ResearchOutput.objects.filter(id=self.id)
@@ -779,7 +780,7 @@ class Site(models.Model):
     - should only have one entry
     """
     site_title = models.CharField(max_length=30, default="")
-    default_tag = models.ForeignKey(Tag, null=True, blank=True)
+    default_tag = models.ForeignKey(Tag, null=True, blank=True, on_delete=models.CASCADE)
     twitter = models.CharField(max_length=30, default="")
     description = models.CharField(max_length=255, default="")
 

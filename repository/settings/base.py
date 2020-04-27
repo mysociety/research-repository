@@ -68,13 +68,12 @@ REST_FRAMEWORK = {
     ],
 }
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -270,3 +269,4 @@ SITE_BASE_URL = config.get('SITE_BASE_URL')
 #settings for social sharing
 DEFAULT_SHARE_IMAGE = config.get('DEFAULT_SHARE_IMAGE')
 
+MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})

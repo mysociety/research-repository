@@ -1,7 +1,35 @@
 from django.contrib import admin
 from repository import models
 from import_export.admin import ImportExportModelAdmin
-from useful_inkleby.useful_django.admin import io_admin_register
+from import_export.resources import ModelResource
+
+
+def construct_model_resource(passed_model):
+
+    class LocalResource(ModelResource):
+
+        class Meta:
+            model = passed_model
+
+    return LocalResource
+
+
+def io_admin_register(passed_model):
+    """
+    filter that registers ImportExportModelAdmin and
+    assigns them a blank model_resource
+    """
+    model_resource = construct_model_resource(passed_model)
+
+    def inner(admin_cls):
+
+        class ModelAdmin(admin_cls):
+            resource_class = model_resource
+
+        admin.site.register(passed_model, ModelAdmin)
+        return ModelAdmin
+
+    return inner
 
 
 @io_admin_register(models.Person)
@@ -39,7 +67,6 @@ class ResearchItemAdmin(ImportExportModelAdmin):
             obj.save()
         if 'zip_archive' in form.changed_data:
             obj.unpack_archive()
-
 
 
 @io_admin_register(models.Tag)

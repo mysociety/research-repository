@@ -1,7 +1,7 @@
 '''
 Creates tests data for testing framework
 '''
-from models import (Tag, Person, ResearchItem, ItemAuthor, ResearchOutput, 
+from .models import (Tag, Person, ResearchItem, ItemAuthor, ResearchOutput, 
                     Site, TagDisplayFilter)
 from pages.models import Page
 from django.contrib.auth.models import User
@@ -10,7 +10,7 @@ import random
 
 
 def prepare_people():
-    print "preparing people"
+    print("preparing people")
     gc = Person.objects.get_or_create
     
     gc(first_name="Test",
@@ -28,7 +28,7 @@ def prepare_people():
        )
 
 def prepare_tags():
-    print "preparing tags"
+    print("preparing tags")
     gc = Tag.objects.get_or_create
     tgc = TagDisplayFilter.objects.get_or_create
     
@@ -105,7 +105,7 @@ def prepare_pages():
        nav_order = 1)
     
 def prepare_research_items():
-    print "preparing research items"
+    print("preparing research items")
     ResearchItem.objects.all().delete()
     
     master_tags = list(Tag.objects.filter(slug__in=["research","policy"]))
@@ -179,7 +179,7 @@ def prepare_research_items():
         r.save()
 
 def create_super_user():
-    print "creating superuser"
+    print("creating superuser")
     if User.objects.filter(username="admin").exists() == False:
         User.objects.create_superuser('admin', 'admin-test@mysociety.org', 'admin')
         
