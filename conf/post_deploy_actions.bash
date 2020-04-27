@@ -20,11 +20,10 @@ fi
 source $virtualenv_activate
 
 # Upgrade pip to a secure version
-pip_version="$(pip --version)"
-if [ "$(echo -e 'pip 1.4\n'"$pip_version" | sort -V | head -1)" = "$pip_version" ]; then
-    curl -L -s https://bootstrap.pypa.io/get-pip.py | python
-fi
 
+curl -L -s https://bootstrap.pypa.io/get-pip.py | python
+
+pip install --upgrade setuptools
 pip install --requirement requirements.txt
 
 # make sure that there is no old code (the .py files may have been git deleted)

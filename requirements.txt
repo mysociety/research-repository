@@ -15,6 +15,7 @@ psycopg2==2.6.2
 six==1.10.0
 wsgiref==0.1.2
 feedparser==5.2.1
+tablib==0.13
 django-import-export==0.5.1
 useful_inkleby==0.3
 -e git+https://github.com/mariocesar/sorl-thumbnail.git@47cc30d5c9e9aeccf314cae61e70c830f9fe4e73#egg=sorl-thumbnail
