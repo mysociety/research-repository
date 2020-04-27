@@ -1,9 +1,5 @@
 virtualenv_dir='../virtualenv-repository'
 virtualenv_activate="$virtualenv_dir/bin/activate"
-if [ ! -f "$virtualenv_activate" ]
-then
-    virtualenv $virtualenv_args $virtualenv_dir
-fi
 source $virtualenv_activate
 
-python manage.py makemigrations
+python3 manage.py makemigrations
