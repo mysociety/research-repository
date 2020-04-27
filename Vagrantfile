@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "sagepe/stretch"
 
   # Enable NFS access to the disk
   config.vm.synced_folder ".", "/vagrant/repository/", :nfs => true
