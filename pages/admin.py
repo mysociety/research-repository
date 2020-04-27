@@ -18,9 +18,14 @@ class LinkAdmin(ImportExportModelAdmin):
 class OptOutAdmin(ImportExportModelAdmin):
     pass
 
-# class FooBarAdmin(admin.ModelAdmin):
-#     prepopulated_fields = {"slug": ["name"]}
-#     list_display  = [ 'slug', 'name', ]
-#     search_fields = ['name']
-#
-# admin.site.register( models.FooBar, FooBarAdmin )
+
+@io_admin_register(models.MiniSite)
+class MiniSiteAdmin(ImportExportModelAdmin):
+    pass
+
+    def save_model(self, request, obj, form, change):
+
+        super(ImportExportModelAdmin, self).save_model(
+            request, obj, form, change)
+        if 'zip_archive' in form.changed_data:
+            obj.unpack_archive()
