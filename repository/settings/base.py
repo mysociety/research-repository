@@ -187,7 +187,7 @@ PIPELINE = {
     ),
     # Use the libsass commandline tool (that's bundled with libsass) as our
     # sass compiler, so there's no need to install anything else.
-    'SASS_BINARY': os.path.join(PARENT_DIR, 'virtualenv-repository', 'bin', 'sassc')
+    'SASS_BINARY': os.path.join(PARENT_DIR, 'venv', 'bin', 'sassc')
 }
 
 # Uploaded files

@@ -1,4 +1,4 @@
-virtualenv_dir='../virtualenv-repository'
+virtualenv_dir='../venv'
 virtualenv_activate="$virtualenv_dir/bin/activate"
 source $virtualenv_activate
 

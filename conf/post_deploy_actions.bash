@@ -11,7 +11,7 @@ cd `dirname $0`/..
 # for example xapian. If using these you might want to add the
 # '--system-site-packages' argument.
 virtualenv_args=""
-virtualenv_dir='../virtualenv-repository'
+virtualenv_dir='../venv'
 virtualenv_activate="$virtualenv_dir/bin/activate"
 if [ ! -f "$virtualenv_activate" ]
 then
