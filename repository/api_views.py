@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 from rest_framework import authentication, permissions
 from django.conf.urls import url
-from models import ResearchItem
+from .models import ResearchItem
 from pages.models import MiniSite
 
 
