@@ -4,23 +4,35 @@
 {% block title %}{{ item.title }} ({{ item.date.year }}){% endblock %}
 
 {% block meta-tags %}
-<link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
-<meta name="DC.relation" content="{{ request.build_absolute_uri }}">
-<meta name="DC.title" content="{{ item.title }}">
-{% for author in item.author_list %}
-<meta name="DC.creator" content="{{ author.last_name}}, {{ author.first_name }}">
-{% endfor %}
-<meta name="DC.date" content="{{ item.date|date:'Y-m-d' }}">
-{% if item.licence %}
-<meta name="DC.rights" content="{{ item.licence }}">
-{% endif %}
 
-{% if item.published == False %}
-<meta name="robots" content="noindex">
-{% endif %}
+    {% if item.show_disclaimer == False and not item.custom_cite %}
+        <link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
+        <meta name="DC.relation" content="{{ request.build_absolute_uri }}">
+        <meta name="DC.title" content="{{ item.title }}">
+    {% for author in item.author_list %}
+        <meta name="DC.creator" content="{{ author.last_name}}, {{ author.first_name }}">
+    {% endfor %}
+    <meta name="DC.issued" content="{{ item.date|date:'Y-m-d' }}">
+        {% if item.licence %}
+            <meta name="DC.rights" content="{{ item.licence }}">
+        {% endif %}
+    <meta name="DC.publisher" content="mySociety">
 
+    {% with item.special_urls as urls %}
+        {% if urls.pdf %}
+            <meta name="citation_pdf_url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'download_special' item.slug 'pdf' %}">
+        {% endif %}
+        {% if urls.full_text %}
+            <meta name="citation_fulltext_html_url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'download_special' item.slug 'full_text' %}"> 
+        {% endif %}
+    {% endwith %}
 
+    {% if item.published == False %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+    {% endif %}
 {% endblock %}
+
 {% block social-meta-tags %}
 <meta property="og:site_name" content="{{settings.SITE_NAME}}">
 <meta property="og:title" content="{{item.title}}"/>
