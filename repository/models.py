@@ -1,14 +1,13 @@
 
+import json
 import os
-import zipfile
 import shutil
+import zipfile
 
-from django.db import models
 from autoslug import AutoSlugField
-from markitup.fields import MarkupField
 from django.conf import settings
 from django.urls import reverse
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils.safestring import mark_safe
 import urllib.request, urllib.parse, urllib.error
 import json
@@ -16,10 +15,14 @@ from django.template import loader
 from django.core.files.base import ContentFile
 from .image_processor import ThumbNailCreator
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
-
+from django.db import models
+from django.db.models import F, Q
+from django.template import loader
+from django.utils.safestring import mark_safe
 from markdown import markdown
-
+from markitup.fields import MarkupField
 
 GENERATE_CHOICES = [("B", "Blog"),
                     ("R", "Report"),
@@ -452,6 +455,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
     LICENCE_CHOICES = (
         ('cc-by-3.0', 'Creative Commons Attribution 3.0 Unported License'),
+        ('pub-rights', 'Publication rights only'),
     )
 
     licence = models.CharField(
@@ -485,6 +489,30 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         help_text='Upload a stringprint document as a zip',
         storage=OverwriteStorage()
     )
+
+    def special_urls(self):
+        """
+        find and return urls for some formats of the page
+        mainly for crawlers benefit.
+        """
+        results = {}
+
+        options = {"pdf":["pdf"],
+                   "full_text": ["read online", "mysociety blog"]
+                    }
+
+        for k,v in options.items():
+            query = Q()
+            for phrase in v:
+                query |= Q(title__icontains=phrase)
+            
+            outputs = self.outputs.filter(query)
+            if outputs.exists():
+                option = outputs[0]
+                results[k] = option
+
+        return results
+
 
     def url(self):
         return reverse('item', args=[self.slug])

@@ -259,6 +259,8 @@ class TagView(DetailView):
         return main_tag
 
 
+
+
 def output_download(request, output_id):
     """
     update database and return actual url
@@ -269,3 +271,17 @@ def output_download(request, output_id):
     item = item[0]
     item.increment_download()
     return HttpResponseRedirect(item.button_url())
+
+def output_download_with_item_slug(request,item_slug, output_id):
+    """
+    Create special aliases for pdfs and full_text
+    """
+    if output_id not in ["pdf", "full_text"]:
+        return output_download(request, output_id)
+
+    item = models.ResearchItem.objects.get(slug=item_slug)
+    urls = item.special_urls()
+    output = urls.get(output_id, None)
+    if output:
+        return output_download(request, output.id)
+    return HttpResponse("Missing {0} format".format(output_id))

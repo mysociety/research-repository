@@ -30,6 +30,7 @@ urlpatterns = [
     url('^api/', include('repository.api_views')),
     url(r'^sitemap\.xml$', views.SitemapView.as_view(), name='sitemap'),
     url(r'^publications/outputs/(?P<output_id>[-\w]+$)', views.output_download, name='download'),
+    url(r'^publications/(?P<item_slug>[-\w]+)/outputs/(?P<output_id>[-\w]+$)', views.output_download_with_item_slug, name='download_special'),
     url(r'^publications/(?P<slug>[-\w]+)$', views.ItemView.as_view(), name='item'),
     url(r'^publications/', views.ItemListView.as_view(), name='items'),
 
