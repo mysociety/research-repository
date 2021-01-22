@@ -451,6 +451,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
     LICENCE_CHOICES = (
         ('cc-by-3.0', 'Creative Commons Attribution 3.0 Unported License'),
+        ('pub-rights', 'Publication rights only'),
     )
 
     licence = models.CharField(
