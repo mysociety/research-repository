@@ -512,7 +512,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         migrate from old style to new style licences
         """
         name_lookup = {x: y for x, y in ResearchItem.LICENCE_CHOICES}
-        if self.licencing is None:
+        if self.licencing is None and self.licence:
             replacement, created = ResearchLicence.objects.get_or_create(
                 slug=self.licence, name=name_lookup[self.licence])
             self.licencing = replacement
