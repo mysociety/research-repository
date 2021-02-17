@@ -21,7 +21,7 @@ source $virtualenv_activate
 
 # Upgrade pip to a secure version
 
-curl -L -s https://bootstrap.pypa.io/get-pip.py | python
+curl -L -s https://bootstrap.pypa.io/2.7/get-pip.py | python
 
 pip install --upgrade setuptools
 pip install --requirement requirements.txt
