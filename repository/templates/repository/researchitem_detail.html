@@ -228,13 +228,16 @@
 {% endif %}
 
 
-{% if item.licence %}
+{% if item.licencing %}
 
     <h2>Licence</h2>
+    {% if item.licencing.url %}
+    <b><a href="{{item.licencing.url}}">{{item.licencing.name}}</a></b>
+    {% else %}
+    <b>{{item.licencing.name}}</b>
+    {% endif %}
 
-    {% with template_name=item.licence|stringformat:"s"|add:".html" %}
-        {% include 'licences/'|add:template_name %}
-    {% endwith %}
+    {{item.licencing.description}}
 
 {% endif %}
 

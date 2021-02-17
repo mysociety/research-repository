@@ -65,6 +65,22 @@ class ThumbnailMixIn(object):
         self.thumbnail.save(filename, cf, save=True)
 
 
+class ResearchLicence(models.Model):
+    """
+    How is the research itself licenced
+    """
+    slug = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
+    url = models.URLField(blank=True, null=True)
+    description = MarkupField(blank=True)
+
+    def __str__(self):
+        return self.slug
+
+    def __unicode__(self):
+        return self.slug
+
+
 class TagGroup(models.Model):
     slug = AutoSlugField(
         unique=True,
@@ -457,8 +473,11 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     licence = models.CharField(
         max_length=16,
         choices=LICENCE_CHOICES,
-        blank=True
+        blank=True,
+        help_text="Deprecated, use 'licencing'."
     )
+
+    licencing = models.ForeignKey(ResearchLicence, null=True, blank=True)
 
     show_citation = models.BooleanField(default=True)
     show_disclaimer = models.BooleanField(default=False,
@@ -485,6 +504,17 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         help_text='Upload a stringprint document as a zip',
         storage=OverwriteStorage()
     )
+
+    def migrate_licence(self):
+        """
+        migrate from old style to new style licences
+        """
+        name_lookup = {x: y for x, y in ResearchItem.LICENCE_CHOICES}
+        if self.licencing is None:
+            replacement, created = ResearchLicence.objects.get_or_create(
+                slug=self.licence, name=name_lookup[self.licence])
+            self.licencing = replacement
+            self.save()
 
     def special_urls(self):
         """
