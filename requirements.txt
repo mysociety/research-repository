@@ -20,4 +20,4 @@ django-import-export==0.5.1
 useful_inkleby==0.3
 -e git+https://github.com/mariocesar/sorl-thumbnail.git@47cc30d5c9e9aeccf314cae61e70c830f9fe4e73#egg=sorl-thumbnail
 colorthief
-djangorestframework==3.9.4
+djangorestframework==3.11.2
