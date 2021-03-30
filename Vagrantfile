@@ -67,10 +67,4 @@ Vagrant.configure(2) do |config|
 	sudo chmod -R ugo+rwx /vagrant
   SHELL
 
-  # Start mailcatcher every time we start the VM
-  config.vm.provision "shell", run: "always" do |s|
-    s.inline = <<-SHELL
-      mailcatcher --http-ip 0.0.0.0
-    SHELL
-  end
 end
