@@ -32,11 +32,13 @@ GENERATE_CHOICES = [("B", "Blog"),
                     ("S", "Series"),
                     ]
 
+
 class OverwriteStorage(FileSystemStorage):
 
     def get_available_name(self, name, max_length=None):
         self.delete(name)
         return name
+
 
 class ThumbnailMixIn(object):
     """
@@ -67,6 +69,22 @@ class ThumbnailMixIn(object):
         filename = "{0}-{1}.png".format(self.slug,
                                         "thumbnail")
         self.thumbnail.save(filename, cf, save=True)
+
+
+class ResearchLicence(models.Model):
+    """
+    How is the research itself licenced
+    """
+    slug = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
+    url = models.URLField(blank=True, null=True)
+    description = MarkupField(blank=True)
+
+    def __str__(self):
+        return self.slug
+
+    def __unicode__(self):
+        return self.slug
 
 
 class TagGroup(models.Model):
@@ -461,8 +479,11 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     licence = models.CharField(
         max_length=16,
         choices=LICENCE_CHOICES,
-        blank=True
+        blank=True,
+        help_text="Deprecated, use 'licencing'."
     )
+
+    licencing = models.ForeignKey(ResearchLicence, null=True, blank=True, on_delete=models.CASCADE)
 
     show_citation = models.BooleanField(default=True)
     show_disclaimer = models.BooleanField(default=False,
@@ -490,6 +511,17 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         storage=OverwriteStorage()
     )
 
+    def migrate_licence(self):
+        """
+        migrate from old style to new style licences
+        """
+        name_lookup = {x: y for x, y in ResearchItem.LICENCE_CHOICES}
+        if self.licencing is None and self.licence:
+            replacement, created = ResearchLicence.objects.get_or_create(
+                slug=self.licence, name=name_lookup[self.licence])
+            self.licencing = replacement
+            self.save()
+
     def special_urls(self):
         """
         find and return urls for some formats of the page
@@ -497,22 +529,21 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         """
         results = {}
 
-        options = {"pdf":["pdf"],
+        options = {"pdf": ["pdf"],
                    "full_text": ["read online", "mysociety blog"]
-                    }
+                   }
 
-        for k,v in options.items():
+        for k, v in options.items():
             query = Q()
             for phrase in v:
                 query |= Q(title__icontains=phrase)
-            
+
             outputs = self.outputs.filter(query)
             if outputs.exists():
                 option = outputs[0]
                 results[k] = option
 
         return results
-
 
     def url(self):
         return reverse('item', args=[self.slug])
@@ -576,31 +607,43 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         zip_ref.extractall(dest)
         zip_ref.close()
 
-        # connect values if absent
+        # connect outputs if not already present
         gc = ResearchOutput.objects.get_or_create
+        current_urls = list(self.outputs.all().values_list("url", flat=True))
 
         if os.path.exists(os.path.join(dest, "toc.json")):
             self.table_of_contents_url = url_path + "toc.json"
             self.fetch_toc(save=True)
-        if os.path.join(dest, "index.html"):
+        url = url_path
+        if os.path.join(dest, "index.html") and url not in current_urls:
             item, created = gc(title="Read Online", research_item=self)
-            item.url = url_path
+            item.url = url
             item.order = 0
             item.top_order = 0
             item.save()
-        if os.path.exists(os.path.join(dest, "plain.html")):
+        url = url_path + "plain.html"
+        if os.path.exists(os.path.join(dest, "plain.html")) and url not in current_urls:
             item, created = gc(title="Plain Text", research_item=self)
-            item.url = url_path + "plain.html"
+            item.url = url
             item.order = 1
             item.top_order = 1
             item.save()
         kindle_file = "{0}.mobi".format(upload_slug)
-        if os.path.exists(os.path.join(dest, kindle_file)):
-                item, created = gc(title="Kindle .mobi", research_item=self)
-                item.url = url_path + kindle_file
-                item.order = 2
-                item.top_order = 2
-                item.save()
+        url = url_path + kindle_file
+        if os.path.exists(os.path.join(dest, kindle_file)) and url not in current_urls:
+            item, created = gc(title="Kindle .mobi", research_item=self)
+            item.url = url
+            item.order = 2
+            item.top_order = 2
+            item.save()
+        epub_file = "{0}.epub".format(upload_slug)
+        url_path + kindle_file
+        if os.path.exists(os.path.join(dest, epub_file)) and url not in current_urls:
+            item, created = gc(title="epub", research_item=self)
+            item.url = url
+            item.order = 2
+            item.top_order = 2
+            item.save()
         self.save()
 
     def fetch_toc(self, save=True):

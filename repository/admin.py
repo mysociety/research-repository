@@ -46,6 +46,12 @@ class ItemAuthorInline(admin.TabularInline):
 class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
+def migrate_licence(self, request, queryset):
+    for model in queryset:
+        model.migrate_licence()
+
+migrate_licence.short_description = 'Migrate licence'
+
 
 @io_admin_register(models.ResearchItem)
 class ResearchItemAdmin(ImportExportModelAdmin):
@@ -54,6 +60,7 @@ class ResearchItemAdmin(ImportExportModelAdmin):
     inlines = (ItemAuthorInline, ResearchOutputInline)
     filter_horizontal = ('tags',)
     list_filter = ('tags', 'published', 'featured')
+    actions = [migrate_licence]
 
     def save_model(self, request, obj, form, change):
         # if value of generate thumbnail has changed
@@ -84,3 +91,4 @@ class TagItemAdmin(ImportExportModelAdmin):
 
 admin.site.register(models.TagGroup)
 admin.site.register(models.Site)
+admin.site.register(models.ResearchLicence)

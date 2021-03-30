@@ -20,7 +20,7 @@ fi
 source $virtualenv_activate
 
 # Upgrade pip to a secure version
-curl -L -s https://bootstrap.pypa.io/get-pip.py | python3
+curl -L -s https://bootstrap.pypa.io/pip/3.5/get-pip.py | python3
 
 pip3 install --requirement requirements.txt
 
@@ -32,17 +32,6 @@ python3 manage.py migrate
 
 # gather all the static files in one place
 python3 manage.py collectstatic --noinput
-
-# researchsites. This feels like a bit of a hack.
-researchsites_dir='../sites'
-if [ ! -d "$researchsites_dir" ]; then
-    mkdir $researchsites_dir
-    cd $researchsites_dir
-    git clone --no-checkout ssh://git.mysociety.org/data/git/private/researchsites.git . && git checkout master
-else
-    cd $researchsites_dir
-    /data/mysociety/bin/git-safe-to-checkout . master && git pull
-fi
 
 #create zip archive if absent
 zip_archive_dir='../zip_uploads'
