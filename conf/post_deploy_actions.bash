@@ -35,17 +35,6 @@ find . -name '*.pyc' -delete
 # gather all the static files in one place
 ./manage.py collectstatic --noinput
 
-# researchsites. This feels like a bit of a hack.
-researchsites_dir='../sites'
-if [ ! -d "$researchsites_dir" ]; then
-    mkdir $researchsites_dir
-    cd $researchsites_dir
-    git clone --no-checkout ssh://git.mysociety.org/data/git/private/researchsites.git . && git checkout master
-else
-    cd $researchsites_dir
-    /data/mysociety/bin/git-safe-to-checkout . master && git pull
-fi
-
 #create zip archive if absent
 zip_archive_dir='../zip_uploads'
 if [ ! -d "$zip_archive_dir" ]; then
