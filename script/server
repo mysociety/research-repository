@@ -1,5 +1,30 @@
-virtualenv_dir='../venv'
-virtualenv_activate="$virtualenv_dir/bin/activate"
-source $virtualenv_activate
+#!/bin/bash
 
-python3 manage.py runserver 0.0.0.0:8000
+# abort on any errors
+set -e
+
+# check that we are in the expected directory
+cd `dirname $0`/..
+
+# Get environment variables, if they exist.
+ENV_FILE=${ENV_FILE:-../env.sh}
+if [ -f "$ENV_FILE" ]; then
+  echo "==> Loading environment from ${ENV_FILE}"
+  source $ENV_FILE
+fi
+
+# Argument handling.
+# The default action when called without an argument is "start"
+ACTION=$1
+[ -n "$ACTION" ] || ACTION="start"
+
+if [ "$ACTION" == "--docker" ]; then
+  script/migrate
+  python3 manage.py collectstatic --noinput
+  mkdir -p static/css
+  sassc --style compressed static/scss/main.scss static/css/main.css
+  gunicorn proj.wsgi:application --bind 0.0.0.0:8000 --worker-tmp-dir /dev/shm --log-file=- --access-logfile=-
+else
+  script/migrate
+  python3 manage.py runserver 0.0.0.0:8000
+fi

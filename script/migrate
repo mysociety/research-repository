@@ -1,5 +1,2 @@
-virtualenv_dir='../venv'
-virtualenv_activate="$virtualenv_dir/bin/activate"
-source $virtualenv_activate
-
+#!/bin/bash
 python3 manage.py migrate
