@@ -1,0 +1,33 @@
+services:
+  app:
+    image: mysocietyorg/caps-dev:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /workspaces/caps/script/server
+    volumes:
+      - ./:/workspaces/research-repository/
+      - ./conf/config.py.docker:/workspaces/research-repository/conf/config.py
+    environment:
+      - REPOSITORY_DB_PASS=${REPOSITORY_DB_PASS:-research}
+      - SECRET_KEY=${SECRET_KEY:-xx}
+      - DEBUG=${DEBUG:-1}
+      - MAPIT_API_KEY=${MAPIT_API_KEY:-xxx}
+      - GOOGLE_ANALYTICS=${GOOGLE_ANALYTICS:-xxx}
+      - MAILCHIMP_KEY=${MAILCHIMP_KEY:-xxx}
+    depends_on:
+      - postgres
+    ports:
+      - ${PORT:-8000}:8000
+
+  postgres:
+    image: postgres:11
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${REPOSITORY_DB_USER:-research}
+      - POSTGRES_PASSWORD=${REPOSITORY_DB_PASS:-research}
+      - POSTGRES_DB=${REPOSITORY_DB_NAME:-research}
+
+volumes:
+  postgres_data:

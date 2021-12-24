@@ -1,0 +1,19 @@
+
+{
+	"name": "caps",
+
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/research-repository",
+	"overrideCommand": true,
+	"postCreateCommand": "script/populate",
+
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"batisteo.vscode-django",
+		"ms-azuretools.vscode-docker",
+		"github.vscode-pull-request-github",
+		"mhutchie.git-graph"
+	]
+}
