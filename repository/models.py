@@ -58,7 +58,6 @@ class ThumbnailMixIn(object):
             return None
 
         hero_path = self.hero.path
-        print(hero_path)
         tc = ThumbNailCreator()
         tcf = tc.convert_hero_image_to_thumbnail
 
@@ -83,7 +82,7 @@ class ResearchLicence(models.Model):
     def __str__(self):
         return self.slug
 
-    def __unicode__(self):
+    def __str__(self):
         return self.slug
 
 
@@ -106,7 +105,7 @@ class TagGroup(models.Model):
 
     description = MarkupField()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -228,7 +227,7 @@ class Tag(models.Model, ThumbnailMixIn):
         else:
             return ""
 
-    def __unicode__(self):
+    def __str__(self):
         return self.nice_name()
 
     def get_research_items(self):
@@ -383,7 +382,7 @@ class Person(models.Model):
     def items_list(self):
         return [items.research_item for items in ItemAuthor.objects.filter(person=self).order_by('-research_item__date')]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.full_name()
 
     class Meta:
@@ -722,7 +721,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     def absolute_url(self):
         return settings.SITE_BASE_URL + reverse('item', args=[self.slug])
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title + ' (' + self.friendly_date() + ')'
 
     def share_abstract(self):
@@ -782,7 +781,7 @@ class ItemAuthor(models.Model):
         default=0
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.person.full_name() + ' is an author of "' + self.research_item.title + ('"" in position %d' % self.order)
 
 
@@ -841,7 +840,7 @@ class ResearchOutput(models.Model):
         else:
             return 'View Online'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 

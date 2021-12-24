@@ -95,10 +95,12 @@ class ThumbNailCreator(object):
         base_image = Image.new('RGB', (110, 150), color=color)
 
         ratio = img.width / 110
-        new_height = img.height / ratio
+        new_height = int(img.height / ratio)
         img = img.resize((110, new_height), Image.BICUBIC)
 
-        base_image.paste(img, (0, 150 / 2 - (new_height / 2) + 20))
+        corner = int(150 / 2 - (new_height / 2) + 20)
+
+        base_image.paste(img, (0, corner))
 
         # find best writing color for background
         cls.writing_colours.sort(

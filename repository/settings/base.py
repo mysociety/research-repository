@@ -268,3 +268,5 @@ SITE_BASE_URL = config.SITE_BASE_URL
 DEFAULT_SHARE_IMAGE = config.DEFAULT_SHARE_IMAGE
 
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

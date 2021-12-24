@@ -61,7 +61,7 @@ class Page(models.Model):
         else:
             return self.title
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
@@ -72,7 +72,7 @@ class Link(models.Model):
     order = models.IntegerField(default=-1)
     new_window = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.label
 
 
@@ -84,7 +84,7 @@ class OptOut(models.Model):
     user_id = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user_id
 
 
