@@ -1,4 +1,5 @@
 conf/*.yml
+conf/config.py
 conf/httpd.conf
 conf/crontab
 *.deployed

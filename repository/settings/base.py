@@ -13,33 +13,29 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 import yaml
 from .paths import *
+from conf import config
 
-config = yaml.load(open(os.path.join(PROJECT_ROOT, 'conf', 'general.yml')))
-
-DEBUG = bool(int(config.get('STAGING')))
+DEBUG = bool(int(config.STAGING))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config.get('REPOSITORY_DB_NAME'),
-        'USER': config.get('REPOSITORY_DB_USER'),
-        'PASSWORD': config.get('REPOSITORY_DB_PASS'),
-        'HOST': config.get('REPOSITORY_DB_HOST'),
-        'PORT': config.get('REPOSITORY_DB_PORT'),
+        'NAME': config.REPOSITORY_DB_NAME,
+        'USER': config.REPOSITORY_DB_USER,
+        'PASSWORD': config.REPOSITORY_DB_PASS,
+        'HOST': config.REPOSITORY_DB_HOST,
+        'PORT': config.REPOSITORY_DB_PORT,
     }
 }
 
-SECRET_KEY = config.get('DJANGO_SECRET_KEY')
+SECRET_KEY = config.DJANGO_SECRET_KEY
 
 ADMINS = ()
 
-if 'ADMIN_NAME' in config:
-    ADMINS = (
-        (config.get('ADMIN_NAME'), config.get('ADMIN_EMAIL')),
-    )
+if hasattr(config, 'ADMIN_NAME'):
+    ADMINS = ((config.ADMIN_NAME, config.ADMIN_EMAIL),)
 
 MANAGERS = ADMINS
-
 
 # Application definition
 
@@ -161,7 +157,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'web'),
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineManifestStorage'
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -187,7 +183,7 @@ PIPELINE = {
     ),
     # Use the libsass commandline tool (that's bundled with libsass) as our
     # sass compiler, so there's no need to install anything else.
-    'SASS_BINARY': os.path.join(PARENT_DIR, 'venv', 'bin', 'sassc')
+    'SASS_BINARY': config.SASSC_LOCATION,
 }
 
 # Uploaded files
@@ -242,7 +238,7 @@ CSRF_COOKIE_HTTPONLY = True
 
 # Allowed hosts
 
-ALLOWED_HOSTS = config.get('ALLOWED_HOSTS', [])
+ALLOWED_HOSTS = config.ALLOWED_HOSTS
 
 
 # Use mailcatcher in development
@@ -260,15 +256,15 @@ MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})
 # Thumbnails
 THUMBNAIL_ALTERNATIVE_RESOLUTIONS = [1.5, 2]
 
-THUMBNAIL_FONT = config.get("THUMBNAIL_FONT")
+THUMBNAIL_FONT = config.THUMBNAIL_FONT
 
 # mySociety-specific settings
-GOOGLE_ANALYTICS_ACCOUNT = config.get('GOOGLE_ANALYTICS_ACCOUNT')
+GOOGLE_ANALYTICS_ACCOUNT = config.GOOGLE_ANALYTICS_ACCOUNT
 
 # mySociety-specific settings
-SITE_BASE_URL = config.get('SITE_BASE_URL')
+SITE_BASE_URL = config.SITE_BASE_URL
 
-#settings for social sharing
-DEFAULT_SHARE_IMAGE = config.get('DEFAULT_SHARE_IMAGE')
+# settings for social sharing
+DEFAULT_SHARE_IMAGE = config.DEFAULT_SHARE_IMAGE
 
 MARKITUP_FILTER = ('markdown.markdown', {'safe_mode': True})

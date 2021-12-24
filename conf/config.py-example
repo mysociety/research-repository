@@ -1,0 +1,40 @@
+import os
+
+REPOSITORY_DB_HOST = "localhost"
+REPOSITORY_DB_PORT = "5432"
+REPOSITORY_DB_USER = "repository"
+REPOSITORY_DB_NAME = "repository"
+REPOSITORY_DB_PASS = "repository"
+
+STAGING = "1"
+
+TIME_ZONE = "Europe/London"
+DJANGO_SECRET_KEY = ""
+
+# create an account and then put the 'UA-123456-1' bit here. If present it will
+# be used in the templates.
+GOOGLE_ANALYTICS_ACCOUNT = ""
+
+# Be sure to set this in your config for sites where DEBUG is False
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = [".example.com", "localhost"]
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash.
+# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
+MEDIA_URL = "/media/"
+
+# The base URL of this installation, to build out absolute URLs.
+# No trailing slash.
+SITE_BASE_URL = "http://localhost:8000"
+
+# Settings for populating social cards
+DEFAULT_SHARE_IMAGE = "/static/img/mysociety-circles-logo-for-social.png"
+SITE_NAME = "mySociety Research"
+SITE_TWITTER_HANDLE = "@mysociety"
+
+ADMIN_NAME = ""
+ADMIN_EMAIL = ""
+
+THUMBNAIL_FONT = os.path.join("web", "fonts","SourceSansPro-Bold.ttf")
+SASSC_LOCATION = 'sassc'

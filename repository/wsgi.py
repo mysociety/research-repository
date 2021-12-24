@@ -16,20 +16,13 @@ framework.
 import os
 import yaml
 
-config_path = os.path.abspath( os.path.join( os.path.dirname(__file__), '..', 'conf', 'general.yml' ) )
-config = yaml.load(open(config_path))
-
-if int(config.get('STAGING')):
-    import repository.wsgi_monitor
-    repository.wsgi_monitor.start(interval=1.0)
-    repository.wsgi_monitor.track(config_path)
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "repository.settings")
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
 
 # Apply WSGI middleware here.
