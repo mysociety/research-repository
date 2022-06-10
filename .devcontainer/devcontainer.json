@@ -6,11 +6,12 @@
 	"service": "app",
 	"workspaceFolder": "/workspaces/research-repository",
 	"overrideCommand": true,
-	"postCreateCommand": "script/populate",
+	"onCreateCommand": "script/populate",
 
 	"extensions": [
-		"ms-python.python",
+		"ms-vscode.test-adapter-converter",
 		"ms-python.vscode-pylance",
+		"ms-python.python",
 		"batisteo.vscode-django",
 		"ms-azuretools.vscode-docker",
 		"github.vscode-pull-request-github",
