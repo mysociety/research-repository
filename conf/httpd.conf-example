@@ -36,7 +36,8 @@ WSGIDaemonProcess example.com \
     processes=5 \
     threads=1 \
     display-name=example.com \
-    python-path=/data/vhost/example.com/repository:/data/vhost/example.com/virtualenv-repository/lib/python3/site-packages
+    python-home=/data/vhost/example.com/.venv/ \
+    python-path=/data/vhost/example.com/repository
 
 WSGIProcessGroup example.com
 
