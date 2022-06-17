@@ -1,43 +1,39 @@
 # Research Repository
 
-
-[![Installability](http://img.shields.io/badge/installability-gold-ffd700.svg)]()
-
 mySociety and its partners do lots of research. This is a place for us to list that research in a coherent manner for easy finding and citation.
 
-## Local development
+## Development
 
+### Codespaces
 
-Once cloned create conf/general.yml and conf/httpd.conf from the example files.
+The most simple development environment is open up the repo in codespaces.
 
-In general.yml specify a django secret key and if testing locally, add '127.0.0.1' to the allowed_hosts.
-    
-This project includes a Vagrantfile to make local development easy.
+This runs a prebuilt container with the data populated (the state that 'local development with docker and vscode' would eventually get to).
 
-Simply run:
+Currently the draw back of this approach is it pushes back to github, and you need to locally pull down and resync to the git.mysociety.org.
 
-    $ vagrant up
+`script/server` will then start the dev server at http://localhost:8000
 
-In Windows run the command prompt as administrator. 
-    
-Once in the vagrant, to populate the database with test data (and create an 'admin'/'admin' superuser) - run:
+## Local development with docker and vscode
 
-	$ script/populate
-	
-	Then to run the server:
-	
-	$ script/server
+After cloning the repo, open up the repo and (if the 'Visual Studio Code Remote - Containers' extention is installed), you will be prompted to reopen the repo in the devcontainer. Do this, wait for it to complete. Once the window opens, it will automatically run `script/populate` (will need to wait a bit longer for this dialogue to finish).
 
-The website will then be running at http://localhost:8000
+`script/server` will then start the dev server at http://localhost:8000
+
+## Local development with docker
+
+Run `docker-compose` up. This will build an application container and PostgreSQL containers These will run in the foreground, so you will see console output in the shell from the containers. You can stop the containers by hitting control-C. If you'd rather run in the background, add the -d switch; if you do this you can stop the environment with docker-compose down.
+
+You can then run `docker-compose exec app script/populate` to load a set of test data. 
 
 
 ## Accessing admin
 
-Admin password is available on the wiki - can then create a user account on the django backend
+The Admin password to the live site is available on mySociety password store - you can then create a user account on the django backend.
 
 https://research.mysociety.org/admin/ 
 
-To create a token to use the remote zip upload, use `script/token <username>`
+To create a token to use the remote zip upload, use `script/token <username>` in the terminal. 
 
 ## Models and concepts
 
@@ -78,6 +74,11 @@ Tags are the way ResearchItems and their display are managed on the site. They a
 
 The default tag (where the research link on the top bar leads - is set in the one ‘Site’ object). 
 
+### Authors
+
+Fairly self-explanatory but the admin a lot of different options and allow author names to be transformed into links to their site via a customisable link behaviour.
+
+
 ### Pages App
 
 Content on the rest of the site is also customisable via the admin. 
@@ -90,14 +91,11 @@ Content on the rest of the site is also customisable via the admin.
 
 As explored on wiki page, items can be embedded in other pages - either as iframes or by reformatting the data.
 
-This involves a very basic api for accessing data. For instance:
+This involves a very basic api for accessing data. For instance, referencing this url creates a json with the 6 most recent featured items:
 
 `/embed/featured/limit:6/format:json`
 
-Creates a json with the 6 most recent featured items. ‘Featured’ can also be any tag slug. These can also be stacked - for instance /blog-posts/community/ shows blog posts that are also in the community tag. 
+. ‘Featured’ can also be any tag slug. These can also be stacked - for instance /blog-posts/community/ shows blog posts that are also in the community tag. 
 
 Excluding ‘format:json’ just displays a webpage, that can be used in an iframe (how the stringprint sites show related items). 
-
-Authors - fairly self-explanatory but have a lot of different options and allow author names to be transformed into links to their site via a customisable link behaviour. Some references in here to an authors page that was never created. 
-
 
