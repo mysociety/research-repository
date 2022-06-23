@@ -649,7 +649,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if self.table_of_contents_url:
             try:
                 response = urllib.request.urlopen(self.table_of_contents_url)
-                self.table_of_contents_cache = response.read()
+                self.table_of_contents_cache = response.read().decode("utf-8") 
             except Exception:
                 pass
             if save:
