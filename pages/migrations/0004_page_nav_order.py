@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0003_page_show_title'),
+        ("pages", "0003_page_show_title"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='page',
-            name='nav_order',
+            model_name="page",
+            name="nav_order",
             field=models.IntegerField(default=-1),
         ),
     ]

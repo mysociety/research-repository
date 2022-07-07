@@ -8,18 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0044_auto_20190715_0951'),
+        ("repository", "0044_auto_20190715_0951"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='itemauthor',
-            name='order',
-            field=models.IntegerField(default=0, help_text=b'Where in the list of authors should this person appear?', verbose_name=b'Order'),
+            model_name="itemauthor",
+            name="order",
+            field=models.IntegerField(
+                default=0,
+                help_text=b"Where in the list of authors should this person appear?",
+                verbose_name=b"Order",
+            ),
         ),
         migrations.AlterField(
-            model_name='researchoutput',
-            name='top_order',
-            field=models.IntegerField(default=0, help_text=b'Order for under image link'),
+            model_name="researchoutput",
+            name="top_order",
+            field=models.IntegerField(
+                default=0, help_text=b"Order for under image link"
+            ),
         ),
     ]

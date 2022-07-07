@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0037_researchitem_show_citation'),
+        ("repository", "0037_researchitem_show_citation"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='display',
+            model_name="tag",
+            name="display",
             field=models.BooleanField(default=True),
         ),
     ]

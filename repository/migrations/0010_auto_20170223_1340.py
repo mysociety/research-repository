@@ -8,13 +8,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0009_auto_20170223_1310'),
+        ("repository", "0009_auto_20170223_1310"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='researchitem',
-            old_name='license',
-            new_name='licence',
+            model_name="researchitem",
+            old_name="license",
+            new_name="licence",
         ),
     ]

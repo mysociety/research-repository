@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0048_auto_20190820_0905'),
+        ("repository", "0048_auto_20190820_0905"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='social_description',
+            model_name="tag",
+            name="social_description",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]

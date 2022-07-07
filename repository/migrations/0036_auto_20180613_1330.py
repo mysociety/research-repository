@@ -9,18 +9,20 @@ import markitup.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0035_auto_20180613_1219'),
+        ("repository", "0035_auto_20180613_1219"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='_custom_cite_rendered',
+            model_name="researchitem",
+            name="_custom_cite_rendered",
             field=models.TextField(blank=True, editable=False),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='custom_cite',
-            field=markitup.fields.MarkupField(blank=True, default=b'', no_rendered_field=True),
+            model_name="researchitem",
+            name="custom_cite",
+            field=markitup.fields.MarkupField(
+                blank=True, default=b"", no_rendered_field=True
+            ),
         ),
     ]

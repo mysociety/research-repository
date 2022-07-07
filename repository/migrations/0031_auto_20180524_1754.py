@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0030_auto_20180524_1749'),
+        ("repository", "0030_auto_20180524_1749"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tag',
-            name='top_bar',
-            field=models.IntegerField(default=-1, help_text=b'Should this category appear on the top bar?'),
+            model_name="tag",
+            name="top_bar",
+            field=models.IntegerField(
+                default=-1, help_text=b"Should this category appear on the top bar?"
+            ),
         ),
     ]

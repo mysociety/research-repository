@@ -8,13 +8,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0002_auto_20170223_2028'),
+        ("pages", "0002_auto_20170223_2028"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='page',
-            name='show_title',
-            field=models.BooleanField(default=True, help_text=b'Should the template display the page title as well as the content?'),
+            model_name="page",
+            name="show_title",
+            field=models.BooleanField(
+                default=True,
+                help_text=b"Should the template display the page title as well as the content?",
+            ),
         ),
     ]

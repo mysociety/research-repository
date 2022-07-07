@@ -9,48 +9,92 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0047_auto_20190819_0911'),
+        ("repository", "0047_auto_20190819_0911"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='date',
-            field=models.DateField(blank=True, help_text=b'The publication date of this tag.', null=True),
+            model_name="tag",
+            name="date",
+            field=models.DateField(
+                blank=True, help_text=b"The publication date of this tag.", null=True
+            ),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='featured',
+            model_name="tag",
+            name="featured",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='generate_thumbnail',
-            field=models.CharField(blank=True, choices=[(b'B', b'Blog'), (b'R', b'Report'), (b'P', b'Policy'), (b'C', b'Consultation'), (b'M', b'Minisite'), (b'S', b'Series')], help_text=b'Generate a thumbnail from the hero image', max_length=2, null=True),
+            model_name="tag",
+            name="generate_thumbnail",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    (b"B", b"Blog"),
+                    (b"R", b"Report"),
+                    (b"P", b"Policy"),
+                    (b"C", b"Consultation"),
+                    (b"M", b"Minisite"),
+                    (b"S", b"Series"),
+                ],
+                help_text=b"Generate a thumbnail from the hero image",
+                max_length=2,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='thumbnail',
-            field=models.ImageField(blank=True, help_text=b'The thumbnail of this research. Recommended ratio is 150x110.', null=True, upload_to=b'thumbnails/'),
+            model_name="tag",
+            name="thumbnail",
+            field=models.ImageField(
+                blank=True,
+                help_text=b"The thumbnail of this research. Recommended ratio is 150x110.",
+                null=True,
+                upload_to=b"thumbnails/",
+            ),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='generate_thumbnail',
-            field=models.CharField(blank=True, choices=[(b'B', b'Blog'), (b'R', b'Report'), (b'P', b'Policy'), (b'C', b'Consultation'), (b'M', b'Minisite'), (b'S', b'Series')], help_text=b'Generate a thumbnail from the hero image', max_length=2, null=True),
+            model_name="researchitem",
+            name="generate_thumbnail",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    (b"B", b"Blog"),
+                    (b"R", b"Report"),
+                    (b"P", b"Policy"),
+                    (b"C", b"Consultation"),
+                    (b"M", b"Minisite"),
+                    (b"S", b"Series"),
+                ],
+                help_text=b"Generate a thumbnail from the hero image",
+                max_length=2,
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='table_of_contents_cache',
-            field=models.TextField(blank=True, default=b'', help_text=b'Stores retrieved json site stucture - can also be used as a markdown field for the contents list'),
+            model_name="researchitem",
+            name="table_of_contents_cache",
+            field=models.TextField(
+                blank=True,
+                default=b"",
+                help_text=b"Stores retrieved json site stucture - can also be used as a markdown field for the contents list",
+            ),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='is_project',
-            field=models.BooleanField(default=False, help_text=b"creates the 'part of' message in all members"),
+            model_name="tag",
+            name="is_project",
+            field=models.BooleanField(
+                default=False, help_text=b"creates the 'part of' message in all members"
+            ),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='slug',
-            field=autoslug.fields.AutoSlugField(editable=True, help_text=b'Used to produce a nice page URL for this item.', populate_from=(b'label',), unique=True),
+            model_name="tag",
+            name="slug",
+            field=autoslug.fields.AutoSlugField(
+                editable=True,
+                help_text=b"Used to produce a nice page URL for this item.",
+                populate_from=(b"label",),
+                unique=True,
+            ),
         ),
     ]

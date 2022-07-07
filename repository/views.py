@@ -16,7 +16,7 @@ def snippet_view(request, options):
 
     options:
 
-    each 
+    each
 
     use multiple tags to do AND
 
@@ -39,7 +39,7 @@ def snippet_view(request, options):
 
     limit = 4
     related_items = None
-    template = 'standard'
+    template = "standard"
     related = False
     display_text = False
     render_json = False
@@ -66,46 +66,44 @@ def snippet_view(request, options):
                     render_json = True
             else:
                 if op == "featured":
-                    featured_tags = models.Tag.objects.filter(
-                        featured=True
-                    )
+                    featured_tags = models.Tag.objects.filter(featured=True)
                     featured_items = models.ResearchItem.objects.filter(
-                        published=True,
-                        featured=True
+                        published=True, featured=True
                     )
                     items = list(featured_items) + list(featured_tags)
                 else:
                     items = items.filter(tags__slug=op)
 
     if related_items:
-        items = models.ResearchItem.objects.get(
-            slug=related_items).similar_items(limit)
+        items = models.ResearchItem.objects.get(slug=related_items).similar_items(limit)
     else:
         if isinstance(items, list):
             items.sort(key=lambda x: x.date, reverse=True)
             items = items[:limit]
         else:
-            items = items.distinct().order_by('-date')[:limit]
+            items = items.distinct().order_by("-date")[:limit]
 
     if render_json:
         contents = [x.json() for x in items]
         return JsonResponse({"items": contents})
 
-    context = {'items': items,
-               'embed': True,
-               'display_text': display_text,
-               'related': related}
+    context = {
+        "items": items,
+        "embed": True,
+        "display_text": display_text,
+        "related": related,
+    }
 
-    return render(request, 'repository/embed_' + template + ".html", context)
+    return render(request, "repository/embed_" + template + ".html", context)
 
 
 class SitemapView(TemplateView):
-    template_name = 'sitemap.html'
+    template_name = "sitemap.html"
 
     def get_context_data(self, **kwargs):
         context = super(SitemapView, self).get_context_data(**kwargs)
-        context['site_base_url'] = settings.SITE_BASE_URL
-        context['items'] = models.ResearchItem.objects.filter(published=True)
+        context["site_base_url"] = settings.SITE_BASE_URL
+        context["items"] = models.ResearchItem.objects.filter(published=True)
         return context
 
     def get(self, request, *args, **kwargs):
@@ -116,18 +114,18 @@ class SitemapView(TemplateView):
 
 class ItemListView(ListView):
     model = models.ResearchItem
-    context_object_name = 'items'
+    context_object_name = "items"
 
     queryset = models.ResearchItem.objects.filter(published=True)
 
 
 class ItemView(DetailView):
     model = models.ResearchItem
-    context_object_name = 'item'
+    context_object_name = "item"
 
     def get_context_data(self, **kwargs):
         context = super(ItemView, self).get_context_data(**kwargs)
-        item = context['item']
+        item = context["item"]
 
         json_ld_representation = {
             "@context": "http://schema.org",
@@ -136,32 +134,33 @@ class ItemView(DetailView):
             "datePublished": item.date.isoformat(),
             "description": item.abstract.raw,
             "author": [],
-            "url": item.absolute_url()
+            "url": item.absolute_url(),
         }
 
         if item.subtitle:
-            json_ld_representation['alternativeHeadline'] = item.subtitle
+            json_ld_representation["alternativeHeadline"] = item.subtitle
 
         if item.thumbnail:
-            json_ld_representation['image'] = settings.SITE_BASE_URL + \
-                item.thumbnail.url
+            json_ld_representation["image"] = (
+                settings.SITE_BASE_URL + item.thumbnail.url
+            )
         else:
-            json_ld_representation['image'] = settings.SITE_BASE_URL + \
-                '/static/img/report-thumbnail.png'
+            json_ld_representation["image"] = (
+                settings.SITE_BASE_URL + "/static/img/report-thumbnail.png"
+            )
 
         for author in item.author_list():
 
-            json_ld_representation['author'].append(
-                author.json_ld_representation())
+            json_ld_representation["author"].append(author.json_ld_representation())
 
-        context['json_ld_representation'] = json.dumps(json_ld_representation)
+        context["json_ld_representation"] = json.dumps(json_ld_representation)
 
         return context
 
 
 class PersonListView(ListView):
     model = models.Person
-    context_object_name = 'people'
+    context_object_name = "people"
 
     def get_queryset(self):
         return models.Person.objects.filter(list_in_people=True)
@@ -169,33 +168,34 @@ class PersonListView(ListView):
 
 class PersonView(DetailView):
     model = models.Person
-    context_object_name = 'person'
+    context_object_name = "person"
 
     def get_context_data(self, **kwargs):
         context = super(PersonView, self).get_context_data(**kwargs)
 
-        context['json_ld_representation'] = json.dumps(
-            context['person'].json_ld_representation())
+        context["json_ld_representation"] = json.dumps(
+            context["person"].json_ld_representation()
+        )
 
         return context
 
 
 class TagListView(ListView):
     model = models.TagGroup
-    context_object_name = 'taggroups'
+    context_object_name = "taggroups"
 
 
 class TagView(DetailView):
     model = models.Tag
-    context_object_name = 'tag'
+    context_object_name = "tag"
 
     def get_context_data(self, **kwargs):
         context = super(TagView, self).get_context_data(**kwargs)
         top_tags = models.Tag.objects.filter(top_bar__gte=0)
-        top_tags = list(top_tags.order_by('top_bar'))
+        top_tags = list(top_tags.order_by("top_bar"))
         if context["tag"] not in top_tags:
             top_tags = []
-        
+
         context["top_tags"] = top_tags
         return context
 
@@ -205,7 +205,7 @@ class TagView(DetailView):
 
         main_tag = queryset.filter(slug=self.kwargs["slug1"]).get()
         main_tag.selected_items = main_tag.get_research_items()
-        filters = list(main_tag.display_filters.all().prefetch_related('tag'))
+        filters = list(main_tag.display_filters.all().prefetch_related("tag"))
         main_tag.filters = []
         if filters:
             for d in filters:
@@ -227,7 +227,9 @@ class TagView(DetailView):
                 main_tag.secondary_tag = main_tag.filters[0]
 
         if main_tag.secondary_tag:
-            main_tag.display_items_in_years = main_tag.secondary_tag.display_items_in_years
+            main_tag.display_items_in_years = (
+                main_tag.secondary_tag.display_items_in_years
+            )
             secondary_items = main_tag.secondary_tag.get_research_items()
             main_tag.selected_items = main_tag.selected_items & secondary_items
             if main_tag.secondary_tag not in main_tag.filters:
@@ -259,8 +261,6 @@ class TagView(DetailView):
         return main_tag
 
 
-
-
 def output_download(request, output_id):
     """
     update database and return actual url
@@ -272,7 +272,8 @@ def output_download(request, output_id):
     item.increment_download()
     return HttpResponseRedirect(item.button_url())
 
-def output_download_with_item_slug(request,item_slug, output_id):
+
+def output_download_with_item_slug(request, item_slug, output_id):
     """
     Create special aliases for pdfs and full_text
     """

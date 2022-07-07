@@ -8,14 +8,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0005_auto_20170222_1628'),
+        ("repository", "0005_auto_20170222_1628"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchoutput',
-            name='title',
-            field=models.CharField(default='', max_length=200),
+            model_name="researchoutput",
+            name="title",
+            field=models.CharField(default="", max_length=200),
             preserve_default=False,
         ),
     ]

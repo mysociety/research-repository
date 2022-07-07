@@ -8,13 +8,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0010_auto_20170223_1340'),
+        ("repository", "0010_auto_20170223_1340"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='researchitem',
-            name='licence',
-            field=models.CharField(blank=True, choices=[(b'cc-by-3.0', b'Creative Commons Attribution 3.0 Unported License')], max_length=16),
+            model_name="researchitem",
+            name="licence",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    (b"cc-by-3.0", b"Creative Commons Attribution 3.0 Unported License")
+                ],
+                max_length=16,
+            ),
         ),
     ]

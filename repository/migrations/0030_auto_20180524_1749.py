@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0029_tag_label'),
+        ("repository", "0029_tag_label"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tag',
-            name='label',
+            model_name="tag",
+            name="label",
             field=models.CharField(max_length=30),
         ),
     ]

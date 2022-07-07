@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0014_auto_20170314_1105'),
+        ("repository", "0014_auto_20170314_1105"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchoutput',
-            name='button_text_value',
+            model_name="researchoutput",
+            name="button_text_value",
             field=models.CharField(blank=True, max_length=200),
         ),
     ]

@@ -8,19 +8,36 @@ import pages.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0009_optout_created'),
+        ("pages", "0009_optout_created"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MiniSite',
+            name="MiniSite",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.CharField(max_length=200)),
-                ('name', models.CharField(max_length=200)),
-                ('site_folder', models.CharField(max_length=200)),
-                ('zip_archive', models.FileField(blank=True, help_text=b'Upload a website as a zip', null=True, storage=pages.models.OverwriteStorage(), upload_to=b'zips/')),
-                ('last_update', models.DateTimeField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("slug", models.CharField(max_length=200)),
+                ("name", models.CharField(max_length=200)),
+                ("site_folder", models.CharField(max_length=200)),
+                (
+                    "zip_archive",
+                    models.FileField(
+                        blank=True,
+                        help_text=b"Upload a website as a zip",
+                        null=True,
+                        storage=pages.models.OverwriteStorage(),
+                        upload_to=b"zips/",
+                    ),
+                ),
+                ("last_update", models.DateTimeField(blank=True, null=True)),
             ],
         ),
     ]

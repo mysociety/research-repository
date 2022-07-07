@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0038_tag_display'),
+        ("repository", "0038_tag_display"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='table_of_contents_cache',
-            field=models.TextField(blank=b'', default=b''),
+            model_name="researchitem",
+            name="table_of_contents_cache",
+            field=models.TextField(blank=b"", default=b""),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='table_of_contents_url',
-            field=models.URLField(blank=True, default=b''),
+            model_name="researchitem",
+            name="table_of_contents_url",
+            field=models.URLField(blank=True, default=b""),
         ),
     ]

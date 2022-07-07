@@ -4,13 +4,16 @@ import os
 from colorthief import ColorThief
 from django.conf import settings
 
+
 def round_to(x, base=5):
     return int(base * round(float(x) / base))
+
 
 def make_positive(v):
     if v < 0:
         return 0 - v
     return v
+
 
 def interestingness(color):
     """
@@ -23,6 +26,7 @@ def interestingness(color):
     value += make_positive(rounded[0] - rounded[2])
     value += make_positive(rounded[1] - rounded[2])
     return value
+
 
 class ThumbNailCreator(object):
 
@@ -44,19 +48,20 @@ class ThumbNailCreator(object):
     MINISITE = "M"
     SERIES = "S"
 
-    mysoc_colors = [MYSOC_BLUE,
-                    MYSOC_GREEN,
-                    MYSOC_RED,
-                    MYSOC_VIOLET,
-                    MYSOC_ORANGE,
-                    MYSOC_YELLOW,
-                    MYSOC_OFF_WHITE,
-                    MYSOC_LIGHT_GREY,
-                    MYSOC_DARK_GREY,
-                    MYSOC_BLACK]
+    mysoc_colors = [
+        MYSOC_BLUE,
+        MYSOC_GREEN,
+        MYSOC_RED,
+        MYSOC_VIOLET,
+        MYSOC_ORANGE,
+        MYSOC_YELLOW,
+        MYSOC_OFF_WHITE,
+        MYSOC_LIGHT_GREY,
+        MYSOC_DARK_GREY,
+        MYSOC_BLACK,
+    ]
 
-    writing_colours = [MYSOC_OFF_WHITE,
-                       MYSOC_BLACK]
+    writing_colours = [MYSOC_OFF_WHITE, MYSOC_BLACK]
 
     font_location = settings.THUMBNAIL_FONT
 
@@ -74,11 +79,9 @@ class ThumbNailCreator(object):
         return dist
 
     @classmethod
-    def convert_hero_image_to_thumbnail(cls,
-                                        source,
-                                        dest=None,
-                                        text=BLOG,
-                                        color_match_quality=1):
+    def convert_hero_image_to_thumbnail(
+        cls, source, dest=None, text=BLOG, color_match_quality=1
+    ):
         """
         expects an image roughly 1024x 680
         creates a thumbnail
@@ -92,7 +95,7 @@ class ThumbNailCreator(object):
         colors.sort(key=lambda x: interestingness(x), reverse=True)
         color = colors[0]
 
-        base_image = Image.new('RGB', (110, 150), color=color)
+        base_image = Image.new("RGB", (110, 150), color=color)
 
         ratio = img.width / 110
         new_height = int(img.height / ratio)
@@ -104,7 +107,8 @@ class ThumbNailCreator(object):
 
         # find best writing color for background
         cls.writing_colours.sort(
-            key=lambda x: cls.color_distance(x, color), reverse=True)
+            key=lambda x: cls.color_distance(x, color), reverse=True
+        )
         font_color = cls.writing_colours[0]
 
         draw = ImageDraw.Draw(base_image)

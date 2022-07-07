@@ -8,13 +8,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0012_auto_20170314_1044'),
+        ("repository", "0012_auto_20170314_1044"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='person',
-            name='url',
-            field=models.URLField(blank=True, help_text=b'A URL with more information on this person (such as an institutional URL).'),
+            model_name="person",
+            name="url",
+            field=models.URLField(
+                blank=True,
+                help_text=b"A URL with more information on this person (such as an institutional URL).",
+            ),
         ),
     ]

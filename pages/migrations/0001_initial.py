@@ -10,21 +10,35 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Page',
+            name="Page",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('slug', models.CharField(help_text=b'Used to produce a nice URL for this page.', max_length=64, unique=True)),
-                ('content', markitup.fields.MarkupField(no_rendered_field=True)),
-                ('_content_rendered', models.TextField(blank=True, editable=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                (
+                    "slug",
+                    models.CharField(
+                        help_text=b"Used to produce a nice URL for this page.",
+                        max_length=64,
+                        unique=True,
+                    ),
+                ),
+                ("content", markitup.fields.MarkupField(no_rendered_field=True)),
+                ("_content_rendered", models.TextField(blank=True, editable=False)),
             ],
             options={
-                'ordering': ['title'],
+                "ordering": ["title"],
             },
         ),
     ]

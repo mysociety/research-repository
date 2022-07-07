@@ -11,34 +11,67 @@ import repository.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0050_researchitem_zip_archive'),
+        ("repository", "0050_researchitem_zip_archive"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ResearchLicence',
+            name="ResearchLicence",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.CharField(max_length=50)),
-                ('name', models.CharField(max_length=200)),
-                ('url', models.URLField(blank=True, null=True)),
-                ('description', markitup.fields.MarkupField(blank=True, no_rendered_field=True)),
-                ('_description_rendered', models.TextField(blank=True, editable=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("slug", models.CharField(max_length=50)),
+                ("name", models.CharField(max_length=200)),
+                ("url", models.URLField(blank=True, null=True)),
+                (
+                    "description",
+                    markitup.fields.MarkupField(blank=True, no_rendered_field=True),
+                ),
+                ("_description_rendered", models.TextField(blank=True, editable=False)),
             ],
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='licence',
-            field=models.CharField(blank=True, choices=[(b'cc-by-3.0', b'Creative Commons Attribution 3.0 Unported License'), (b'pub-rights', b'Publication rights only')], help_text=b"Deprecated, use 'licencing'.", max_length=16),
+            model_name="researchitem",
+            name="licence",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    (
+                        b"cc-by-3.0",
+                        b"Creative Commons Attribution 3.0 Unported License",
+                    ),
+                    (b"pub-rights", b"Publication rights only"),
+                ],
+                help_text=b"Deprecated, use 'licencing'.",
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='zip_archive',
-            field=models.FileField(blank=True, help_text=b'Upload a stringprint document as a zip', null=True, storage=repository.models.OverwriteStorage(), upload_to=b'zips/'),
+            model_name="researchitem",
+            name="zip_archive",
+            field=models.FileField(
+                blank=True,
+                help_text=b"Upload a stringprint document as a zip",
+                null=True,
+                storage=repository.models.OverwriteStorage(),
+                upload_to=b"zips/",
+            ),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='licencing',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='repository.ResearchLicence'),
+            model_name="researchitem",
+            name="licencing",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="repository.ResearchLicence",
+            ),
         ),
     ]

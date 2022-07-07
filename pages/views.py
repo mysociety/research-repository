@@ -7,11 +7,11 @@ import feedparser
 import datetime
 
 
-
 class FeedCache(object):
     """
     basic cacher for imported rss feed
     """
+
     _feed = []
     _time = None
     feed_url = "https://www.mysociety.org/category/research/feed"
@@ -22,7 +22,9 @@ class FeedCache(object):
         if cls._time == None:
             return True
         else:
-            return datetime.datetime.now() > cls._time + datetime.timedelta(seconds=cls.timeout)
+            return datetime.datetime.now() > cls._time + datetime.timedelta(
+                seconds=cls.timeout
+            )
 
     @classmethod
     def fetch_feed(cls):
@@ -41,35 +43,42 @@ class HomeView(TemplateView):
 
         context = super(TemplateView, self).get_context_data(**kwargs)
 
-        context['feed'] = FeedCache.fetch_feed()
-        context['page'] = models.Page.objects.get_or_create(slug="home")[0]
+        context["feed"] = FeedCache.fetch_feed()
+        context["page"] = models.Page.objects.get_or_create(slug="home")[0]
 
         featured_items = repository_models.ResearchItem.objects.filter(
-            published=True,
-            featured=True
+            published=True, featured=True
         )
 
-        featured_tags = repository_models.Tag.objects.filter(
-            featured=True
-        )
+        featured_tags = repository_models.Tag.objects.filter(featured=True)
         featured = list(featured_items) + list(featured_tags)
 
         featured.sort(key=lambda x: x.date, reverse=True)
 
-        context['featured_items'] = featured
+        context["featured_items"] = featured
 
         return context
 
 
 class PageView(DetailView):
     model = models.Page
-    context_object_name = 'page'
+    context_object_name = "page"
 
-def opt_out_view(request,experiment,user_id):
+
+def opt_out_view(request, experiment, user_id):
     allowed_experiments = ["ps1"]
     if experiment in allowed_experiments:
-        model, created = models.OptOut.objects.get_or_create(experiment=experiment,user_id=user_id)
-        return HttpResponse("ID {0} opted-out. Contact research@mysociety.org with further questions.".format(user_id))
+        model, created = models.OptOut.objects.get_or_create(
+            experiment=experiment, user_id=user_id
+        )
+        return HttpResponse(
+            "ID {0} opted-out. Contact research@mysociety.org with further questions.".format(
+                user_id
+            )
+        )
     else:
-        return HttpResponse("{0} is not a registered experiment. Contact research@mysociety.org".format(experiment))
-    
+        return HttpResponse(
+            "{0} is not a registered experiment. Contact research@mysociety.org".format(
+                experiment
+            )
+        )

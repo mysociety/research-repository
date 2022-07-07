@@ -8,14 +8,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0028_tag_top_bar'),
+        ("repository", "0028_tag_top_bar"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='label',
-            field=models.SlugField(default='', max_length=30),
+            model_name="tag",
+            name="label",
+            field=models.SlugField(default="", max_length=30),
             preserve_default=False,
         ),
     ]

@@ -8,17 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0001_initial'),
+        ("pages", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='page',
-            name='_content_rendered',
+            model_name="page",
+            name="_content_rendered",
         ),
         migrations.AlterField(
-            model_name='page',
-            name='content',
+            model_name="page",
+            name="content",
             field=models.TextField(),
         ),
     ]

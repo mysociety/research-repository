@@ -1,14 +1,13 @@
 from django.contrib import admin
 from pages import models
+
 # tweak to taste - simple at the top and more custom below
 from import_export.admin import ImportExportModelAdmin
 from import_export.resources import ModelResource
 
 
 def construct_model_resource(passed_model):
-
     class LocalResource(ModelResource):
-
         class Meta:
             model = passed_model
 
@@ -23,7 +22,6 @@ def io_admin_register(passed_model):
     model_resource = construct_model_resource(passed_model)
 
     def inner(admin_cls):
-
         class ModelAdmin(admin_cls):
             resource_class = model_resource
 
@@ -54,7 +52,6 @@ class MiniSiteAdmin(ImportExportModelAdmin):
 
     def save_model(self, request, obj, form, change):
 
-        super(ImportExportModelAdmin, self).save_model(
-            request, obj, form, change)
-        if 'zip_archive' in form.changed_data:
+        super(ImportExportModelAdmin, self).save_model(request, obj, form, change)
+        if "zip_archive" in form.changed_data:
             obj.unpack_archive()

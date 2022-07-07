@@ -8,13 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0049_tag_social_description'),
+        ("repository", "0049_tag_social_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='zip_archive',
-            field=models.FileField(blank=True, help_text=b'Upload a stringprint document as a zip', null=True, upload_to=b'zips/'),
+            model_name="researchitem",
+            name="zip_archive",
+            field=models.FileField(
+                blank=True,
+                help_text=b"Upload a stringprint document as a zip",
+                null=True,
+                upload_to=b"zips/",
+            ),
         ),
     ]

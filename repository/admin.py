@@ -5,9 +5,7 @@ from import_export.resources import ModelResource
 
 
 def construct_model_resource(passed_model):
-
     class LocalResource(ModelResource):
-
         class Meta:
             model = passed_model
 
@@ -22,7 +20,6 @@ def io_admin_register(passed_model):
     model_resource = construct_model_resource(passed_model)
 
     def inner(admin_cls):
-
         class ModelAdmin(admin_cls):
             resource_class = model_resource
 
@@ -34,8 +31,8 @@ def io_admin_register(passed_model):
 
 @io_admin_register(models.Person)
 class PersonAdmin(ImportExportModelAdmin):
-    list_display = ('full_name', 'institution')
-    prepopulated_fields = {'slug': ('first_name', 'last_name')}
+    list_display = ("full_name", "institution")
+    prepopulated_fields = {"slug": ("first_name", "last_name")}
 
 
 class ItemAuthorInline(admin.TabularInline):
@@ -46,20 +43,27 @@ class ItemAuthorInline(admin.TabularInline):
 class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
+
 def migrate_licence(self, request, queryset):
     for model in queryset:
         model.migrate_licence()
 
-migrate_licence.short_description = 'Migrate licence'
+
+migrate_licence.short_description = "Migrate licence"
 
 
 @io_admin_register(models.ResearchItem)
 class ResearchItemAdmin(ImportExportModelAdmin):
-    list_display = ('title', 'friendly_date', 'author_list', 'published',)
-    prepopulated_fields = {'slug': ('title',)}
+    list_display = (
+        "title",
+        "friendly_date",
+        "author_list",
+        "published",
+    )
+    prepopulated_fields = {"slug": ("title",)}
     inlines = (ItemAuthorInline, ResearchOutputInline)
-    filter_horizontal = ('tags',)
-    list_filter = ('tags', 'published', 'featured')
+    filter_horizontal = ("tags",)
+    list_filter = ("tags", "published", "featured")
     actions = [migrate_licence]
 
     def save_model(self, request, obj, form, change):
@@ -67,23 +71,20 @@ class ResearchItemAdmin(ImportExportModelAdmin):
         # update
 
         obj.fetch_toc(save=False)
-        super(ImportExportModelAdmin, self).save_model(
-            request, obj, form, change)
+        super(ImportExportModelAdmin, self).save_model(request, obj, form, change)
         if obj.generate_thumbnail and not obj.thumbnail:
             obj.generate_thumbnail_from_hero()
             obj.save()
-        if 'zip_archive' in form.changed_data:
+        if "zip_archive" in form.changed_data:
             obj.unpack_archive()
 
 
 @io_admin_register(models.Tag)
 class TagItemAdmin(ImportExportModelAdmin):
-
     def save_model(self, request, obj, form, change):
         # if value of generate thumbnail has changed
         # update
-        super(ImportExportModelAdmin, self).save_model(
-            request, obj, form, change)
+        super(ImportExportModelAdmin, self).save_model(request, obj, form, change)
         if obj.generate_thumbnail and not obj.thumbnail:
             obj.generate_thumbnail_from_hero()
             obj.save()

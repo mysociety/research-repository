@@ -8,20 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0021_merge_20170705_1109'),
+        ("repository", "0021_merge_20170705_1109"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.SlugField(allow_unicode=True, max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.SlugField(allow_unicode=True, max_length=30)),
             ],
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='tags',
-            field=models.ManyToManyField(to='repository.Tag'),
+            model_name="researchitem",
+            name="tags",
+            field=models.ManyToManyField(to="repository.Tag"),
         ),
     ]

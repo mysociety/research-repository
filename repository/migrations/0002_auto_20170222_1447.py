@@ -10,24 +10,29 @@ import markitup.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0001_initial'),
+        ("repository", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='_abstract_rendered',
+            model_name="researchitem",
+            name="_abstract_rendered",
             field=models.TextField(blank=True, editable=False),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='abstract',
-            field=markitup.fields.MarkupField(default='', no_rendered_field=True),
+            model_name="researchitem",
+            name="abstract",
+            field=markitup.fields.MarkupField(default="", no_rendered_field=True),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='slug',
-            field=autoslug.fields.AutoSlugField(editable=True, help_text=b'Used to produce a nice page URL for this item.', populate_from=(b'title',), unique=True),
+            model_name="researchitem",
+            name="slug",
+            field=autoslug.fields.AutoSlugField(
+                editable=True,
+                help_text=b"Used to produce a nice page URL for this item.",
+                populate_from=(b"title",),
+                unique=True,
+            ),
         ),
     ]

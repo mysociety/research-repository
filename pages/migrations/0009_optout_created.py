@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0008_optout'),
+        ("pages", "0008_optout"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='optout',
-            name='created',
+            model_name="optout",
+            name="created",
             field=models.DateTimeField(auto_now_add=True, null=True),
         ),
     ]

@@ -8,18 +8,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0032_researchoutput_top_order'),
+        ("repository", "0032_researchoutput_top_order"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='display_items_in_years',
-            field=models.BooleanField(default=True, help_text=b'On the tag page - does it display items in years?'),
+            model_name="tag",
+            name="display_items_in_years",
+            field=models.BooleanField(
+                default=True,
+                help_text=b"On the tag page - does it display items in years?",
+            ),
         ),
         migrations.AlterField(
-            model_name='tag',
-            name='label',
+            model_name="tag",
+            name="label",
             field=models.CharField(blank=True, max_length=30),
         ),
     ]

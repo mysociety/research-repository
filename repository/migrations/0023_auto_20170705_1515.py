@@ -9,45 +9,66 @@ import markitup.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0022_auto_20170705_1505'),
+        ("repository", "0022_auto_20170705_1505"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TagGroup',
+            name="TagGroup",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.SlugField(allow_unicode=True, max_length=30)),
-                ('hero', models.ImageField(blank=True, help_text=b"A hero image which will be displayed on this tag group's page. Recommended ratio is 1024x680.", null=True, upload_to=b'hero/')),
-                ('description', markitup.fields.MarkupField(no_rendered_field=True)),
-                ('_description_rendered', models.TextField(blank=True, editable=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.SlugField(allow_unicode=True, max_length=30)),
+                (
+                    "hero",
+                    models.ImageField(
+                        blank=True,
+                        help_text=b"A hero image which will be displayed on this tag group's page. Recommended ratio is 1024x680.",
+                        null=True,
+                        upload_to=b"hero/",
+                    ),
+                ),
+                ("description", markitup.fields.MarkupField(no_rendered_field=True)),
+                ("_description_rendered", models.TextField(blank=True, editable=False)),
             ],
             options={
-                'ordering': ['name'],
+                "ordering": ["name"],
             },
         ),
         migrations.AlterModelOptions(
-            name='tag',
-            options={'ordering': ['name']},
+            name="tag",
+            options={"ordering": ["name"]},
         ),
         migrations.AddField(
-            model_name='tag',
-            name='_description_rendered',
+            model_name="tag",
+            name="_description_rendered",
             field=models.TextField(blank=True, editable=False),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='description',
+            model_name="tag",
+            name="description",
             field=markitup.fields.MarkupField(blank=True, no_rendered_field=True),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='hero',
-            field=models.ImageField(blank=True, help_text=b"A hero image which will be displayed on this tag's page. Recommended ratio is 1024x680.", null=True, upload_to=b'hero/'),
+            model_name="tag",
+            name="hero",
+            field=models.ImageField(
+                blank=True,
+                help_text=b"A hero image which will be displayed on this tag's page. Recommended ratio is 1024x680.",
+                null=True,
+                upload_to=b"hero/",
+            ),
         ),
         migrations.AddField(
-            model_name='tag',
-            name='tag_groups',
-            field=models.ManyToManyField(to='repository.TagGroup'),
+            model_name="tag",
+            name="tag_groups",
+            field=models.ManyToManyField(to="repository.TagGroup"),
         ),
     ]

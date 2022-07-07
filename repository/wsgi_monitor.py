@@ -16,12 +16,14 @@ _running = False
 _queue = queue.Queue()
 _lock = threading.Lock()
 
+
 def _restart(path):
     _queue.put(True)
-    prefix = 'monitor (pid=%d):' % os.getpid()
-    print('%s Change detected to \'%s\'.' % (prefix, path), file=sys.stderr)
-    print('%s Triggering process restart.' % prefix, file=sys.stderr)
+    prefix = "monitor (pid=%d):" % os.getpid()
+    print("%s Change detected to '%s'." % (prefix, path), file=sys.stderr)
+    print("%s Triggering process restart." % prefix, file=sys.stderr)
     os.kill(os.getpid(), signal.SIGINT)
+
 
 def _modified(path):
     try:
@@ -55,17 +57,18 @@ def _modified(path):
 
     return False
 
+
 def _monitor():
     while 1:
         # Check modification times on all files in sys.modules.
 
         for module in list(sys.modules.values()):
-            if not hasattr(module, '__file__'):
+            if not hasattr(module, "__file__"):
                 continue
-            path = getattr(module, '__file__')
+            path = getattr(module, "__file__")
             if not path:
                 continue
-            if os.path.splitext(path)[1] in ['.pyc', '.pyo', '.pyd']:
+            if os.path.splitext(path)[1] in [".pyc", ".pyo", ".pyd"]:
                 path = path[:-1]
             if _modified(path):
                 return _restart(path)
@@ -84,8 +87,10 @@ def _monitor():
         except:
             pass
 
+
 _thread = threading.Thread(target=_monitor)
 _thread.setDaemon(True)
+
 
 def _exiting():
     try:
@@ -94,11 +99,14 @@ def _exiting():
         pass
     _thread.join()
 
+
 atexit.register(_exiting)
+
 
 def track(path):
     if not path in _files:
         _files.append(path)
+
 
 def start(interval=1.0):
     global _interval
@@ -108,8 +116,8 @@ def start(interval=1.0):
     global _running
     _lock.acquire()
     if not _running:
-        prefix = 'monitor (pid=%d):' % os.getpid()
-        print('%s Starting change monitor.' % prefix, file=sys.stderr)
+        prefix = "monitor (pid=%d):" % os.getpid()
+        print("%s Starting change monitor." % prefix, file=sys.stderr)
         _running = True
         _thread.start()
     _lock.release()

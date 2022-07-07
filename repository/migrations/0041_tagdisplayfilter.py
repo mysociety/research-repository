@@ -9,17 +9,37 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0040_auto_20180801_1429'),
+        ("repository", "0040_auto_20180801_1429"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TagDisplayFilter',
+            name="TagDisplayFilter",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.IntegerField(default=0)),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='display_filters', to='repository.Tag')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='repository.Tag')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("order", models.IntegerField(default=0)),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="display_filters",
+                        to="repository.Tag",
+                    ),
+                ),
+                (
+                    "tag",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="repository.Tag"
+                    ),
+                ),
             ],
         ),
     ]

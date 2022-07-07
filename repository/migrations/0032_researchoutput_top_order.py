@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0031_auto_20180524_1754'),
+        ("repository", "0031_auto_20180524_1754"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchoutput',
-            name='top_order',
-            field=models.IntegerField(default=-1, help_text=b'Order for under image link'),
+            model_name="researchoutput",
+            name="top_order",
+            field=models.IntegerField(
+                default=-1, help_text=b"Order for under image link"
+            ),
         ),
     ]

@@ -7,33 +7,51 @@ import pages.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0010_minisite'),
+        ("pages", "0010_minisite"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='minisite',
-            name='zip_archive',
-            field=models.FileField(blank=True, help_text='Upload a website as a zip', null=True, storage=pages.models.OverwriteStorage(), upload_to='zips/'),
+            model_name="minisite",
+            name="zip_archive",
+            field=models.FileField(
+                blank=True,
+                help_text="Upload a website as a zip",
+                null=True,
+                storage=pages.models.OverwriteStorage(),
+                upload_to="zips/",
+            ),
         ),
         migrations.AlterField(
-            model_name='page',
-            name='show_title',
-            field=models.BooleanField(default=True, help_text='Should the template display the page title as well as the content?'),
+            model_name="page",
+            name="show_title",
+            field=models.BooleanField(
+                default=True,
+                help_text="Should the template display the page title as well as the content?",
+            ),
         ),
         migrations.AlterField(
-            model_name='page',
-            name='slug',
-            field=models.CharField(help_text='Used to produce a nice URL for this page.', max_length=64, unique=True),
+            model_name="page",
+            name="slug",
+            field=models.CharField(
+                help_text="Used to produce a nice URL for this page.",
+                max_length=64,
+                unique=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='page',
-            name='social_image',
-            field=models.ImageField(blank=True, help_text='Image to be used on social shares of the site', null=True, upload_to='social/'),
+            model_name="page",
+            name="social_image",
+            field=models.ImageField(
+                blank=True,
+                help_text="Image to be used on social shares of the site",
+                null=True,
+                upload_to="social/",
+            ),
         ),
         migrations.AlterField(
-            model_name='page',
-            name='social_title',
-            field=models.CharField(blank=True, default='', max_length=200, null=True),
+            model_name="page",
+            name="social_title",
+            field=models.CharField(blank=True, default="", max_length=200, null=True),
         ),
     ]

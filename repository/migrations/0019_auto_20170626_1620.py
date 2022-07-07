@@ -8,13 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0018_researchitem_thumbnail'),
+        ("repository", "0018_researchitem_thumbnail"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='researchitem',
-            name='thumbnail',
-            field=models.ImageField(blank=True, help_text=b'The thumbnail of this research. Recommended ratio is 150x110.', null=True, upload_to=b'thumbnails/'),
+            model_name="researchitem",
+            name="thumbnail",
+            field=models.ImageField(
+                blank=True,
+                help_text=b"The thumbnail of this research. Recommended ratio is 150x110.",
+                null=True,
+                upload_to=b"thumbnails/",
+            ),
         ),
     ]

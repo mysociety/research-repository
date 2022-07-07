@@ -11,53 +11,132 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ItemAuthor',
+            name="ItemAuthor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('order', models.IntegerField(help_text=b'Where in the list of authors should this person appear?', verbose_name=b'Order')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "order",
+                    models.IntegerField(
+                        help_text=b"Where in the list of authors should this person appear?",
+                        verbose_name=b"Order",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order'],
+                "ordering": ["order"],
             },
         ),
         migrations.CreateModel(
-            name='Person',
+            name="Person",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.CharField(max_length=30)),
-                ('last_name', models.CharField(max_length=30)),
-                ('slug', autoslug.fields.AutoSlugField(editable=True, help_text=b"Used to produce a nice page URL for this person's work.", populate_from=(b'first_name', b'last_name'), unique=True)),
-                ('institution', models.CharField(blank=True, help_text=b'The institution this person works for at time of publication.', max_length=50)),
-                ('orcid', models.CharField(blank=True, help_text=b"This person's ORCID iD (https://orcid.org/).", max_length=19)),
-                ('researcherid', models.CharField(blank=True, help_text=b"This person's ResearcherID (https://www.researcherid.com/).", max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.CharField(max_length=30)),
+                ("last_name", models.CharField(max_length=30)),
+                (
+                    "slug",
+                    autoslug.fields.AutoSlugField(
+                        editable=True,
+                        help_text=b"Used to produce a nice page URL for this person's work.",
+                        populate_from=(b"first_name", b"last_name"),
+                        unique=True,
+                    ),
+                ),
+                (
+                    "institution",
+                    models.CharField(
+                        blank=True,
+                        help_text=b"The institution this person works for at time of publication.",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "orcid",
+                    models.CharField(
+                        blank=True,
+                        help_text=b"This person's ORCID iD (https://orcid.org/).",
+                        max_length=19,
+                    ),
+                ),
+                (
+                    "researcherid",
+                    models.CharField(
+                        blank=True,
+                        help_text=b"This person's ResearcherID (https://www.researcherid.com/).",
+                        max_length=30,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ResearchItem',
+            name="ResearchItem",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('date', models.DateField()),
-                ('slug', autoslug.fields.AutoSlugField(editable=True, help_text=b'Used to produce a nice page URL for this item.', populate_from=(b'title', b'date'), unique=True)),
-                ('authors', models.ManyToManyField(help_text=b'Authors of this research item.', related_name='authors', through='repository.ItemAuthor', to='repository.Person')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("date", models.DateField()),
+                (
+                    "slug",
+                    autoslug.fields.AutoSlugField(
+                        editable=True,
+                        help_text=b"Used to produce a nice page URL for this item.",
+                        populate_from=(b"title", b"date"),
+                        unique=True,
+                    ),
+                ),
+                (
+                    "authors",
+                    models.ManyToManyField(
+                        help_text=b"Authors of this research item.",
+                        related_name="authors",
+                        through="repository.ItemAuthor",
+                        to="repository.Person",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
         migrations.AddField(
-            model_name='itemauthor',
-            name='person',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='repository.Person'),
+            model_name="itemauthor",
+            name="person",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="repository.Person"
+            ),
         ),
         migrations.AddField(
-            model_name='itemauthor',
-            name='research_item',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='repository.ResearchItem'),
+            model_name="itemauthor",
+            name="research_item",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="repository.ResearchItem",
+            ),
         ),
     ]

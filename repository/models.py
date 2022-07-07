@@ -1,8 +1,9 @@
-
 import json
 import os
 import shutil
+from datetime import datetime
 import zipfile
+from typing import List
 
 from autoslug import AutoSlugField
 from django.conf import settings
@@ -24,17 +25,17 @@ from django.utils.safestring import mark_safe
 from markdown import markdown
 from markitup.fields import MarkupField
 
-GENERATE_CHOICES = [("B", "Blog"),
-                    ("R", "Report"),
-                    ("P", "Policy"),
-                    ("C", "Consultation"),
-                    ("M", "Minisite"),
-                    ("S", "Series"),
-                    ]
+GENERATE_CHOICES = [
+    ("B", "Blog"),
+    ("R", "Report"),
+    ("P", "Policy"),
+    ("C", "Consultation"),
+    ("M", "Minisite"),
+    ("S", "Series"),
+]
 
 
 class OverwriteStorage(FileSystemStorage):
-
     def get_available_name(self, name, max_length=None):
         self.delete(name)
         return name
@@ -48,7 +49,8 @@ class ThumbnailMixIn(object):
     def clean(self):
         if self.generate_thumbnail and not self.hero:
             raise ValidationError(
-                "Trying to generate a thumbnail, but no hero uplaoded.")
+                "Trying to generate a thumbnail, but no hero uplaoded."
+            )
 
     def generate_thumbnail_from_hero(self):
         """
@@ -61,12 +63,10 @@ class ThumbnailMixIn(object):
         tc = ThumbNailCreator()
         tcf = tc.convert_hero_image_to_thumbnail
 
-        tempfile = tcf(hero_path,
-                       text=self.generate_thumbnail)
+        tempfile = tcf(hero_path, text=self.generate_thumbnail)
 
         cf = ContentFile(tempfile.getvalue())
-        filename = "{0}-{1}.png".format(self.slug,
-                                        "thumbnail")
+        filename = "{0}-{1}.png".format(self.slug, "thumbnail")
         self.thumbnail.save(filename, cf, save=True)
 
 
@@ -74,6 +74,7 @@ class ResearchLicence(models.Model):
     """
     How is the research itself licenced
     """
+
     slug = models.CharField(max_length=50)
     name = models.CharField(max_length=200)
     url = models.URLField(blank=True, null=True)
@@ -87,20 +88,16 @@ class ResearchLicence(models.Model):
 
 
 class TagGroup(models.Model):
-    slug = AutoSlugField(
-        unique=True,
-        editable=True,
-        populate_from=('name')
-    )
+    slug = AutoSlugField(unique=True, editable=True, populate_from=("name"))
 
     name = models.CharField(max_length=30)
 
     hero = models.ImageField(
-        upload_to='hero/',
+        upload_to="hero/",
         null=True,
         blank=True,
         editable=True,
-        help_text="A hero image which will be displayed on this tag group's page. Recommended ratio is 1024x350."
+        help_text="A hero image which will be displayed on this tag group's page. Recommended ratio is 1024x350.",
     )
 
     description = MarkupField()
@@ -109,7 +106,7 @@ class TagGroup(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
 
 
 class Tag(models.Model, ThumbnailMixIn):
@@ -121,23 +118,21 @@ class Tag(models.Model, ThumbnailMixIn):
     slug = AutoSlugField(
         unique=True,
         editable=True,
-        populate_from=('label',),
-        help_text='Used to produce a nice page URL for this item.'
+        populate_from=("label",),
+        help_text="Used to produce a nice page URL for this item.",
     )
 
     featured = models.BooleanField(default=False)
     date = models.DateField(
-        help_text='The publication date of this tag.',
-        null=True,
-        blank=True
+        help_text="The publication date of this tag.", null=True, blank=True
     )
 
     hero = models.ImageField(
-        upload_to='hero/',
+        upload_to="hero/",
         null=True,
         blank=True,
         editable=True,
-        help_text="A hero image which will be displayed on this tag's page. Recommended ratio is 1024x350."
+        help_text="A hero image which will be displayed on this tag's page. Recommended ratio is 1024x350.",
     )
 
     generate_thumbnail = models.CharField(
@@ -146,40 +141,36 @@ class Tag(models.Model, ThumbnailMixIn):
         null=True,
         blank=True,
         editable=True,
-        help_text="Generate a thumbnail from the hero image"
+        help_text="Generate a thumbnail from the hero image",
     )
 
     thumbnail = models.ImageField(
-        upload_to='thumbnails/',
+        upload_to="thumbnails/",
         null=True,
         blank=True,
         editable=True,
-        help_text="The thumbnail of this research. Recommended ratio is 150x110."
+        help_text="The thumbnail of this research. Recommended ratio is 150x110.",
     )
 
-    description = MarkupField(
-        blank=True
-    )
+    description = MarkupField(blank=True)
 
-    tag_groups = models.ManyToManyField(
-        TagGroup, blank=True, related_name="tags")
+    tag_groups = models.ManyToManyField(TagGroup, blank=True, related_name="tags")
 
     display = models.BooleanField(default=True)
 
-    is_project = models.BooleanField(default=False,
-                                     help_text="creates the 'part of' message in all members")
+    is_project = models.BooleanField(
+        default=False, help_text="creates the 'part of' message in all members"
+    )
 
-    top_bar = models.IntegerField(default=-1,
-                                  help_text='Should this category appear on the top bar?'
-                                  )
+    top_bar = models.IntegerField(
+        default=-1, help_text="Should this category appear on the top bar?"
+    )
 
-    display_items_in_years = models.BooleanField(default=True,
-                                                 help_text='On the tag page - does it display items in years?'
-                                                 )
+    display_items_in_years = models.BooleanField(
+        default=True, help_text="On the tag page - does it display items in years?"
+    )
 
-    social_description = models.CharField(max_length=255,
-                                          null=True,
-                                          blank=True)
+    social_description = models.CharField(max_length=255, null=True, blank=True)
 
     def get_social_description(self):
         if self.social_description:
@@ -202,20 +193,21 @@ class Tag(models.Model, ThumbnailMixIn):
             else:
                 return ""
 
-        di = {"title": self.title,
-              "subtitle": "",
-              "slug": self.slug,
-              "date": self.date.isoformat(),
-              "thumbnail": url_if_exists(self.thumbnail),
-              "hero_image": url_if_exists(self.hero),
-              "url": self.absolute_url(),
-              "desc": self.get_social_description(),
-              }
+        di = {
+            "title": self.title,
+            "subtitle": "",
+            "slug": self.slug,
+            "date": self.date.isoformat(),
+            "thumbnail": url_if_exists(self.thumbnail),
+            "hero_image": url_if_exists(self.hero),
+            "url": self.absolute_url(),
+            "desc": self.get_social_description(),
+        }
         di["authors"] = []
         return di
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + reverse('tag', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse("tag", args=[self.slug])
 
     @property
     def title(self):
@@ -231,7 +223,7 @@ class Tag(models.Model, ThumbnailMixIn):
         return self.nice_name()
 
     def get_research_items(self):
-        return self.items.all().filter(published=True).order_by('-date')
+        return self.items.all().filter(published=True).order_by("-date")
 
     def count(self):
         return self.get_research_items().count()
@@ -245,17 +237,20 @@ class Tag(models.Model, ThumbnailMixIn):
             return self.slug.title()
 
     def url(self):
-        return reverse('tag', args=[self.slug])
+        return reverse("tag", args=[self.slug])
 
     class Meta:
-        ordering = ['slug']
+        ordering = ["slug"]
 
 
 class TagDisplayFilter(models.Model):
     """
     model to manage when secondary tags should be part of the tag navigation
     """
-    parent = models.ForeignKey(Tag, related_name="display_filters", on_delete=models.CASCADE)
+
+    parent = models.ForeignKey(
+        Tag, related_name="display_filters", on_delete=models.CASCADE
+    )
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
@@ -266,58 +261,54 @@ class Person(models.Model):
     slug = AutoSlugField(
         unique=True,
         editable=True,
-        populate_from=('first_name', 'last_name'),
-        help_text='Used to produce a nice page URL for this person\'s work.'
+        populate_from=("first_name", "last_name"),
+        help_text="Used to produce a nice page URL for this person's work.",
     )
     institution = models.CharField(
-        max_length=50,
-        help_text='The institution this person works for.',
-        blank=True
+        max_length=50, help_text="The institution this person works for.", blank=True
     )
     orcid = models.CharField(
-        verbose_name='ORCID ID',
+        verbose_name="ORCID ID",
         max_length=19,
-        help_text='This person\'s ORCID ID (https://orcid.org/).',
-        blank=True
+        help_text="This person's ORCID ID (https://orcid.org/).",
+        blank=True,
     )
     researcherid = models.CharField(
-        verbose_name='ResearcherID',
+        verbose_name="ResearcherID",
         max_length=30,
-        help_text='This person\'s ResearcherID (https://www.researcherid.com/).',
-        blank=True
+        help_text="This person's ResearcherID (https://www.researcherid.com/).",
+        blank=True,
     )
     googlescholar = models.CharField(
-        verbose_name='Google Scholar ID',
+        verbose_name="Google Scholar ID",
         max_length=30,
-        help_text='This person\'s Google Scholar ID (https://scholar.google.com/).',
-        blank=True
+        help_text="This person's Google Scholar ID (https://scholar.google.com/).",
+        blank=True,
     )
     twitter = models.CharField(
-        max_length=50,
-        help_text='This person\'s Twitter handle.',
-        blank=True
+        max_length=50, help_text="This person's Twitter handle.", blank=True
     )
     url = models.URLField(
-        help_text='A URL with more information on this person (such as an institutional URL).',
-        blank=True
+        help_text="A URL with more information on this person (such as an institutional URL).",
+        blank=True,
     )
     list_in_people = models.BooleanField(
-        help_text='Should this person be included in the list of people?',
+        help_text="Should this person be included in the list of people?",
         blank=True,
-        default=False
+        default=False,
     )
 
     LINK_BEHAVIOUR_CHOICES = (
-        ('profile-page', 'A profile page on research.mysociety.org'),
-        ('url', 'Directly to the person\'s own URL (if known)'),
-        ('none', 'Do not link this name'),
+        ("profile-page", "A profile page on research.mysociety.org"),
+        ("url", "Directly to the person's own URL (if known)"),
+        ("none", "Do not link this name"),
     )
 
     link_behaviour = models.CharField(
         max_length=16,
         choices=LINK_BEHAVIOUR_CHOICES,
-        help_text='How should we link this person\'s name when given as an author?',
-        default="none"
+        help_text="How should we link this person's name when given as an author?",
+        default="none",
     )
 
     def full_name(self):
@@ -573,15 +564,16 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             else:
                 return ""
 
-        di = {"title": self.title,
-              "subtitle": self.subtitle,
-              "slug": self.slug,
-              "date": self.date.isoformat(),
-              "thumbnail": url_if_exists(self.thumbnail),
-              "hero_image": url_if_exists(self.hero),
-              "url": self.absolute_url(),
-              "desc": self.get_social_description(),
-              }
+        di = {
+            "title": self.title,
+            "subtitle": self.subtitle,
+            "slug": self.slug,
+            "date": self.date.isoformat(),
+            "thumbnail": url_if_exists(self.thumbnail),
+            "hero_image": url_if_exists(self.hero),
+            "url": self.absolute_url(),
+            "desc": self.get_social_description(),
+        }
         authors = self.authors.all()
         di["authors"] = [x.json_ld_representation() for x in authors]
         return di
@@ -649,7 +641,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if self.table_of_contents_url:
             try:
                 response = urllib.request.urlopen(self.table_of_contents_url)
-                self.table_of_contents_cache = response.read().decode("utf-8") 
+                self.table_of_contents_cache = response.read().decode("utf-8")
             except Exception:
                 pass
             if save:
@@ -677,8 +669,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
     def rendered_toc(self):
         if self.is_json_toc():
-            template = loader.get_template('parts/researchtoc.html')
-            return template.render({'item': self})
+            template = loader.get_template("parts/researchtoc.html")
+            return template.render({"item": self})
         else:
             return mark_safe(markdown(self.table_of_contents_cache))
 
@@ -696,33 +688,38 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         return self.tags.filter(display=True)
 
     def ordered_outputs(self):
-        return self.outputs.all().exclude(order=-1).order_by('order')
+        return self.outputs.all().exclude(order=-1).order_by("order")
 
     def default_top_output(self):
         options = self.outputs.all()
-        options = options.exclude(top_order=-1).order_by('top_order')
+        options = options.exclude(top_order=-1).order_by("top_order")
         if options.exists():
             return options[0].output_url()
         else:
             return "#"
 
     def ordered_top_outputs(self):
-        return self.outputs.all().exclude(top_order=-1).order_by('top_order')
+        return self.outputs.all().exclude(top_order=-1).order_by("top_order")
 
     def author_list(self):
-        return [authors.person for authors in ItemAuthor.objects.filter(research_item=self).order_by('order')]
+        return [
+            authors.person
+            for authors in ItemAuthor.objects.filter(research_item=self).order_by(
+                "order"
+            )
+        ]
 
     def friendly_date(self):
         return self.date.strftime("%B %Y")
 
     def licence_template_string(self):
-        return 'licenses/' + self.licence + '.html'
+        return "licenses/" + self.licence + ".html"
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + reverse('item', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse("item", args=[self.slug])
 
     def __str__(self):
-        return self.title + ' (' + self.friendly_date() + ')'
+        return self.title + " (" + self.friendly_date() + ")"
 
     def share_abstract(self):
         """
@@ -736,7 +733,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         text = text.replace("$TOC", "")
 
         if len(text) > 140:
-            text = text[:140 - 4] + "[..]"
+            text = text[: 140 - 4] + "[..]"
         return text
 
     def similar_items(self, limit=2):
@@ -747,9 +744,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
         tags = list(self.tags.all())
         ids = set([x.id for x in tags])
-        all_items = ResearchItem.objects.filter(
-            tags__in=tags, published=True)
-        all_items = all_items.exclude(id=self.id).prefetch_related('tags')
+        all_items = ResearchItem.objects.filter(tags__in=tags, published=True)
+        all_items = all_items.exclude(id=self.id).prefetch_related("tags")
         all_items = all_items.distinct()
         all_items = list(all_items)
 
@@ -765,24 +761,24 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
 
 class ItemAuthor(models.Model):
-
     class Meta:
-        ordering = ['order']
+        ordering = ["order"]
 
-    person = models.ForeignKey(
-        Person, on_delete=models.CASCADE
-    )
-    research_item = models.ForeignKey(
-        ResearchItem, on_delete=models.CASCADE
-    )
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    research_item = models.ForeignKey(ResearchItem, on_delete=models.CASCADE)
     order = models.IntegerField(
-        verbose_name='Order',
-        help_text='Where in the list of authors should this person appear?',
-        default=0
+        verbose_name="Order",
+        help_text="Where in the list of authors should this person appear?",
+        default=0,
     )
 
     def __str__(self):
-        return self.person.full_name() + ' is an author of "' + self.research_item.title + ('"" in position %d' % self.order)
+        return (
+            self.person.full_name()
+            + ' is an author of "'
+            + self.research_item.title
+            + ('"" in position %d' % self.order)
+        )
 
 
 class ResearchOutput(models.Model):
@@ -790,39 +786,36 @@ class ResearchOutput(models.Model):
     title = models.CharField(max_length=200)
 
     research_item = models.ForeignKey(
-        ResearchItem,
-        related_name='outputs',
-        on_delete=models.CASCADE
+        ResearchItem, related_name="outputs", on_delete=models.CASCADE
     )
 
     file = models.FileField(
-        upload_to='outputs/',
+        upload_to="outputs/",
         blank=True,
-        help_text='If the output is a file we should host ourselves, upload it.'
+        help_text="If the output is a file we should host ourselves, upload it.",
     )
 
     url = models.URLField(
         blank=True,
-        help_text='If the output is hosted elsewhere (like a journal), what is the URL?'
+        help_text="If the output is hosted elsewhere (like a journal), what is the URL?",
     )
 
     button_text_value = models.CharField(
         max_length=200,
         blank=True,
-        help_text='Optional custom text for the button to get this output.'
+        help_text="Optional custom text for the button to get this output.",
     )
 
     download_count = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
-    top_order = models.IntegerField(default=0,
-                                    help_text='Order for under image link')
+    top_order = models.IntegerField(default=0, help_text="Order for under image link")
 
     def output_url(self):
-        return reverse('download', args=[self.id])
+        return reverse("download", args=[self.id])
 
     def increment_download(self):
         query = ResearchOutput.objects.filter(id=self.id)
-        query.update(download_count=F('download_count') + 1)
+        query.update(download_count=F("download_count") + 1)
 
     def button_url(self):
         if self.file:
@@ -835,10 +828,10 @@ class ResearchOutput(models.Model):
             return self.button_text_value
 
         if self.file:
-            return 'Download'
+            return "Download"
 
         else:
-            return 'View Online'
+            return "View Online"
 
     def __str__(self):
         return self.title
@@ -849,8 +842,11 @@ class Site(models.Model):
     Holds site level information
     - should only have one entry
     """
+
     site_title = models.CharField(max_length=30, default="")
-    default_tag = models.ForeignKey(Tag, null=True, blank=True, on_delete=models.CASCADE)
+    default_tag = models.ForeignKey(
+        Tag, null=True, blank=True, on_delete=models.CASCADE
+    )
     twitter = models.CharField(max_length=30, default="")
     description = models.CharField(max_length=255, default="")
 

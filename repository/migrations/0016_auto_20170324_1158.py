@@ -8,36 +8,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0015_researchoutput_button_text_value'),
+        ("repository", "0015_researchoutput_button_text_value"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='person',
-            options={'ordering': ['last_name', 'first_name'], 'verbose_name_plural': 'people'},
+            name="person",
+            options={
+                "ordering": ["last_name", "first_name"],
+                "verbose_name_plural": "people",
+            },
         ),
         migrations.AlterModelOptions(
-            name='researchitem',
-            options={'ordering': ['-date']},
+            name="researchitem",
+            options={"ordering": ["-date"]},
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='subtitle',
+            model_name="researchitem",
+            name="subtitle",
             field=models.CharField(blank=True, max_length=1000),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='date',
-            field=models.DateField(help_text=b'The publication date of this item.'),
+            model_name="researchitem",
+            name="date",
+            field=models.DateField(help_text=b"The publication date of this item."),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='title',
+            model_name="researchitem",
+            name="title",
             field=models.CharField(max_length=500),
         ),
         migrations.AlterField(
-            model_name='researchoutput',
-            name='button_text_value',
-            field=models.CharField(blank=True, help_text=b'Optional custom text for the button to get this output.', max_length=200),
+            model_name="researchoutput",
+            name="button_text_value",
+            field=models.CharField(
+                blank=True,
+                help_text=b"Optional custom text for the button to get this output.",
+                max_length=200,
+            ),
         ),
     ]

@@ -8,13 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0016_auto_20170324_1158'),
+        ("repository", "0016_auto_20170324_1158"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='person',
-            name='googlescholar',
-            field=models.CharField(blank=True, help_text=b"This person's Google Scholar ID (https://scholar.google.com/).", max_length=30, verbose_name=b'Google Scholar ID'),
+            model_name="person",
+            name="googlescholar",
+            field=models.CharField(
+                blank=True,
+                help_text=b"This person's Google Scholar ID (https://scholar.google.com/).",
+                max_length=30,
+                verbose_name=b"Google Scholar ID",
+            ),
         ),
     ]

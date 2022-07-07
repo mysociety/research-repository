@@ -9,19 +9,19 @@ import markitup.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0006_researchoutput_title'),
+        ("repository", "0006_researchoutput_title"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='_funders_rendered',
+            model_name="researchitem",
+            name="_funders_rendered",
             field=models.TextField(blank=True, editable=False),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='funders',
-            field=markitup.fields.MarkupField(default='', no_rendered_field=True),
+            model_name="researchitem",
+            name="funders",
+            field=markitup.fields.MarkupField(default="", no_rendered_field=True),
             preserve_default=False,
         ),
     ]

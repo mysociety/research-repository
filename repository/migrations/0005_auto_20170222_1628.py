@@ -9,13 +9,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0004_auto_20170222_1620'),
+        ("repository", "0004_auto_20170222_1620"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='researchoutput',
-            name='research_item',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='outputs', to='repository.ResearchItem'),
+            model_name="researchoutput",
+            name="research_item",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="outputs",
+                to="repository.ResearchItem",
+            ),
         ),
     ]

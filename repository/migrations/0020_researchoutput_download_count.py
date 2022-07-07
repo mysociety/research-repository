@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0019_auto_20170626_1620'),
+        ("repository", "0019_auto_20170626_1620"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchoutput',
-            name='download_count',
+            model_name="researchoutput",
+            name="download_count",
             field=models.IntegerField(default=0),
         ),
     ]

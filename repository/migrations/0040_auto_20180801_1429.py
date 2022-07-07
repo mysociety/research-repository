@@ -8,28 +8,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0039_auto_20180615_0921'),
+        ("repository", "0039_auto_20180615_0921"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='person',
-            name='link_behaviour',
-            field=models.CharField(choices=[(b'profile-page', b'A profile page on research.mysociety.org'), (b'url', b"Directly to the person's own URL (if known)"), (b'none', b'Do not link this name')], default=b'none', help_text=b"How should we link this person's name when given as an author?", max_length=16),
+            model_name="person",
+            name="link_behaviour",
+            field=models.CharField(
+                choices=[
+                    (b"profile-page", b"A profile page on research.mysociety.org"),
+                    (b"url", b"Directly to the person's own URL (if known)"),
+                    (b"none", b"Do not link this name"),
+                ],
+                default=b"none",
+                help_text=b"How should we link this person's name when given as an author?",
+                max_length=16,
+            ),
         ),
         migrations.AlterField(
-            model_name='person',
-            name='list_in_people',
-            field=models.BooleanField(default=False, help_text=b'Should this person be included in the list of people?'),
+            model_name="person",
+            name="list_in_people",
+            field=models.BooleanField(
+                default=False,
+                help_text=b"Should this person be included in the list of people?",
+            ),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='featured',
-            field=models.BooleanField(default=False, help_text=b'Should this item be featured on the homepage?'),
+            model_name="researchitem",
+            name="featured",
+            field=models.BooleanField(
+                default=False,
+                help_text=b"Should this item be featured on the homepage?",
+            ),
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='table_of_contents_cache',
-            field=models.TextField(blank=True, default=b'', editable=False),
+            model_name="researchitem",
+            name="table_of_contents_cache",
+            field=models.TextField(blank=True, default=b"", editable=False),
         ),
     ]

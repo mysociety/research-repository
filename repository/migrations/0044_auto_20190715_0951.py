@@ -8,18 +8,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0043_tag_is_project'),
+        ("repository", "0043_tag_is_project"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='social_description',
+            model_name="researchitem",
+            name="social_description",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='social_large',
-            field=models.ImageField(blank=True, help_text=b'The thumbnail of this research. Recommended ratio is 1200*630', null=True, upload_to=b'social/'),
+            model_name="researchitem",
+            name="social_large",
+            field=models.ImageField(
+                blank=True,
+                help_text=b"The thumbnail of this research. Recommended ratio is 1200*630",
+                null=True,
+                upload_to=b"social/",
+            ),
         ),
     ]

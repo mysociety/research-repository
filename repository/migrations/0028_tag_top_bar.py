@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0027_researchoutput_order'),
+        ("repository", "0027_researchoutput_order"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tag',
-            name='top_bar',
-            field=models.BooleanField(default=False, help_text=b'Should this category appear on the top bar?'),
+            model_name="tag",
+            name="top_bar",
+            field=models.BooleanField(
+                default=False, help_text=b"Should this category appear on the top bar?"
+            ),
         ),
     ]

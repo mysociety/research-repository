@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0034_auto_20180613_1206'),
+        ("repository", "0034_auto_20180613_1206"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='site',
-            name='description',
-            field=models.CharField(default=b'', max_length=255),
+            model_name="site",
+            name="description",
+            field=models.CharField(default=b"", max_length=255),
         ),
         migrations.AddField(
-            model_name='site',
-            name='twitter',
-            field=models.CharField(default=b'', max_length=30),
+            model_name="site",
+            name="twitter",
+            field=models.CharField(default=b"", max_length=30),
         ),
     ]

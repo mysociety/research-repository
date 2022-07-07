@@ -9,19 +9,25 @@ import markitup.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0007_auto_20170222_2051'),
+        ("repository", "0007_auto_20170222_2051"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='license',
-            field=models.CharField(choices=[(b'cc-by-3', b'Creative Commons Attribution 3.0 Unported License')], default='', max_length=16),
+            model_name="researchitem",
+            name="license",
+            field=models.CharField(
+                choices=[
+                    (b"cc-by-3", b"Creative Commons Attribution 3.0 Unported License")
+                ],
+                default="",
+                max_length=16,
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='researchitem',
-            name='funders',
+            model_name="researchitem",
+            name="funders",
             field=markitup.fields.MarkupField(blank=True, no_rendered_field=True),
         ),
     ]

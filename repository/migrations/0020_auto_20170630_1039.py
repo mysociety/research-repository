@@ -8,25 +8,36 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0019_auto_20170626_1620'),
+        ("repository", "0019_auto_20170626_1620"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchitem',
-            name='featured',
-            field=models.BooleanField(default=False, help_text=b'Should this item be featured on the homepage?'),
+            model_name="researchitem",
+            name="featured",
+            field=models.BooleanField(
+                default=False,
+                help_text=b"Should this item be featured on the homepage?",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='hero',
-            field=models.ImageField(blank=True, help_text=b"A hero image which will be displayed on this research's page. Recommended ratio is 1024x680.", null=True, upload_to=b'hero/'),
+            model_name="researchitem",
+            name="hero",
+            field=models.ImageField(
+                blank=True,
+                help_text=b"A hero image which will be displayed on this research's page. Recommended ratio is 1024x680.",
+                null=True,
+                upload_to=b"hero/",
+            ),
         ),
         migrations.AddField(
-            model_name='researchitem',
-            name='published',
-            field=models.BooleanField(default=True, help_text=b'Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL.'),
+            model_name="researchitem",
+            name="published",
+            field=models.BooleanField(
+                default=True,
+                help_text=b"Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL.",
+            ),
             preserve_default=False,
         ),
     ]

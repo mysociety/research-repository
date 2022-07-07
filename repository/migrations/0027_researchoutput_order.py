@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('repository', '0026_auto_20170727_1108'),
+        ("repository", "0026_auto_20170727_1108"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='researchoutput',
-            name='order',
+            model_name="researchoutput",
+            name="order",
             field=models.IntegerField(default=0),
         ),
     ]

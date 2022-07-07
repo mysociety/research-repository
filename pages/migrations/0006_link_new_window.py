@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0005_link'),
+        ("pages", "0005_link"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='link',
-            name='new_window',
+            model_name="link",
+            name="new_window",
             field=models.BooleanField(default=False),
         ),
     ]
