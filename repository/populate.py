@@ -9,6 +9,7 @@ from .models import (
     ResearchOutput,
     Site,
     TagDisplayFilter,
+    ResearchLicence,
 )
 from pages.models import Page
 from django.contrib.auth.models import User
@@ -192,6 +193,17 @@ def prepare_research_items():
         r.save()
 
 
+def create_licences():
+    print("preparing research licence")
+    gc = ResearchLicence.objects.get_or_create
+
+    gc(
+        slug="cc-by-4.0",
+        name="Attribution 4.0 International (CC BY 4.0)",
+        url="https://creativecommons.org/licenses/by/4.0/",
+    )
+
+
 def create_super_user():
     print("creating superuser")
     if User.objects.filter(username="admin").exists() == False:
@@ -205,3 +217,4 @@ def populate():
     prepare_site()
     prepare_pages()
     prepare_research_items()
+    create_licences()
