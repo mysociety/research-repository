@@ -316,7 +316,7 @@ class Person(models.Model):
         parts = name.split(" ")
         last = parts[-1]
         first = " ".join(parts[:-1])
-        slug = "".join([slugify(x) for x in [first, last]])
+        slug = "-".join([slugify(x) for x in [first, last]])
         obj, created = cls.objects.get_or_create(
             first_name=first, last_name=last, slug=slug
         )
