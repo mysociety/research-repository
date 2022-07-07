@@ -1,29 +1,29 @@
 import json
 import os
 import shutil
-from datetime import datetime
+import urllib.error
+import urllib.parse
+import urllib.request
 import zipfile
+from datetime import datetime
 from typing import List
-
+from django.utils.text import slugify
 from autoslug import AutoSlugField
 from django.conf import settings
-from django.urls import reverse
-from django.db.models import F, Q
-from django.utils.safestring import mark_safe
-import urllib.request, urllib.parse, urllib.error
-import json
-from django.template import loader
-from django.core.files.base import ContentFile
-from .image_processor import ThumbNailCreator
+from django.utils.text import slugify
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import F, Q
 from django.template import loader
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from markdown import markdown
 from markitup.fields import MarkupField
+
+from .image_processor import ThumbNailCreator
 
 GENERATE_CHOICES = [
     ("B", "Blog"),
@@ -49,7 +49,7 @@ class ThumbnailMixIn(object):
     def clean(self):
         if self.generate_thumbnail and not self.hero:
             raise ValidationError(
-                "Trying to generate a thumbnail, but no hero uplaoded."
+                "Trying to generate a thumbnail, but no hero uploaded."
             )
 
     def generate_thumbnail_from_hero(self):
@@ -311,16 +311,27 @@ class Person(models.Model):
         default="none",
     )
 
+    @classmethod
+    def get_person_from_name(cls, name: str) -> "Person":
+        parts = name.split(" ")
+        last = parts[-1]
+        first = " ".join(parts[:-1])
+        slug = "".join([slugify(x) for x in [first, last]])
+        obj, created = cls.objects.get_or_create(
+            first_name=first, last_name=last, slug=slug
+        )
+        return obj
+
     def full_name(self):
-        return self.first_name + ' ' + self.last_name
+        return self.first_name + " " + self.last_name
 
     def absolute_url(self):
-        return settings.SITE_BASE_URL + reverse('person', args=[self.slug])
+        return settings.SITE_BASE_URL + reverse("person", args=[self.slug])
 
     def preferred_url(self):
-        if self.link_behaviour == 'profile-page':
+        if self.link_behaviour == "profile-page":
             return self.absolute_url()
-        elif self.link_behaviour == 'url' and self.url:
+        elif self.link_behaviour == "url" and self.url:
             return self.url
 
     def json_ld_representation(self):
@@ -330,11 +341,11 @@ class Person(models.Model):
             "@type": "Person",
             "familyName": self.last_name,
             "givenName": self.first_name,
-            "name": self.full_name()
+            "name": self.full_name(),
         }
 
         if self.institution:
-            json_ld_representation['affiliation'] = {
+            json_ld_representation["affiliation"] = {
                 "@type": "Organization",
                 "name": self.institution,
             }
@@ -342,7 +353,7 @@ class Person(models.Model):
         author_alternate_urls = []
 
         if self.preferred_url():
-            json_ld_representation['url'] = self.preferred_url()
+            json_ld_representation["url"] = self.preferred_url()
             author_alternate_urls.append(self.preferred_url())
 
         if self.url:
@@ -352,72 +363,72 @@ class Person(models.Model):
             author_alternate_urls.append(self.absolute_url())
 
         if self.orcid:
-            author_alternate_urls.append('http://orcid.org/' + self.orcid)
+            author_alternate_urls.append("http://orcid.org/" + self.orcid)
 
         if self.googlescholar:
             author_alternate_urls.append(
-                'https://scholar.google.co.uk/citations?user=' + self.googlescholar)
+                "https://scholar.google.co.uk/citations?user=" + self.googlescholar
+            )
 
         if self.researcherid:
             author_alternate_urls.append(
-                'http://www.researcherid.com/rid/' + self.researcherid)
+                "http://www.researcherid.com/rid/" + self.researcherid
+            )
 
         if self.twitter:
-            author_alternate_urls.append('https://twitter.com/' + self.twitter)
+            author_alternate_urls.append("https://twitter.com/" + self.twitter)
 
         # This exciting line deduplicates the list.
-        json_ld_representation['sameAs'] = list(set(author_alternate_urls))
+        json_ld_representation["sameAs"] = list(set(author_alternate_urls))
 
         return json_ld_representation
 
     def items_list(self):
-        return [items.research_item for items in ItemAuthor.objects.filter(person=self).order_by('-research_item__date')]
+        return [
+            items.research_item
+            for items in ItemAuthor.objects.filter(person=self).order_by(
+                "-research_item__date"
+            )
+        ]
 
     def __str__(self):
         return self.full_name()
 
     class Meta:
-        ordering = ['last_name', 'first_name']
-        verbose_name_plural = 'people'
+        ordering = ["last_name", "first_name"]
+        verbose_name_plural = "people"
 
 
 class ResearchItem(models.Model, ThumbnailMixIn):
-
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]
 
     title = models.CharField(max_length=500)
-    subtitle = models.CharField(
-        max_length=1000,
-        blank=True
-    )
+    subtitle = models.CharField(max_length=1000, blank=True)
 
-    date = models.DateField(
-        help_text='The publication date of this item.'
-    )
+    date = models.DateField(help_text="The publication date of this item.")
 
     slug = AutoSlugField(
         unique=True,
         editable=True,
-        populate_from=('title',),
-        help_text='Used to produce a nice page URL for this item.'
+        populate_from=("title",),
+        help_text="Used to produce a nice page URL for this item.",
     )
 
     published = models.BooleanField(
-        help_text='Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL.'
+        help_text="Should this item be visible in listings, and indexable by search engines? Items will always be visible via their URL."
     )
 
     featured = models.BooleanField(
-        help_text='Should this item be featured on the homepage?',
-        default=False
+        help_text="Should this item be featured on the homepage?", default=False
     )
 
     hero = models.ImageField(
-        upload_to='hero/',
+        upload_to="hero/",
         null=True,
         blank=True,
         editable=True,
-        help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680."
+        help_text="A hero image which will be displayed on this research's page. Recommended ratio is 1024x680.",
     )
 
     generate_thumbnail = models.CharField(
@@ -426,79 +437,84 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         null=True,
         blank=True,
         editable=True,
-        help_text="Generate a thumbnail from the hero image"
+        help_text="Generate a thumbnail from the hero image",
     )
 
     thumbnail = models.ImageField(
-        upload_to='thumbnails/',
+        upload_to="thumbnails/",
         null=True,
         blank=True,
         editable=True,
-        help_text="The thumbnail of this research. Recommended ratio is 150x110."
+        help_text="The thumbnail of this research. Recommended ratio is 150x110.",
     )
 
     social_large = models.ImageField(
-        upload_to='social/',
+        upload_to="social/",
         null=True,
         blank=True,
         editable=True,
-        help_text="The thumbnail of this research. Recommended ratio is 1200*630"
+        help_text="The thumbnail of this research. Recommended ratio is 1200*630",
     )
 
     authors = models.ManyToManyField(
-        Person,
-        through='ItemAuthor',
-        help_text='Authors of this research item.'
+        Person, through="ItemAuthor", help_text="Authors of this research item."
     )
 
     abstract = MarkupField()
 
-    social_description = models.CharField(max_length=255,
-                                          null=True,
-                                          blank=True)
+    social_description = models.CharField(max_length=255, null=True, blank=True)
 
-    funders = MarkupField(
-        blank=True
-    )
+    funders = MarkupField(blank=True)
 
     LICENCE_CHOICES = (
-        ('cc-by-3.0', 'Creative Commons Attribution 3.0 Unported License'),
-        ('pub-rights', 'Publication rights only'),
+        ("cc-by-3.0", "Creative Commons Attribution 3.0 Unported License"),
+        ("pub-rights", "Publication rights only"),
     )
 
     licence = models.CharField(
         max_length=16,
         choices=LICENCE_CHOICES,
         blank=True,
-        help_text="Deprecated, use 'licencing'."
+        help_text="Deprecated, use 'licencing'.",
     )
 
-    licencing = models.ForeignKey(ResearchLicence, null=True, blank=True, on_delete=models.CASCADE)
+    licencing = models.ForeignKey(
+        ResearchLicence, null=True, blank=True, on_delete=models.CASCADE
+    )
 
     show_citation = models.BooleanField(default=True)
-    show_disclaimer = models.BooleanField(default=False,
-                                          help_text='Shows external author disclaimer.')
+    show_disclaimer = models.BooleanField(
+        default=False, help_text="Shows external author disclaimer."
+    )
 
-    custom_cite = MarkupField(blank=True, default="",
-                              help_text='Replaces the automatically generate citation with a manual one.')
+    custom_cite = MarkupField(
+        blank=True,
+        default="",
+        help_text="Replaces the automatically generate citation with a manual one.",
+    )
 
     tags = models.ManyToManyField(Tag, blank=True, related_name="items")
 
-    table_of_contents_url = models.URLField(blank=True, default="",
-                                            help_text='External .json to create TOC')
+    table_of_contents_url = models.URLField(
+        blank=True, default="", help_text="External .json to create TOC"
+    )
     table_of_contents_cache = models.TextField(
-        blank=True, default="", editable=True,
-        help_text='Stores retrieved json site stucture - can also be used as a markdown field for the contents list')
+        blank=True,
+        default="",
+        editable=True,
+        help_text="Stores retrieved json site stucture - can also be used as a markdown field for the contents list",
+    )
 
-    photo_credit = MarkupField(blank=True, default="",
-                               help_text='Photo credit for image')
+    photo_credit = MarkupField(
+        blank=True, default="", help_text="Photo credit for image"
+    )
 
     zip_archive = models.FileField(
-        upload_to='zips/',
+        upload_to="zips/",
         blank=True,
         null=True,
-        help_text='Upload a stringprint document as a zip',
-        storage=OverwriteStorage()
+        help_text="Upload a stringprint document as a zip",
+        storage=OverwriteStorage(),
     )
 
     def migrate_licence(self):
@@ -508,7 +524,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         name_lookup = {x: y for x, y in ResearchItem.LICENCE_CHOICES}
         if self.licencing is None and self.licence:
             replacement, created = ResearchLicence.objects.get_or_create(
-                slug=self.licence, name=name_lookup[self.licence])
+                slug=self.licence, name=name_lookup[self.licence]
+            )
             self.licencing = replacement
             self.save()
 
@@ -519,9 +536,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         """
         results = {}
 
-        options = {"pdf": ["pdf"],
-                   "full_text": ["read online", "mysociety blog"]
-                   }
+        options = {"pdf": ["pdf"], "full_text": ["read online", "mysociety blog"]}
 
         for k, v in options.items():
             query = Q()
@@ -536,7 +551,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         return results
 
     def url(self):
-        return reverse('item', args=[self.slug])
+        return reverse("item", args=[self.slug])
 
     def has_thumbnail(self):
         if self.thumbnail:
@@ -581,6 +596,20 @@ class ResearchItem(models.Model, ThumbnailMixIn):
     def projects(self):
         return self.tags.filter(is_project=True)
 
+    def add_authors(self, authors: List[str]):
+
+        if self.authors.all().exists() is True:
+            # Not amending authors
+            return
+
+        people = [Person.get_person_from_name(x) for x in authors]
+
+        ims = [
+            ItemAuthor(person=x, research_item=self, order=n)
+            for n, x in enumerate(people)
+        ]
+        ItemAuthor.objects.bulk_create(ims)
+
     def unpack_archive(self):
         """
         extracts zip archive to holding directory
@@ -594,7 +623,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if os.path.exists(dest):
             shutil.rmtree(dest)
         url_path = settings.SITE_BASE_URL + settings.ZIP_URL + upload_slug + "/"
-        zip_ref = zipfile.ZipFile(zip_location, 'r')
+        zip_ref = zipfile.ZipFile(zip_location, "r")
         zip_ref.extractall(dest)
         zip_ref.close()
 
@@ -605,6 +634,39 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if os.path.exists(os.path.join(dest, "toc.json")):
             self.table_of_contents_url = url_path + "toc.json"
             self.fetch_toc(save=True)
+
+        hero_image_path = os.path.join(dest, "hero.png")
+        if os.path.exists(hero_image_path):
+            ...
+            self.hero.save("hero.png", File(open(hero_image_path, "rb")), save=True)
+            # add hero image
+        thumbnail_path = os.path.join(dest, "{0}-thumbnail.png".format(upload_slug))
+        if os.path.exists(thumbnail_path):
+            self.thumbnail.save(
+                "{0}-thumbnail.png".format(upload_slug),
+                File(open(thumbnail_path, "rb")),
+                save=True,
+            )
+            self.save()
+
+        settings_path = os.path.join(dest, "settings-for-render.json")
+        if os.path.exists(settings_path):
+            with open(settings_path, "r") as f:
+                data = json.load(f)
+
+            if self.licencing is None:
+                self.licencing = ResearchLicence.objects.get(slug="cc-by-4.0")
+            if not self.title:
+                self.title = data["title"]
+                self.subtitle = data.get("subtitle", "")
+            if not self.date:
+                self.date = datetime.fromisoformat(data["publish_date"])
+            if not self.abstract:
+                self.abstract = data["description"]
+            if not self.photo_credit:
+                self.photo_credit = data.get("header", {}).get("credit", "")
+            self.add_authors(data["authors"].split(","))
+
         url = url_path
         if os.path.join(dest, "index.html") and url not in current_urls:
             item, created = gc(title="Read Online", research_item=self)
@@ -628,12 +690,20 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             item.top_order = 2
             item.save()
         epub_file = "{0}.epub".format(upload_slug)
-        url_path + kindle_file
+        url = url_path + epub_file
         if os.path.exists(os.path.join(dest, epub_file)) and url not in current_urls:
             item, created = gc(title="epub", research_item=self)
             item.url = url
             item.order = 2
             item.top_order = 2
+            item.save()
+        pdf_file = "{0}.pdf".format(upload_slug)
+        url = url_path + pdf_file
+        if os.path.exists(os.path.join(dest, pdf_file)) and url not in current_urls:
+            item, created = gc(title="PDF", research_item=self)
+            item.url = url
+            item.order = 3
+            item.top_order = 3
             item.save()
         self.save()
 
