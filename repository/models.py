@@ -665,6 +665,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
                 self.abstract = data["description"]
             if not self.photo_credit:
                 self.photo_credit = data.get("header", {}).get("credit", "")
+        if data.get("authors", None):
             self.add_authors(data["authors"].split(","))
 
         url = url_path
