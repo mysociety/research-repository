@@ -26,10 +26,13 @@
 
 {{ page.content|safe }}
 
-{% if featured_items %}
-    <h2>Featured research<small> (<a href="{% if site.default_tag %}{% url 'tag' site.default_tag.slug %}{% else %}{% url 'items' %}{% endif %}">See more</a>)</small></h2>
+{% if featured_groups %}
+    <h2>Our research</h2>
+    {% for section, featured_items in featured_groups %}
+    <h3>{{ section }}</h3>
+    <a href="{% url 'tag' section.slug %}">See more</a>
     {% include 'parts/researchlist.html' with items=featured_items %}
-
+    {% endfor %}
 {% endif %}
 
 {% if feed %}

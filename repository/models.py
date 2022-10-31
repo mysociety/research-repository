@@ -152,6 +152,11 @@ class Tag(models.Model, ThumbnailMixIn):
         help_text="The thumbnail of this research. Recommended ratio is 150x110.",
     )
 
+    front_page_order = models.IntegerField(
+        default=0,
+        help_text="zero if not on front page, otherwise ascending order down the page",
+    )
+
     description = MarkupField(blank=True)
 
     tag_groups = models.ManyToManyField(TagGroup, blank=True, related_name="tags")
@@ -880,6 +885,17 @@ class ResearchOutput(models.Model):
     download_count = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
     top_order = models.IntegerField(default=0, help_text="Order for under image link")
+
+    def downloadable(self) -> bool:
+        """
+        Is this output downloadable?
+        """
+        if self.file:
+            return True
+        for i in ["pdf", "epub", "kindle", "download"]:
+            if i in self.title.lower():
+                return True
+        return False
 
     def output_url(self):
         return reverse("download", args=[self.id])

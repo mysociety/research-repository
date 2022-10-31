@@ -1,7 +1,7 @@
 from django.views.generic import DetailView, TemplateView
 
 from pages import models
-from repository import models as repository_models
+from repository.models import ResearchItem, Tag, TagGroup
 from django.http.response import HttpResponse
 import feedparser
 import datetime
@@ -46,16 +46,32 @@ class HomeView(TemplateView):
         context["feed"] = FeedCache.fetch_feed()
         context["page"] = models.Page.objects.get_or_create(slug="home")[0]
 
-        featured_items = repository_models.ResearchItem.objects.filter(
-            published=True, featured=True
+        front_page_tags = Tag.objects.filter(front_page_order__gt=0).order_by(
+            "front_page_order"
         )
 
-        featured_tags = repository_models.Tag.objects.filter(featured=True)
-        featured = list(featured_items) + list(featured_tags)
+        featured_groups = []
 
-        featured.sort(key=lambda x: x.date, reverse=True)
+        for tag in front_page_tags:
 
-        context["featured_items"] = featured
+            featured_items = ResearchItem.objects.filter(
+                published=True, featured=True, tags=tag
+            )
+
+            # there can be a tag group that shadows the tag if we want to include A tag in the front page.
+            tag_group = TagGroup.objects.filter(name=tag.label).first()
+            if tag_group:
+                featured_tags = Tag.objects.filter(featured=True, tag_groups=tag_group)
+            else:
+                featured_tags = []
+
+            featured = list(featured_items) + list(featured_tags)
+
+            featured.sort(key=lambda x: x.date, reverse=True)
+
+            featured_groups.append((tag, featured))
+
+        context["featured_groups"] = featured_groups
 
         return context
 
