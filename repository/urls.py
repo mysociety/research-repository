@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url, include
+from django.urls import re_path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
@@ -25,50 +25,50 @@ from django.views.generic import RedirectView
 admin.autodiscover()
 
 urlpatterns = [
-    url(r"^$", pageViews.HomeView.as_view(), name="home"),
-    url(r"^admin/", admin.site.urls),
-    url("^api/", include("repository.api_views")),
-    url(r"^sitemap\.xml$", views.SitemapView.as_view(), name="sitemap"),
-    url(
+    re_path(r"^$", pageViews.HomeView.as_view(), name="home"),
+    re_path(r"^admin/", admin.site.urls),
+    re_path("^api/", include("repository.api_views")),
+    re_path(r"^sitemap\.xml$", views.SitemapView.as_view(), name="sitemap"),
+    re_path(
         r"^publications/outputs/(?P<output_id>[-\w]+$)",
         views.output_download,
         name="download",
     ),
-    url(
+    re_path(
         r"^publications/(?P<item_slug>[-\w]+)/outputs/(?P<output_id>[-\w]+$)",
         views.output_download_with_item_slug,
         name="download_special",
     ),
-    url(r"^publications/(?P<slug>[-\w]+)$", views.ItemView.as_view(), name="item"),
-    url(r"^publications/", views.ItemListView.as_view(), name="items"),
-    url(
+    re_path(r"^publications/(?P<slug>[-\w]+)$", views.ItemView.as_view(), name="item"),
+    re_path(r"^publications/", views.ItemListView.as_view(), name="items"),
+    re_path(
         r"^research/outputs/(?P<output_id>[-\w]+$)",
         RedirectView.as_view(pattern_name="download", permanent=True),
     ),
-    url(
+    re_path(
         r"^research/(?P<slug>[-\w]+)$",
         RedirectView.as_view(pattern_name="item", permanent=True),
     ),
-    url(r"^research/", RedirectView.as_view(pattern_name="items", permanent=True)),
-    url(r"^people/(?P<slug>[-\w]+)$", views.PersonView.as_view(), name="person"),
-    url(r"^people/", views.PersonListView.as_view(), name="people"),
-    url(
+    re_path(r"^research/", RedirectView.as_view(pattern_name="items", permanent=True)),
+    re_path(r"^people/(?P<slug>[-\w]+)$", views.PersonView.as_view(), name="person"),
+    re_path(r"^people/", views.PersonListView.as_view(), name="people"),
+    re_path(
         r"^section/(?P<slug1>[-\w]+)/(?P<slug2>[-\w]+)$",
         views.TagView.as_view(),
         name="tag",
     ),
-    url(r"^section/(?P<slug1>[-\w]+)$", views.TagView.as_view(), name="tag"),
-    url(
+    re_path(r"^section/(?P<slug1>[-\w]+)$", views.TagView.as_view(), name="tag"),
+    re_path(
         r"^tag/(?P<slug>[-\w]+)$",
         RedirectView.as_view(pattern_name="tag", permanent=True),
     ),
-    url(r"^tags/", views.TagListView.as_view(), name="tags"),
-    url(r"^embed/(?P<options>.+)", views.snippet_view, name="embed"),
-    url(
+    re_path(r"^tags/", views.TagListView.as_view(), name="tags"),
+    re_path(r"^embed/(?P<options>.+)", views.snippet_view, name="embed"),
+    re_path(
         r"^optout/(?P<experiment>[-\w]+)/(?P<user_id>[-\w]+)$",
         pageViews.opt_out_view,
         name="page",
     ),
-    url(r"^(?P<slug>[-\w]+)$", pageViews.PageView.as_view(), name="page"),
-    url(r"^markitup/", include("markitup.urls")),
+    re_path(r"^(?P<slug>[-\w]+)$", pageViews.PageView.as_view(), name="page"),
+    re_path(r"^markitup/", include("markitup.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

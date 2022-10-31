@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 from rest_framework import authentication, permissions
-from django.conf.urls import url
+from django.urls import re_path
 from .models import ResearchItem
 from pages.models import MiniSite
 from django.utils import timezone
@@ -62,17 +62,17 @@ class SiteUploadView(APIView):
 
 
 urlpatterns = [
-    url(
+    re_path(
         "^upload_zip/(?P<item_slug>[-\w]+)$",
         FileUploadView.as_view(),
         name="upload_zip",
     ),
-    url(
+    re_path(
         "^upload_site/(?P<item_slug>[-\w]+)/$",
         SiteUploadView.as_view(),
         name="upload_site",
     ),
-    url(
+    re_path(
         "^upload_site/(?P<item_slug>[-\w]+)/(?P<preserve_existing>[-\w]+)$",
         SiteUploadView.as_view(),
         name="upload_site",

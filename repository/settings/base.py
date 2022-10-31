@@ -264,3 +264,5 @@ MARKITUP_FILTER = ("markdown.markdown", {"safe_mode": True})
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+CSRF_TRUSTED_ORIGINS = ["https://*.preview.app.github.dev/", "https://research.mysociety.org"]
