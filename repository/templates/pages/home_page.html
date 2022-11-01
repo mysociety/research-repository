@@ -8,13 +8,13 @@
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}">
 <meta property="og:description" content="{{site.description|safe}}" >
 
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="{{site.twitter}}">
 <meta name="twitter:title" content="{{site.site_title}}">
 <meta name="twitter:description" content="{{site.description|safe}}">
 
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
-<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE}}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE_LARGE}}">
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{settings.DEFAULT_SHARE_IMAGE_LARGE}}">
 {% endblock %}
 
 

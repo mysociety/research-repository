@@ -24,6 +24,7 @@ def add_settings(request):
             "GOOGLE_ANALYTICS_ACCOUNT": settings.GOOGLE_ANALYTICS_ACCOUNT,
             "DEBUG": settings.DEBUG,
             "DEFAULT_SHARE_IMAGE": settings.DEFAULT_SHARE_IMAGE,
+            "DEFAULT_SHARE_IMAGE_LARGE": settings.DEFAULT_SHARE_IMAGE_LARGE,
             "SITE_NAME": site.site_title,
             "SITE_TWITTER_HANDLE": site.twitter,
         },

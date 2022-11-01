@@ -258,6 +258,7 @@ SITE_BASE_URL = config.SITE_BASE_URL
 
 # settings for social sharing
 DEFAULT_SHARE_IMAGE = config.DEFAULT_SHARE_IMAGE
+DEFAULT_SHARE_IMAGE_LARGE = "/static/img/mysoc_research_logo.png"
 
 MARKITUP_FILTER = ("markdown.markdown", {"safe_mode": True})
 
