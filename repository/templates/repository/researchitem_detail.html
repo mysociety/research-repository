@@ -83,7 +83,6 @@
 <p><a href="{% url 'admin:repository_researchitem_change' item.id %}">Edit This Item</a></p>
 {% endif %}
 
-
 {% thumbnail item.hero "1024x680" crop="center" as im %}
 <a href="{{item.default_top_output}}"><img src="{{ im.url }}" width="{{ im.x }}" height="{{ im.y }}"></a>
 {% endthumbnail %}
@@ -96,8 +95,7 @@
 
 <p>
     {% for output in oo %}
-
-    <span class="research-item__button" ><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{{ output.title }}</a></span>
+    <span class="research-item__button" ><a class="button" rel="nofollow" href="{% url 'download' output.id %}">{% if output.downloadable %}{% include 'parts/download_logo.html' %}{% else %}🌐{% endif %}{{ output.title }}</a></span>
 
     {% endfor %}
 </p>

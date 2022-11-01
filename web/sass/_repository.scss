@@ -3,12 +3,12 @@
 a.button {
     padding: 6px;
     border-radius: 3px;
-    border: 1px solid $colour_green;
-    background: lighten($colour_green, 45%);
-    color: $colour_green_dark_2;
+    border: 1px solid $colour_blue_dark_2;
+    background: $colour_blue_dark_2;
+    color: $colour_off_white;
 
     &:hover {
-        background: lighten($colour_green, 35%);
+        background: lighten($colour_blue_dark_2, 10%);
         text-decoration: none;
     }
 	
