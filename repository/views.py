@@ -157,6 +157,18 @@ class ItemView(DetailView):
 
         return context
 
+    def get(self, request, *args, **kwargs):
+        """
+        Redirect to url if there is only one item with that slug
+        """
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+
+        if context["item"].outputs.count() > 1:
+            return self.render_to_response(context)
+        else:
+            return HttpResponseRedirect(context["item"].outputs.first().url)
+
 
 class PersonListView(ListView):
     model = models.Person
