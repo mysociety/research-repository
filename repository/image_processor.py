@@ -111,26 +111,32 @@ class ThumbNailCreator(object):
         )
         font_color = cls.writing_colours[0]
 
+        deploy_path = "/data/vhost/research.mysociety.org/research-repository"
+        if os.path.exists(deploy_path):
+            font_path = os.path.join(deploy_path, cls.font_location)
+        else:
+            font_path = cls.font_location
+
         draw = ImageDraw.Draw(base_image)
         if text == cls.BLOG:
-            font = ImageFont.truetype(cls.font_location, 40)
+            font = ImageFont.truetype(font_path, 40)
             draw.text((14, 0), "blog", font_color, font=font)
         if text == cls.REPORT:
-            font = ImageFont.truetype(cls.font_location, 35)
+            font = ImageFont.truetype(font_path, 35)
             draw.text((6, 0), "report", font_color, font=font)
         if text == cls.POLICY:
-            font = ImageFont.truetype(cls.font_location, 35)
+            font = ImageFont.truetype(font_path, 35)
             draw.text((9, 0), "policy", font_color, font=font)
         if text == cls.CONSULTATION:
-            font = ImageFont.truetype(cls.font_location, 18)
+            font = ImageFont.truetype(font_path, 18)
             draw.text((5, 5), "consultation", font_color, font=font)
             draw.text((19, 22), "response", font_color, font=font)
         if text == cls.MINISITE:
-            font = ImageFont.truetype(cls.font_location, 30)
+            font = ImageFont.truetype(font_path, 30)
             draw.text((24, -3), "mini", font_color, font=font)
             draw.text((31, 23), "site", font_color, font=font)
         if text == cls.SERIES:
-            font = ImageFont.truetype(cls.font_location, 35)
+            font = ImageFont.truetype(font_path, 35)
             draw.text((9, 0), "series", font_color, font=font)
         if dest:
             base_image.save(dest, quality=95)
