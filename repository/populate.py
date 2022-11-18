@@ -48,6 +48,7 @@ def prepare_tags():
         slug="research",
         description="Test Site Research",
         top_bar=1,
+        front_page_order=True,
     )
 
     t, c = gc(
