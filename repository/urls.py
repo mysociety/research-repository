@@ -62,6 +62,7 @@ urlpatterns = [
         r"^tag/(?P<slug>[-\w]+)$",
         RedirectView.as_view(pattern_name="tag", permanent=True),
     ),
+    url(r"^import_blog", views.add_blog_based_on_social, name="import_blog"),
     url(r"^tags/", views.TagListView.as_view(), name="tags"),
     url(r"^embed/(?P<options>.+)", views.snippet_view, name="embed"),
     url(

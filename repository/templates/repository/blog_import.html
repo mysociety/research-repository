@@ -1,0 +1,29 @@
+{% extends 'fullpage.html' %}
+
+{% block title %}Import blog page{% endblock %}
+
+
+
+{% block content %}
+
+<h1>Import blog</h1>
+
+{% if new_url %}
+
+<hr>
+<p>New entry created at <a href="{{ new_url }}"> {{ new_url }}</a></p>
+
+<hr>
+
+{% endif %}
+
+<p>Enter a blog post from mysociety.org here to do a quick import based on social settings</p>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

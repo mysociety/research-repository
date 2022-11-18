@@ -1,12 +1,12 @@
 from django.views.generic import TemplateView, ListView, DetailView
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from repository import models
 from django.shortcuts import render
 from django.db.models import Q
 from django.http import JsonResponse
 from collections import Counter
-
+from repository.forms import BlogImport
 import json
 
 
@@ -271,6 +271,25 @@ def output_download(request, output_id):
     item = item[0]
     item.increment_download()
     return HttpResponseRedirect(item.button_url())
+
+
+def add_blog_based_on_social(request: HttpRequest):
+    """
+    Create a new entry based on a page in a blog. Require staff user
+    """
+    if not request.user.is_staff:
+        return HttpResponse("Need to be staff user to use this feature.")
+    new_url = None
+    if request.method == "POST":
+        form = BlogImport(request.POST)
+        if form.is_valid():
+            new_url = form.save()
+    else:
+        form = BlogImport()
+
+    return render(
+        request, "repository/blog_import.html", {"form": form, "new_url": new_url}
+    )
 
 
 def output_download_with_item_slug(request, item_slug, output_id):

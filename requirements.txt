@@ -17,3 +17,4 @@ django-import-export==2.0.2
 git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail
 colorthief
 djangorestframework==3.13.1
+beautifulsoup4==4.11.1
