@@ -19,6 +19,7 @@ def add_settings(request):
         "top_links": Link.objects.all().exclude(order=-1).order_by("order"),
         "all_pages": get_pages_for_nav(),
         "top_tags": Tag.objects.all().exclude(top_bar=-1).order_by("top_bar"),
+        "all_tags": Tag.objects.all(),
         "site": site,
         "settings": {
             "GOOGLE_ANALYTICS_ACCOUNT": settings.GOOGLE_ANALYTICS_ACCOUNT,

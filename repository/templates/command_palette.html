@@ -1,0 +1,82 @@
+{% load static %}
+
+<ninja-keys> </ninja-keys>
+<script src="{% static "js/ninja-keys.js" %}"></script>
+
+<script>
+  const ninja = document.querySelector('ninja-keys');
+  ninja.data = [
+    {
+      id: 'Home',
+      title: 'Home page',
+      hotkey: '',
+      icon: '',
+      section: 'Pages',
+      handler: () => {
+        // it's auto register above hotkey with this handler
+        window.location.href = '/'; 
+      },
+    },
+    {% for p in all_pages %}
+    {
+      id: 'page:{{ p.slug }}',
+      title: '{{ p.title}}',
+      hotkey: '',
+      icon: '',
+      section: 'Pages',
+      handler: () => {
+        // it's auto register above hotkey with this handler
+        window.location.href = '/{{ p.slug }}'; 
+      },
+    },
+    {% endfor %}
+    {% if request.user.is_staff %}
+    {
+      id: 'admin:add_blog',
+      title: 'Admin: Add blog',
+      hotkey: '',
+      icon: '',
+      section: 'Admin',
+      handler: () => {
+        // it's auto register above hotkey with this handler
+        window.location.href = '/import_blog'; 
+      },
+    },
+    {
+      id: 'admin:Admin',
+      title: 'Admin: Interface',
+      hotkey: '',
+      icon: '',
+      section: 'Admin',
+      handler: () => {
+        // it's auto register above hotkey with this handler
+        window.location.href = '/admin/'; 
+      },
+    },
+    {% else %}
+    {
+      id: 'admin:log-in',
+      title: 'Admin: Log in',
+      hotkey: '',
+      icon: '',
+      section: 'Admin',
+      handler: () => {
+        window.location.href = '/admin/'; 
+      },
+    },
+    {% endif %}
+    {% for t in all_tags %}
+    {
+      id: 'tag:{{ t.slug }}',
+      title: 'Tag: {{ t.label }}',
+      hotkey: '',
+      icon: '',
+      section: 'Tag',
+      handler: () => {
+        // it's auto register above hotkey with this handler
+        window.location.href = '{% url 'tag' t.slug %}'; 
+      },
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+</script>
