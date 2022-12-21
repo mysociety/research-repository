@@ -27,7 +27,7 @@ class PhraseHighlighter(Highlighter):
         # remove search operators like AND, OR, NOT from self.query_words
         banned = ["AND", "OR", "NOT"]
         self.query_words = {
-            word for word in self.query_words if word.upper() not in banned
+            word.lower() for word in self.query_words if word.upper() not in banned
         }
 
 
