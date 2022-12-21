@@ -757,6 +757,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             item.top_order = 3
             item.save()
         self.save()
+        self.create_search_items()
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:

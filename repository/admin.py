@@ -85,6 +85,7 @@ class ResearchItemAdmin(ImportExportModelAdmin):
             obj.save()
         if "zip_archive" in form.changed_data:
             obj.unpack_archive()
+        obj.create_search_items()
 
 
 @io_admin_register(models.Tag)

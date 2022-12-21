@@ -61,6 +61,8 @@ class BlogImport(forms.Form):
 
         item.add_authors([author])
 
+        item.create_search_items()
+
         print(f"Created ResearchItem {item}")
 
         return item.url()
