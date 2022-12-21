@@ -21,6 +21,8 @@ from django.contrib import admin
 from repository import views
 from pages import views as pageViews
 from django.views.generic import RedirectView
+from haystack.views import SearchView
+from haystack.forms import SearchForm
 
 admin.autodiscover()
 
@@ -72,4 +74,9 @@ urlpatterns = [
     ),
     url(r"^(?P<slug>[-\w]+)$", pageViews.PageView.as_view(), name="page"),
     url(r"^markitup/", include("markitup.urls")),
+    url(
+        r"^search/",
+        SearchView(form_class=SearchForm),
+    ),
+    # url(r"^search/", views.ResearchSearchView.as_view(), name="search_view"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

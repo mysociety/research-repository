@@ -18,3 +18,5 @@ git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail
 colorthief
 djangorestframework==3.13.1
 beautifulsoup4==4.11.1
+Whoosh==2.7.4
+django-haystack==3.2.1

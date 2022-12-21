@@ -164,26 +164,36 @@ def prepare_research_items():
 
         # add a few outputs
         gc = ResearchOutput.objects.get_or_create
-        gc(
-            title="Download Now!",
-            url="http://mysociety.org",
-            order=0,
-            top_order=0,
-            research_item=r,
-        )
-        gc(
-            title="View Online!",
-            url="http://mysociety.org",
-            order=0,
-            top_order=0,
-            research_item=r,
-        )
+        if random.randint(1, 2) == 1:
+            gc(
+                title="Download Now!",
+                url="https://research.mysociety.org/html/prototyping-data-sharing/prototyping-data-sharing.pdf",
+                order=0,
+                top_order=0,
+                research_item=r,
+            )
+            gc(
+                title="Read online",
+                url="https://research.mysociety.org/html/prototyping-data-sharing/",
+                order=1,
+                top_order=1,
+                research_item=r,
+            )
+        else:
+            gc(
+                title="Read on blog!",
+                url="https://www.mysociety.org/2022/12/20/the-12-days-of-foi/",
+                order=0,
+                top_order=0,
+                research_item=r,
+            )
 
         author_text = ", ".join([x.full_name() for x in authors])
         tag_text = ", ".join([x.label for x in tags_to_add])
         abstract = "This is a test item, written by {0}. It has the following tags: {1}"
         r.abstract = abstract.format(author_text, tag_text)
         r.save()
+        r.create_search_items()
 
         all_items.append(r)
 

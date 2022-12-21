@@ -26,3 +26,4 @@ target/
 local.properties
 .classpath
 .settings/
+whoosh_index/
