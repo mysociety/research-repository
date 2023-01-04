@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from pathlib import Path
 import yaml
 from .paths import *
 from conf import config
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     "markitup",
     "import_export",
     "sorl.thumbnail",
+    "haystack",
     "repository",
     "pages",
 ]
@@ -265,3 +267,14 @@ MARKITUP_FILTER = ("markdown.markdown", {"safe_mode": True})
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+HAYSTACK_CUSTOM_HIGHLIGHTER = "repository.search_funcs.PhraseHighlighter"
+
+HAYSTACK_SIGNAL_PROCESSOR = "haystack.signals.RealtimeSignalProcessor"
+
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": "haystack.backends.whoosh_backend.WhooshEngine",
+        "PATH": os.path.join(Path(__file__).parent.parent.parent, "whoosh_index"),
+    },
+}

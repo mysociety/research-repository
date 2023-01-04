@@ -26,8 +26,19 @@
 
 {{ page.content|safe }}
 
+
+
 {% if featured_groups %}
     <h2>Our research</h2>
+    <div class="colour-green" style="margin: 2em 0;">
+        <form style="max-width: 40em"  method="get" action="/search/">
+            <div class="inline-input">
+                <input name="q" placeholder="Search mySociety research" aria-label="Search term">
+            </div><div class="inline-button">
+                <input type="submit" class="button" name="search" value="Search">
+            </div>
+        </form>
+    </div>
     {% for section, featured_items in featured_groups %}
     <h3>{{ section }}</h3>
     <a href="{% url 'tag' section.slug %}">See more</a>

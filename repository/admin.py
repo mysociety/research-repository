@@ -52,6 +52,14 @@ def migrate_licence(self, request, queryset):
 migrate_licence.short_description = "Migrate licence"
 
 
+def create_search_items(self, request, queryset):
+    for model in queryset:
+        model.create_search_items()
+
+
+create_search_items.short_description = "Create search items"
+
+
 @io_admin_register(models.ResearchItem)
 class ResearchItemAdmin(ImportExportModelAdmin):
     list_display = (
@@ -64,7 +72,7 @@ class ResearchItemAdmin(ImportExportModelAdmin):
     inlines = (ItemAuthorInline, ResearchOutputInline)
     filter_horizontal = ("tags",)
     list_filter = ("tags", "published", "featured")
-    actions = [migrate_licence]
+    actions = [migrate_licence, create_search_items]
 
     def save_model(self, request, obj, form, change):
         # if value of generate thumbnail has changed
@@ -77,6 +85,7 @@ class ResearchItemAdmin(ImportExportModelAdmin):
             obj.save()
         if "zip_archive" in form.changed_data:
             obj.unpack_archive()
+        obj.create_search_items()
 
 
 @io_admin_register(models.Tag)
@@ -93,3 +102,4 @@ class TagItemAdmin(ImportExportModelAdmin):
 admin.site.register(models.TagGroup)
 admin.site.register(models.Site)
 admin.site.register(models.ResearchLicence)
+admin.site.register(models.SearchItem)

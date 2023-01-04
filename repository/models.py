@@ -7,10 +7,9 @@ import urllib.request
 import zipfile
 from datetime import datetime
 from typing import List
-from django.utils.text import slugify
+
 from autoslug import AutoSlugField
 from django.conf import settings
-from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.files.base import ContentFile
@@ -20,9 +19,15 @@ from django.db.models import F, Q
 from django.template import loader
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.utils.text import slugify
 from markdown import markdown
 from markitup.fields import MarkupField
 
+from .search_funcs import (
+    SearchData,
+    get_data_from_mysociety_blog,
+    get_stringprint_search_data,
+)
 from .image_processor import ThumbNailCreator
 
 GENERATE_CHOICES = [
@@ -522,6 +527,46 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         storage=OverwriteStorage(),
     )
 
+    def create_search_items(self):
+        """
+        Extract text for search from items
+        """
+        # get all urls for this item's outputs
+        urls = [x.url for x in self.outputs.all()]
+
+        # get any urls that start with  https://mysociety.org or https://research.mysociety.org
+        # and get the data from the blog
+        items: List[SearchData] = []
+        for url in urls:
+            if url.startswith("https://mysociety.org") or url.startswith(
+                "https://www.mysociety.org"
+            ):
+                print("getting data from blog: ", url, "for item: ", self.title, "")
+                items.extend(get_data_from_mysociety_blog(url, self.title))
+            elif (
+                url.startswith("https://research.mysociety.org")
+                and url.endswith("/")
+                or url.endswith("index.html")
+            ):
+                print(
+                    "getting data from research blog: ",
+                    url,
+                    "for item: ",
+                    self.title,
+                    "",
+                )
+                items.extend(get_stringprint_search_data(url, self.title))
+
+        self.search_items.all().delete()
+
+        search_items = [
+            SearchItem(
+                research_item=self, url=item.url, title=item.title, text=item.text
+            )
+            for item in items
+        ]
+        SearchItem.bulk_create_with_signal(search_items)
+
     def migrate_licence(self):
         """
         migrate from old style to new style licences
@@ -712,6 +757,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             item.top_order = 3
             item.save()
         self.save()
+        self.create_search_items()
 
     def fetch_toc(self, save=True):
         if self.table_of_contents_url:
@@ -945,3 +991,30 @@ class Site(models.Model):
             s = Site()
             s.save()
             return s
+
+
+class SearchItem(models.Model):
+    """
+    Hold the free text to populate the search results to populate the search
+    """
+
+    research_item = models.ForeignKey(
+        ResearchItem, related_name="search_items", on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    url = models.CharField(max_length=1020)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.title + " - " + self.text[:20]
+
+    @classmethod
+    def bulk_create_with_signal(cls, items: List["SearchItem"]):
+        """
+        Bulk create but trigger the signal for index updates
+        """
+        from django.db.models.signals import post_save
+
+        created = cls.objects.bulk_create(items)
+        for c in created:
+            post_save.send(cls, instance=c, created=True)
