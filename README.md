@@ -10,7 +10,7 @@ The most simple development environment is open up the repo in codespaces.
 
 This runs a prebuilt container with the data populated (the state that 'local development with docker and vscode' would eventually get to).
 
-Currently the draw back of this approach is it pushes back to github, and you need to locally pull down and resync to the git.mysociety.org.
+A Github action will push changes to the GitHub repository back to git.mysociety.org. git.mysociety.org is still the primary, and changes forced there will override the Github repository.
 
 `script/server` will then start the dev server at http://localhost:8000
 
