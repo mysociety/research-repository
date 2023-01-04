@@ -44,6 +44,10 @@ def get_data_from_mysociety_blog(url: str, title: str) -> List[SearchData]:
     The URL is a deep link to the paragraph using chrome's deep linking syntax.
     This is : #:~:text=url%20encoded%20text
     """
+    # check url doesn't end in a pdf
+    if url.endswith(".pdf"):
+        return []
+
     html = request.urlopen(url).read()
     soup = BeautifulSoup(html, "html.parser")
     items = []
