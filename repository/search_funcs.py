@@ -51,6 +51,8 @@ def get_data_from_mysociety_blog(url: str, title: str) -> List[SearchData]:
     # The main content is in the 'wordpress-editor-content' div, we want each individual paragraph
     # so we can link to them
     content = soup.find("div", {"class": "wordpress-editor-content"})
+    if not content:
+        return []
     paragraphs = content.find_all("p")
 
     for p in paragraphs:
