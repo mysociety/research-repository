@@ -549,7 +549,7 @@ class ResearchItem(models.Model, ThumbnailMixIn):
                 or url.endswith("index.html")
             ):
                 print(
-                    "getting data from research blog: ",
+                    "getting data from stringprint: ",
                     url,
                     "for item: ",
                     self.title,
@@ -568,7 +568,9 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             )
             for item in items
         ]
-        SearchItem.bulk_create_with_signal(search_items)
+        if search_items:
+            print(f"Creating {len(search_items)} search items for {self.title}")
+            SearchItem.bulk_create_with_signal(search_items)
 
     def migrate_licence(self):
         """

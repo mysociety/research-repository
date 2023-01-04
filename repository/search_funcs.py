@@ -79,9 +79,19 @@ def get_stringprint_search_data(url: str, title: str) -> List[SearchData]:
     else:
         base_directory = url.split("/")[:-1]
         search_url = "/".join(base_directory) + "/tipuesearch_content.js"
-    html = request.urlopen(search_url).read()
+    try:
+        html = request.urlopen(search_url).read()
+    except request.HTTPError:
+        print(f"Cannot fetch info from: {search_url}")
+        return []
     html = html.replace(b"var tipuesearch = ", b"").strip()[:-1]
     html = html.replace(rb"\ ", rb"\\")
+
+    # remove carriage returns
+    html = html.replace(b"\r", b"")
+    # remove tabs and replace with splaces
+    html = html.replace(b"\t", b" ")
+
     data = json.loads(html)
     items = []
     for item in data["pages"]:
