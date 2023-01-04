@@ -858,9 +858,9 @@ table.table td {
     input {
         width: 100%;
         height: 2.277777778em;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border: none;
+        border-radius: 3px;
+        border: 1px solid $colour_mid_grey;
+        padding-left: 1em;
     }
 }
 

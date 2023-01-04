@@ -1,6 +1,9 @@
 {% extends 'fullpage.html' %}
 {% load highlight %}
 
+{% block title %}Search {% if query %}- {{ query }} {% endif %}{% endblock %}
+
+
 {% block content %}
 
 
