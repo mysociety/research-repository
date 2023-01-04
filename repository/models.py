@@ -561,7 +561,10 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
         search_items = [
             SearchItem(
-                research_item=self, url=item.url, title=item.title, text=item.text
+                research_item=self,
+                url=item.url,
+                title=item.title[:250] + "..." if len(item.title) > 255 else item.title,
+                text=item.text,
             )
             for item in items
         ]
