@@ -81,6 +81,7 @@ def get_stringprint_search_data(url: str, title: str) -> List[SearchData]:
         search_url = "/".join(base_directory) + "/tipuesearch_content.js"
     html = request.urlopen(search_url).read()
     html = html.replace(b"var tipuesearch = ", b"").strip()[:-1]
+    html = html.replace(rb"\ ", rb"\\")
     data = json.loads(html)
     items = []
     for item in data["pages"]:
