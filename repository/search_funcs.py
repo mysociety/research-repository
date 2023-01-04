@@ -57,7 +57,7 @@ def get_data_from_mysociety_blog(url: str, title: str) -> List[SearchData]:
         # get the text of the paragraph
         text = p.get_text().strip()
         # create a deep link to the paragraph
-        link = url + "#:~:text=" + parse.quote(text[:800])
+        link = url + "#:~:text=" + parse.quote(text[:500])
         # add the link and text to the list
         if text:
             items.append(SearchData(url=link, text=text, title=title))
