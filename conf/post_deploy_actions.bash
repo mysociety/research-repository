@@ -12,4 +12,4 @@ source .venv/bin/activate
 python manage.py migrate
 
 # repopulate search index
-python manage.py rebuild_index
+python manage.py rebuild_index --noinput
