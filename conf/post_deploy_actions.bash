@@ -10,3 +10,6 @@ source .venv/bin/activate
 
 # get the database up to speed
 python manage.py migrate
+
+# repopulate search index
+python manage.py rebuild_index
