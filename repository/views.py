@@ -164,10 +164,18 @@ class ItemView(DetailView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
 
-        if context["item"].outputs.count() > 1:
-            return self.render_to_response(context)
-        else:
+        # what I want is if there is one output, which is an URL, not a file,
+        #  to redirect to that
+        link_outputs = (
+            context["item"]
+            .outputs.exclude(Q(url__isnull=True) | Q(url__exact=""))
+            .count()
+        )
+
+        if link_outputs == 1:
             return HttpResponseRedirect(context["item"].outputs.first().url)
+        else:
+            return self.render_to_response(context)
 
 
 class PersonListView(ListView):
