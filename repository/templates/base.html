@@ -22,7 +22,31 @@
     {% block json-ld %}
     {% endblock %}
 
-    {% if settings.GOOGLE_ANALYTICS_ACCOUNT %}
+    {% if not settings.DEBUG %}
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      var debug = false;
+      if (debug) {
+        gtag('config', 'G-54QXHS41X5', { 'debug_mode':true } );
+        gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A", 1 );
+      } else {
+      gtag("consent", "default", {
+                ad_storage: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "denied",
+                personalization_storage: "denied",
+                security_storage: "denied"
+            });
+      gtag('config', 'G-54QXHS41X5');
+      gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
+    }
+    </script>
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -73,6 +97,13 @@
       </div>
     </div>
 
+    <!-- import main.js -->
+    <script
+    src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+    crossorigin="anonymous"></script>
+    <script src="{% static "js/main.js" %}"></script>
+    
     <div class="mysoc-footer" role="contentinfo">
       <div class="page">
         <div class="row">
@@ -134,9 +165,9 @@
                 <ul class="mysoc-footer__badges">
                     <li role="presentation"><a href="https://github.com/mysociety/" class="mysoc-footer__badge mysoc-footer__badge--github">Github</a></li>
                     <li role="presentation">
-                      <a href="https://twitter.com/mysociety" class="mysoc-footer__badge mysoc-footer__badge--twitter" onclick="if (ga) { ga('send','event','Outbound Link','Twitter Exit','Footer link',1) };">@mysociety</a>
+                      <a href="https://twitter.com/mysociety" class="mysoc-footer__badge mysoc-footer__badge--twitter" >@mysociety</a>
                     </li>
-                    <li role="presentation"><a href="https://www.facebook.com/mySociety/" class="mysoc-footer__badge mysoc-footer__badge--facebook" onclick="if (ga) { ga('send','event','Outbound Link','Facebook Exit','Footer link',1) };">mySociety</a></li>
+                    <li role="presentation"><a href="https://www.facebook.com/mySociety/" class="mysoc-footer__badge mysoc-footer__badge--facebook">mySociety</a></li>
                 </ul>
             </div>
 
