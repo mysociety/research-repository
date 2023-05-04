@@ -157,7 +157,7 @@
         <div class="inline-input">
             <input name="EMAIL" placeholder="you@email.com" aria-label="Email address" type="email">
         </div><div class="inline-button">
-            <input type="submit" class="button" name="subscribe" value="Subscribe" onclick="ga('send', 'event', 'Newsletter', 'Signup', '{{item.slug}}')">
+            <input type="submit" class="button" name="subscribe" value="Subscribe" onclick="trackEvent('newsletter_signup', {'page':'{{ item.slug }}'})">
         </div>
         <p>
             <label>
@@ -269,7 +269,7 @@
 
 <p>
     {% for output in oo %}
-	<p class="author-name"><a href="{% url 'download' output.id %}" rel="nofollow" onclick="ga('send', 'event','Link Usage', 'Download - Right', '{{item.slug}}','{{output.title|slugify}} -{{output.id}}')">{{ output.title }}</a></p>
+	<p class="author-name"><a href="{% url 'download' output.id %}" rel="nofollow" >{{ output.title }}</a></p>
     {% endfor %}
 </p>
 {% endif %}

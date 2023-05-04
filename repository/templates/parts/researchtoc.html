@@ -2,11 +2,13 @@
 {% if toc %}
 <ol>
 {% for i in toc %}
-<li><a href="{{i.link}}" onclick="ga('send', 'event','Link Usage', 'Table of Contents Click', '{{item.slug}}', '{{i.link}}')">{{i.name}}</a>
-{% if i.children %}
+<li><a href="{{i.link}}" onclick="trackEvent('toc_click', {'slug': '{{item.slug}}', 'link': '{{i.link}}'})">{{i.name}}</a>
+    
+
+    {% if i.children %}
 <ol>
 {% for c in i.children %}
-<li><a href="{{c.link}}" onclick="ga('send', 'event','Link Usage', 'Table of Contents Click',  '{{item.slug}}', '{{i.link}}')">{{c.name}}</a></li>
+<li><a href="{{c.link}}" onclick="trackEvent('toc_click', {'slug': '{{item.slug}}', 'link': '{{i.link}}'})">{{c.name}}</a></li>
 {% endfor %}
 </ol>
 {% endif %}
