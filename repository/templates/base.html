@@ -22,7 +22,7 @@
     {% block json-ld %}
     {% endblock %}
 
-    {% if not settings.DEBUG %}
+    {% if settings.DEBUG %}
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
@@ -32,25 +32,20 @@
       gtag('js', new Date());
       var debug = false;
       var client_id = Math.floor(Math.random() * 1000000000) + '.' + Math.floor(Math.random() * 1000000000);
+      gtag('set', 'client_id', client_id);
       if (debug) {
-        gtag('config', 'G-54QXHS41X5', {,
-          client_storage: 'none',
-          client_id: client_id,
-          'debug_mode':true } );
+        gtag('config', 'G-54QXHS41X5', { 'debug_mode':true } );
         gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A", 1 );
       } else {
-      gtag("consent", "default", {
+            gtag("consent", "default", {
                 ad_storage: "denied",
                 analytics_storage: "denied",
                 functionality_storage: "denied",
                 personalization_storage: "denied",
                 security_storage: "denied"
             });
-      
-      gtag('config', 'G-54QXHS41X5', {send_page_view: true,
-                                      client_storage: 'none',
-                                      client_id: client_id});
-      gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
+            gtag('config', 'G-54QXHS41X5');
+            gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
     }
     </script>
 
