@@ -31,8 +31,12 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       var debug = false;
+      var client_id = Math.floor(Math.random() * 1000000000) + '.' + Math.floor(Math.random() * 1000000000);
       if (debug) {
-        gtag('config', 'G-54QXHS41X5', { 'debug_mode':true } );
+        gtag('config', 'G-54QXHS41X5', {,
+          client_storage: 'none',
+          client_id: client_id,
+          'debug_mode':true } );
         gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A", 1 );
       } else {
       gtag("consent", "default", {
@@ -42,7 +46,10 @@
                 personalization_storage: "denied",
                 security_storage: "denied"
             });
-      gtag('config', 'G-54QXHS41X5');
+      
+      gtag('config', 'G-54QXHS41X5', {send_page_view: true,
+                                      client_storage: 'none',
+                                      client_id: client_id});
       gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
     }
     </script>
