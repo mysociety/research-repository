@@ -22,7 +22,7 @@
     {% block json-ld %}
     {% endblock %}
 
-    {% if settings.DEBUG %}
+    {% if not settings.DEBUG %}
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
