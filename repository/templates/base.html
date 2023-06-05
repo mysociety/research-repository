@@ -23,18 +23,16 @@
     {% endblock %}
 
     {% if not settings.DEBUG %}
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       var debug = false;
       var client_id = Math.floor(Math.random() * 1000000000) + '.' + Math.floor(Math.random() * 1000000000);
-      gtag('set', 'client_id', client_id);
       if (debug) {
-        gtag('config', 'G-54QXHS41X5', { 'debug_mode':true } );
+        gtag('config', 'G-54QXHS41X5', {'client_id' : client_id, 'cookie_expires':0, 'debug_mode': true } );
         gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A", 1 );
       } else {
             gtag("consent", "default", {
@@ -44,7 +42,7 @@
                 personalization_storage: "denied",
                 security_storage: "denied"
             });
-            gtag('config', 'G-54QXHS41X5');
+            gtag('config', 'G-54QXHS41X5', {'client_id' : client_id, 'cookie_expires':0, 'debug_mode': false } );
             gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
     }
     </script>
@@ -105,12 +103,7 @@
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
     crossorigin="anonymous"></script>
     <script src="{% static "js/main.js" %}"></script>
-    {% if not settings.DEBUG %}
-    <script>
-      // fire page view manually through measurement_protocol
-      trackEvent("page_view", {page_title: document.title, page_location: window.location.href, page_referrer: document.referrer})
-    </script>
-    {% endif %}
+
     <div class="mysoc-footer" role="contentinfo">
       <div class="page">
         <div class="row">
