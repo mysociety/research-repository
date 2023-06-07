@@ -28,6 +28,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r"^$", pageViews.HomeView.as_view(), name="home"),
+    url(r"^email/open/", views.tracking_open_view, name="open_view"),
     url(r"^admin/", admin.site.urls),
     url("^api/", include("repository.api_views")),
     url(r"^sitemap\.xml$", views.SitemapView.as_view(), name="sitemap"),

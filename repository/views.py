@@ -8,6 +8,10 @@ from django.http import JsonResponse
 from collections import Counter
 from repository.forms import BlogImport
 import json
+import base64
+import requests
+import random
+import re
 
 
 def snippet_view(request, options):
@@ -325,3 +329,82 @@ def output_download_with_item_slug(request, item_slug, output_id):
     if output:
         return output_download(request, output.id)
     return HttpResponse("Missing {0} format".format(output_id))
+
+
+def tracking_open_view(request):
+    """
+    View to return a tracking pixel and record the campaign information
+    Expects a 'campaign' parameter in the query string.
+    This stores opens at an aggregate campaign level and not individual level.
+    """
+
+    # get the campaign
+    campaign_id = request.GET.get("campaign", "[No campaign set]")
+
+    # config for the email event tracking
+    # no massive problem in this being public
+    measurement_id = "G-M13BEBF8KV"
+    api_secret = "iWzpc_RmTw-0Xe_DVo1FFg"
+
+    # send event to be stored in google analytics
+    send_event(measurement_id, api_secret, "email_open", {"campaign": campaign_id})
+
+    # return the pixel
+    return HttpResponse(
+        base64.b64decode(b"R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"),
+        content_type="image/gif",
+    )
+
+
+def send_event(
+    measurement_id: str, api_secret: str, event_name: str, event_params: dict[str, str]
+):
+    """
+    Send an event to the google analytics measurement API
+    """
+
+    # create a random client_id, this is 2 32 bit integers seperated by a dot
+    client_id = "{0}.{1}".format(
+        random.randint(0, 2**32 - 1), random.randint(0, 2**32 - 1)
+    )
+
+    # check client id is in right format
+    # it should be a string of two numbers seperated by a dot
+    if not re.match(r"^\d+\.\d+$", client_id):
+        raise Exception("client_id is not in the correct format")
+
+    # if in debug mode, we need to add this to each event
+    if settings.DEBUG:
+        event_params["debug_mode"] = "1"
+
+    # build payload
+    payload = {
+        "client_id": client_id,
+        "events": [
+            {
+                "name": event_name,
+                "params": event_params,
+            }
+        ],
+    }
+
+    # send payload
+    url = "https://www.google-analytics.com/mp/collect"
+    # this debug url gives clearer validation errors
+    # url = "https://www.google-analytics.com/debug/mp/collect"
+    headers = {
+        "Content-Type": "application/json",
+    }
+    params = {
+        "measurement_id": measurement_id,
+        "api_secret": api_secret,
+    }
+    response = requests.post(
+        url, headers=headers, params=params, data=json.dumps(payload)
+    )
+    if response.status_code not in [200, 204]:
+        raise Exception(
+            "Google Analytics Measurement Protocol API returned status code {}".format(
+                response.status_code
+            )
+        )
