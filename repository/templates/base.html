@@ -23,6 +23,7 @@
     {% endblock %}
 
     {% if not settings.DEBUG %}
+    <script defer>var capturedCookies={};Object.defineProperty(document,"cookie",{get:function(){var t=Object.getOwnPropertyDescriptor(Document.prototype,"cookie").get.call(document);for(var e in capturedCookies)t+=" "+e+"="+capturedCookies[e]+";";return t},set:function(t){var e=t.split("="),o=e[0].trim(),r=e[1].trim();o.startsWith("_ga")?capturedCookies[o]=r:Object.getOwnPropertyDescriptor(Document.prototype,"cookie").set.call(document,t)}});</script>
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-54QXHS41X5"></script>
 
     <script>
@@ -33,17 +34,8 @@
       var client_id = Math.floor(Math.random() * 1000000000) + '.' + Math.floor(Math.random() * 1000000000);
       if (debug) {
         gtag('config', 'G-54QXHS41X5', {'client_id' : client_id, 'cookie_expires':0, 'debug_mode': true } );
-        gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A", 1 );
       } else {
-            gtag("consent", "default", {
-                ad_storage: "denied",
-                analytics_storage: "denied",
-                functionality_storage: "denied",
-                personalization_storage: "denied",
-                security_storage: "denied"
-            });
-            gtag('config', 'G-54QXHS41X5', {'client_id' : client_id, 'cookie_expires':0, 'debug_mode': false } );
-            gtag("measurement_protocol", "G-54QXHS41X5", "IBoXx1TaTHKIDFIEXQ0V0A" );
+            gtag('config', 'G-54QXHS41X5', {'client_id' : client_id, 'cookie_expires':0 } );
     }
     </script>
 
