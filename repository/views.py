@@ -368,10 +368,9 @@ def tracking_open_view(request):
     except ApiClientError as error:
         campaign_slug = campaign_id
 
-    # config for the email event tracking
-    # no massive problem in this being public
-    measurement_id = "G-M13BEBF8KV"
-    api_secret = "iWzpc_RmTw-0Xe_DVo1FFg"
+    # config for the google analytics measurement api
+    measurement_id = "G-2X56VXTG0K"
+    api_secret = "1pSoMuDHTNi-wuHDf1n-fQ"
 
     # send event to be stored in google analytics
     send_event(
