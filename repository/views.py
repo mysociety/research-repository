@@ -364,7 +364,7 @@ def tracking_open_view(request):
         campaign_slug = slugify(campaign_name)
         # if starts with auto, remove this
         if campaign_slug.startswith("auto"):
-            campaign_slug = campaign_slug[5:]
+            campaign_slug = campaign_slug[4:]
     except ApiClientError as error:
         campaign_slug = campaign_id
 
