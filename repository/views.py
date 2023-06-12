@@ -12,6 +12,9 @@ import base64
 import requests
 import random
 import re
+from django.utils.text import slugify
+import mailchimp_marketing
+from mailchimp_marketing.api_client import ApiClientError
 
 
 def snippet_view(request, options):
@@ -339,7 +342,31 @@ def tracking_open_view(request):
     """
 
     # get the campaign
-    campaign_id = request.GET.get("campaign", "[No campaign set]")
+    campaign_id = request.GET.get("campaign", "undefined")
+    audience_id = request.GET.get("audience", "undefined")
+
+    # when viewing the preview in mailchimp it looks like this
+    if campaign_id == "*|CAMPAIGN_UID|*":
+        return HttpResponse(
+            base64.b64decode(
+                b"R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+            ),
+            content_type="image/gif",
+        )
+
+    # from the mailchimp api, get the campaign based on the unique id
+    # from that, get the name of the campaign, and slugify it
+    client = mailchimp_marketing.Client()
+    client.set_config({"api_key": settings.MAILCHIMP_API_KEY, "server": "us9"})
+    try:
+        response = client.campaigns.get(campaign_id)
+        campaign_name = response["settings"]["title"]
+        campaign_slug = slugify(campaign_name)
+        # if starts with auto, remove this
+        if campaign_slug.startswith("auto"):
+            campaign_slug = campaign_slug[5:]
+    except ApiClientError as error:
+        campaign_slug = campaign_id
 
     # config for the email event tracking
     # no massive problem in this being public
@@ -347,7 +374,12 @@ def tracking_open_view(request):
     api_secret = "iWzpc_RmTw-0Xe_DVo1FFg"
 
     # send event to be stored in google analytics
-    send_event(measurement_id, api_secret, "email_open", {"campaign": campaign_id})
+    send_event(
+        measurement_id,
+        api_secret,
+        "email_open",
+        {"campaign": campaign_slug, "audience": audience_id},
+    )
 
     # return the pixel
     return HttpResponse(

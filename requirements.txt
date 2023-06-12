@@ -21,3 +21,4 @@ beautifulsoup4==4.11.1
 Whoosh==2.7.4
 django-haystack==3.2.1
 requests==2.31.0
+git+https://github.com/mailchimp/mailchimp-marketing-python.git#egg=mailchimp_marketing

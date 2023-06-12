@@ -255,6 +255,8 @@ THUMBNAIL_FONT = config.THUMBNAIL_FONT
 # mySociety-specific settings
 GOOGLE_ANALYTICS_ACCOUNT = config.GOOGLE_ANALYTICS_ACCOUNT
 
+MAILCHIMP_API_KEY = config.MAILCHIMP_API_KEY
+
 # mySociety-specific settings
 SITE_BASE_URL = config.SITE_BASE_URL
 

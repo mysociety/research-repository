@@ -15,6 +15,9 @@ DJANGO_SECRET_KEY = ""
 # be used in the templates.
 GOOGLE_ANALYTICS_ACCOUNT = ""
 
+# used to look up the campaign title
+MAILCHIMP_API_KEY = ""
+
 # Be sure to set this in your config for sites where DEBUG is False
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [".example.com", "localhost"]
