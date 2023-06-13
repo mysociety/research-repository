@@ -333,6 +333,7 @@ def output_download_with_item_slug(request, item_slug, output_id):
         return output_download(request, output.id)
     return HttpResponse("Missing {0} format".format(output_id))
 
+campaign_tracking_cache = {}
 
 def tracking_open_view(request):
     """
@@ -358,15 +359,19 @@ def tracking_open_view(request):
     # from that, get the name of the campaign, and slugify it
     client = mailchimp_marketing.Client()
     client.set_config({"api_key": settings.MAILCHIMP_API_KEY, "server": "us9"})
-    try:
-        response = client.campaigns.get(campaign_id)
-        campaign_name = response["settings"]["title"]
-        campaign_slug = slugify(campaign_name)
-        # if starts with auto, remove this
-        if campaign_slug.startswith("auto"):
-            campaign_slug = campaign_slug[4:]
-    except ApiClientError as error:
-        campaign_slug = campaign_id
+    if campaign_id in campaign_tracking_cache:
+        campaign_slug = campaign_tracking_cache[campaign_id]
+    else:
+        try:
+            response = client.campaigns.get(campaign_id)
+            campaign_name = response["settings"]["title"]
+            campaign_slug = slugify(campaign_name)
+            # if starts with auto, remove this
+            if campaign_slug.startswith("auto"):
+                campaign_slug = campaign_slug[4:]
+            campaign_tracking_cache[campaign_id] = campaign_slug
+        except ApiClientError as error:
+            campaign_slug = campaign_id
 
     # config for the google analytics measurement api
     measurement_id = "G-2X56VXTG0K"
