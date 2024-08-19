@@ -1,6 +1,7 @@
 from django.conf import settings
-from pages.models import Page, Link
-from repository.models import Tag, Site
+
+from pages.models import Link, Page
+from repository.models import Site, Tag
 
 
 def get_pages_for_nav():

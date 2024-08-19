@@ -3,14 +3,18 @@ Created on 27 Sep 2019
 
 @author: Alex
 """
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
-from rest_framework import authentication, permissions
+
 from django.conf.urls import url
-from .models import ResearchItem
-from pages.models import MiniSite
 from django.utils import timezone
+
+from rest_framework import authentication, permissions
+from rest_framework.parsers import FileUploadParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from pages.models import MiniSite
+
+from .models import ResearchItem
 
 
 class FileUploadView(APIView):

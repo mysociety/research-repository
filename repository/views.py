@@ -1,20 +1,22 @@
-from django.views.generic import TemplateView, ListView, DetailView
-from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from repository import models
-from django.shortcuts import render
-from django.db.models import Q
-from django.http import JsonResponse
-from collections import Counter
-from repository.forms import BlogImport
-import json
 import base64
-import requests
+import json
 import random
 import re
+from collections import Counter
+
+from django.conf import settings
+from django.db.models import Q
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.utils.text import slugify
+from django.views.generic import DetailView, ListView, TemplateView
+
 import mailchimp_marketing
+import requests
 from mailchimp_marketing.api_client import ApiClientError
+
+from repository import models
+from repository.forms import BlogImport
 
 
 def snippet_view(request, options):
@@ -157,7 +159,6 @@ class ItemView(DetailView):
             )
 
         for author in item.author_list():
-
             json_ld_representation["author"].append(author.json_ld_representation())
 
         context["json_ld_representation"] = json.dumps(json_ld_representation)
@@ -227,7 +228,6 @@ class TagView(DetailView):
         return context
 
     def get_object(self, queryset=None):
-
         queryset = self.get_queryset()
 
         main_tag = queryset.filter(slug=self.kwargs["slug1"]).get()
@@ -333,7 +333,9 @@ def output_download_with_item_slug(request, item_slug, output_id):
         return output_download(request, output.id)
     return HttpResponse("Missing {0} format".format(output_id))
 
+
 campaign_tracking_cache = {}
+
 
 def tracking_open_view(request):
     """
@@ -370,7 +372,7 @@ def tracking_open_view(request):
             if campaign_slug.startswith("auto"):
                 campaign_slug = campaign_slug[4:]
             campaign_tracking_cache[campaign_id] = campaign_slug
-        except ApiClientError as error:
+        except ApiClientError:
             campaign_slug = campaign_id
 
     # config for the google analytics measurement api

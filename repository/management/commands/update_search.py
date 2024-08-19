@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+
 from repository.models import ResearchItem
 
 # add an optional parameter to the command for if a search should be updated if it already exists

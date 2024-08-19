@@ -1,8 +1,10 @@
 import io
-from PIL import Image, ImageDraw, ImageFont
 import os
-from colorthief import ColorThief
+
 from django.conf import settings
+
+from colorthief import ColorThief
+from PIL import Image, ImageDraw, ImageFont
 
 
 def round_to(x, base=5):
@@ -29,7 +31,6 @@ def interestingness(color):
 
 
 class ThumbNailCreator(object):
-
     MYSOC_BLUE = (79, 173, 237)
     MYSOC_GREEN = (98, 179, 86)
     MYSOC_RED = (224, 75, 75)

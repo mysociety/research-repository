@@ -1,7 +1,9 @@
 from django.contrib import admin
-from repository import models
+
 from import_export.admin import ImportExportModelAdmin
 from import_export.resources import ModelResource
+
+from repository import models
 
 
 def construct_model_resource(passed_model):

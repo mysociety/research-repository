@@ -1,11 +1,12 @@
 import os
 from urllib.request import urlopen, urlretrieve
 
-from bs4 import BeautifulSoup
 from django import forms
 from django.core.files import File
 from django.utils.text import slugify
 from django.utils.timezone import now
+
+from bs4 import BeautifulSoup
 
 from repository.models import ResearchItem, ResearchOutput, Tag
 

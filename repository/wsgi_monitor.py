@@ -1,12 +1,11 @@
 # From http://code.google.com/p/modwsgi/wiki/ReloadingSourceCode
 
-import os
-import sys
-import time
-import signal
-import threading
 import atexit
+import os
 import queue
+import signal
+import sys
+import threading
 
 _interval = 1.0
 _times = {}
@@ -49,7 +48,7 @@ def _modified(path):
 
         if mtime != _times[path]:
             return True
-    except:
+    except Exception:
         # If any exception occured, likely that file has been
         # been removed just before stat(), so force a restart.
 
@@ -84,7 +83,7 @@ def _monitor():
 
         try:
             return _queue.get(timeout=_interval)
-        except:
+        except Exception:
             pass
 
 
@@ -95,7 +94,7 @@ _thread.setDaemon(True)
 def _exiting():
     try:
         _queue.put(True)
-    except:
+    except Exception:
         pass
     _thread.join()
 
@@ -104,7 +103,7 @@ atexit.register(_exiting)
 
 
 def track(path):
-    if not path in _files:
+    if path not in _files:
         _files.append(path)
 
 

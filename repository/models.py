@@ -8,7 +8,6 @@ import zipfile
 from datetime import datetime
 from typing import List
 
-from autoslug import AutoSlugField
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -20,15 +19,17 @@ from django.template import loader
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.text import slugify
+
+from autoslug import AutoSlugField
 from markdown import markdown
 from markitup.fields import MarkupField
 
+from .image_processor import ThumbNailCreator
 from .search_funcs import (
     SearchData,
     get_data_from_mysociety_blog,
     get_stringprint_search_data,
 )
-from .image_processor import ThumbNailCreator
 
 GENERATE_CHOICES = [
     ("B", "Blog"),
@@ -84,9 +85,6 @@ class ResearchLicence(models.Model):
     name = models.CharField(max_length=200)
     url = models.URLField(blank=True, null=True)
     description = MarkupField(blank=True)
-
-    def __str__(self):
-        return self.slug
 
     def __str__(self):
         return self.slug
@@ -345,7 +343,6 @@ class Person(models.Model):
             return self.url
 
     def json_ld_representation(self):
-
         json_ld_representation = {
             "@context": "http://schema.org",
             "@type": "Person",
@@ -652,7 +649,6 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         return self.tags.filter(is_project=True)
 
     def add_authors(self, authors: List[str]):
-
         if self.authors.all().exists() is True:
             # Not amending authors
             return
@@ -776,8 +772,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
 
     def is_json_toc(self):
         try:
-            j = json.loads(self.table_of_contents_cache)
-        except ValueError as e:
+            json.loads(self.table_of_contents_cache)
+        except ValueError:
             return False
         return True
 
@@ -909,7 +905,6 @@ class ItemAuthor(models.Model):
 
 
 class ResearchOutput(models.Model):
-
     title = models.CharField(max_length=200)
 
     research_item = models.ForeignKey(

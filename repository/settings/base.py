@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from pathlib import Path
-import yaml
-from .paths import *
+
 from conf import config
+
+from .paths import PARENT_DIR, PROJECT_DIR, PROJECT_ROOT
 
 DEBUG = bool(int(config.STAGING))
 

@@ -1,20 +1,24 @@
 """
 Creates tests data for testing framework
 """
+
+import random
+from datetime import datetime
+
+from django.contrib.auth.models import User
+
+from pages.models import Page
+
 from .models import (
-    Tag,
+    ItemAuthor,
     Person,
     ResearchItem,
-    ItemAuthor,
+    ResearchLicence,
     ResearchOutput,
     Site,
+    Tag,
     TagDisplayFilter,
-    ResearchLicence,
 )
-from pages.models import Page
-from django.contrib.auth.models import User
-from datetime import datetime
-import random
 
 
 def prepare_people():
@@ -129,7 +133,6 @@ def prepare_research_items():
 
     all_items = []
     for x in range(1, 21):
-
         letter = chr(x + 64)
 
         r = ResearchItem(
@@ -217,7 +220,7 @@ def create_licences():
 
 def create_super_user():
     print("creating superuser")
-    if User.objects.filter(username="admin").exists() == False:
+    if User.objects.filter(username="admin").exists() is False:
         User.objects.create_superuser("admin", "admin-test@mysociety.org", "admin")
 
 

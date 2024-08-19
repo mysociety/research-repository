@@ -1,10 +1,12 @@
+import datetime
+
+from django.http.response import HttpResponse
 from django.views.generic import DetailView, TemplateView
+
+import feedparser
 
 from pages import models
 from repository.models import ResearchItem, Tag, TagGroup
-from django.http.response import HttpResponse
-import feedparser
-import datetime
 
 
 class FeedCache(object):
@@ -19,7 +21,7 @@ class FeedCache(object):
 
     @classmethod
     def is_time(cls):
-        if cls._time == None:
+        if cls._time is None:
             return True
         else:
             return datetime.datetime.now() > cls._time + datetime.timedelta(
@@ -40,7 +42,6 @@ class HomeView(TemplateView):
     template_name = "pages/home_page.html"
 
     def get_context_data(self, **kwargs):
-
         context = super(TemplateView, self).get_context_data(**kwargs)
 
         context["feed"] = FeedCache.fetch_feed()
@@ -53,7 +54,6 @@ class HomeView(TemplateView):
         featured_groups = []
 
         for tag in front_page_tags:
-
             featured_items = ResearchItem.objects.filter(
                 published=True, featured=True, tags=tag
             )

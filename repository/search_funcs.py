@@ -1,12 +1,10 @@
 # tools to extract search data from linked urls
-from typing import List, Tuple
-from urllib import request
-from urllib import parse
-from bs4 import BeautifulSoup
-from typing import NamedTuple
 import json
 import re
+from typing import List, NamedTuple
+from urllib import parse, request
 
+from bs4 import BeautifulSoup
 from haystack.utils.highlighting import Highlighter
 
 

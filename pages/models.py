@@ -1,10 +1,10 @@
 import os
-import zipfile
 import shutil
+import zipfile
 
-from django.db import models
-from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.db import models
 from django.utils import timezone
 
 
@@ -64,7 +64,6 @@ class Page(models.Model):
 
 
 class Link(models.Model):
-
     label = models.CharField(max_length=200)
     url = models.URLField()
     order = models.IntegerField(default=-1)
