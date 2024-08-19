@@ -22,10 +22,10 @@ def io_admin_register(passed_model):
     model_resource = construct_model_resource(passed_model)
 
     def inner(admin_cls):
+        @admin.register(passed_model)
         class ModelAdmin(admin_cls):
             resource_class = model_resource
 
-        admin.site.register(passed_model, ModelAdmin)
         return ModelAdmin
 
     return inner
@@ -46,20 +46,24 @@ class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
 
+@admin.action(
+    description="Migrate licence"
+)
 def migrate_licence(self, request, queryset):
     for model in queryset:
         model.migrate_licence()
 
 
-migrate_licence.short_description = "Migrate licence"
 
 
+@admin.action(
+    description="Create search items"
+)
 def create_search_items(self, request, queryset):
     for model in queryset:
         model.create_search_items()
 
 
-create_search_items.short_description = "Create search items"
 
 
 @io_admin_register(models.ResearchItem)

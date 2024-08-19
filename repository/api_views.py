@@ -4,7 +4,7 @@ Created on 27 Sep 2019
 @author: Alex
 """
 
-from django.conf.urls import url
+from django.urls import re_path
 from django.utils import timezone
 
 from rest_framework import authentication, permissions
@@ -66,17 +66,17 @@ class SiteUploadView(APIView):
 
 
 urlpatterns = [
-    url(
+    re_path(
         "^upload_zip/(?P<item_slug>[-\w]+)$",
         FileUploadView.as_view(),
         name="upload_zip",
     ),
-    url(
+    re_path(
         "^upload_site/(?P<item_slug>[-\w]+)/$",
         SiteUploadView.as_view(),
         name="upload_site",
     ),
-    url(
+    re_path(
         "^upload_site/(?P<item_slug>[-\w]+)/(?P<preserve_existing>[-\w]+)$",
         SiteUploadView.as_view(),
         name="upload_site",

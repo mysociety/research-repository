@@ -21,7 +21,7 @@ DEBUG = bool(int(config.STAGING))
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": config.REPOSITORY_DB_NAME,
         "USER": config.REPOSITORY_DB_USER,
         "PASSWORD": config.REPOSITORY_DB_PASS,
@@ -130,7 +130,6 @@ TIME_ZONE = "Europe/London"
 
 USE_I18N = True
 
-USE_L10N = True
 
 USE_TZ = True
 
@@ -160,7 +159,14 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, "web"),
 )
 
-STATICFILES_STORAGE = "pipeline.storage.PipelineManifestStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "pipeline.storage.PipelineManifestStorage",
+    },
+}
 
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
