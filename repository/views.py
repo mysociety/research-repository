@@ -366,7 +366,9 @@ def tracking_open_view(request):
     else:
         try:
             response = client.campaigns.get(campaign_id)
-            campaign_name = response["settings"]["title"]
+            campaign_name = (
+                response["settings"]["title"] or response["settings"]["subject_line"]
+            )
             campaign_slug = slugify(campaign_name)
             # if starts with auto, remove this
             if campaign_slug.startswith("auto"):
