@@ -16,18 +16,23 @@ services:
       - GOOGLE_ANALYTICS=${GOOGLE_ANALYTICS:-xxx}
       - MAILCHIMP_KEY=${MAILCHIMP_KEY:-xxx}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - ${PORT:-8000}:8000
 
   postgres:
-    image: postgres:11
+    image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=${REPOSITORY_DB_USER:-research}
       - POSTGRES_PASSWORD=${REPOSITORY_DB_PASS:-research}
       - POSTGRES_DB=${REPOSITORY_DB_NAME:-research}
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 volumes:
   postgres_data:
