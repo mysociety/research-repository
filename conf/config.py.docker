@@ -20,7 +20,7 @@ MAILCHIMP_API_KEY = ""
 # Be sure to set this in your config for sites where DEBUG is False
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [".example.com", "localhost"]
-
+CSRF_TRUSTED_ORIGINS = ["http://*.example.com", "http://localhost"]
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"

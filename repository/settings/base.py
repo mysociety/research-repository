@@ -241,6 +241,7 @@ CSRF_COOKIE_HTTPONLY = True
 
 ALLOWED_HOSTS = config.ALLOWED_HOSTS
 
+CSRF_TRUSTED_ORIGINS = config.CSRF_TRUSTED_ORIGINS
 
 # Use mailcatcher in development
 if DEBUG:
