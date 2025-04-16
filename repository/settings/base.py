@@ -288,3 +288,5 @@ HAYSTACK_CONNECTIONS = {
         "PATH": os.path.join(Path(__file__).parent.parent.parent, "whoosh_index"),
     },
 }
+
+MEASUREMENT_SECRET_KEY = config.MEASUREMENT_SECRET_KEY

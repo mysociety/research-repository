@@ -41,3 +41,5 @@ ADMIN_EMAIL = ""
 
 THUMBNAIL_FONT = os.path.join("web", "fonts","SourceSansPro-Bold.ttf")
 SASSC_LOCATION = 'sassc'
+
+MEASUREMENT_SECRET_KEY = ""
