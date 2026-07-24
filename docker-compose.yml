@@ -1,10 +1,10 @@
 services:
   app:
-    image: mysocietyorg/caps-dev:${TAG:-latest}
+    image: mysocietyorg/research-dev:${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile
-    command: /workspaces/caps/script/server
+    command: /workspaces/research-repository/script/server
     volumes:
       - ./:/workspaces/research-repository/
       - ./conf/config.py.docker:/workspaces/research-repository/conf/config.py
@@ -24,7 +24,8 @@ services:
   postgres:
     image: postgres:13
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - .:/app
+      - pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${REPOSITORY_DB_USER:-research}
       - POSTGRES_PASSWORD=${REPOSITORY_DB_PASS:-research}
@@ -34,5 +35,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    working_dir: /app
 volumes:
-  postgres_data:
+  pgdata:
