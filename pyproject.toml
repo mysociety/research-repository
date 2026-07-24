@@ -1,3 +1,34 @@
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+Django = "4.2.30"
+Markdown = "3.10.2"
+Pillow = "12.3.0"
+pyyaml = "6.0.3"
+csscompressor = "0.9.4"
+django-autoslug = "1.9.9"
+django-markitup = "4.1.0"
+django-pipeline = "4.1.0"
+django-pipeline-csscompressor = { git = "https://github.com/mysociety/django-pipeline-csscompressor", rev = "6a88fde5045d68746f1c7ee816deda86615c5581" }
+libsass = "0.23.0"
+olefile = "0.47"
+psycopg2 = "2.9.12"
+six = "1.17.0"
+feedparser = "6.0.12"
+django-import-export = "4.4.1"
+sorl-thumbnail = "13.0.0"
+colorthief = "^0.2.1"
+djangorestframework = "3.17.1"
+beautifulsoup4 = "4.15.0"
+Whoosh = "2.7.4"
+django-haystack = "3.4.0"
+requests = "2.34.2"
+mailchimp_marketing = { git = "https://github.com/mailchimp/mailchimp-marketing-python.git" }
+
+[tool.poetry.group.dev.dependencies]
+ruff = "0.16.0"
 
 [tool.ruff]
 extend-exclude = ["migrations"]

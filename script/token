@@ -1,2 +1,2 @@
 #!/bin/bash
-python manage.py drf_create_token $1
+poetry run python manage.py drf_create_token $1
