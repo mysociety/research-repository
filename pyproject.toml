@@ -29,6 +29,10 @@ mailchimp_marketing = { git = "https://github.com/mailchimp/mailchimp-marketing-
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.16.0"
+pytest = "8.3.3"
+pytest-cov = "5.0.0"
+pytest-django = "4.9.0"
+pytest-socket = "0.7.0"
 
 [tool.ruff]
 extend-exclude = ["migrations"]
@@ -60,3 +64,22 @@ section-order = [
 
 [tool.ruff.lint.isort.sections]
 django = ["django"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+addopts = "-ra --strict-markers --disable-socket --allow-hosts=localhost,127.0.0.1,postgres"
+python_files = ["test_*.py", "tests.py"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["pages", "repository"]
+omit = ["*/migrations/*", "*/wsgi.py", "*/wsgi_monitor.py"]
+
+[tool.coverage.report]
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+]
+show_missing = true
+skip_covered = true

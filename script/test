@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+
+echo "==> Checking formatting"
+poetry run ruff format --check .
+
+echo "==> Running lint"
+poetry run ruff check .
+
+echo "==> Running Django system checks"
+poetry run django-admin check --settings=tests.settings
+
+echo "==> Running pytest"
+poetry run pytest \
+  --cov \
+  --cov-report=term-missing \
+  "$@"
