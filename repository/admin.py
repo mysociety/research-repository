@@ -46,24 +46,16 @@ class ResearchOutputInline(admin.TabularInline):
     model = models.ResearchOutput
 
 
-@admin.action(
-    description="Migrate licence"
-)
+@admin.action(description="Migrate licence")
 def migrate_licence(self, request, queryset):
     for model in queryset:
         model.migrate_licence()
 
 
-
-
-@admin.action(
-    description="Create search items"
-)
+@admin.action(description="Create search items")
 def create_search_items(self, request, queryset):
     for model in queryset:
         model.create_search_items()
-
-
 
 
 @io_admin_register(models.ResearchItem)
