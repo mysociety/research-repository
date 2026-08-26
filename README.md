@@ -99,3 +99,22 @@ This involves a very basic api for accessing data. For instance, referencing thi
 
 Excluding ‘format:json’ just displays a webpage, that can be used in an iframe (how the stringprint sites show related items). 
 
+
+## Tests
+
+Install the locked development dependencies with Poetry and run the suite
+with its default, self-contained SQLite database:
+
+```sh
+poetry install --no-root
+script/test
+```
+
+To run against PostgreSQL, configure the `REPOSITORY_DB_*` environment variables
+used by the application and select the production database backend:
+
+```sh
+TEST_DATABASE=postgres script/test
+```
+
+Any additional arguments are passed to pytest, for example `script/test -x`.
