@@ -1,0 +1,41 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: research
+          POSTGRES_PASSWORD: research
+          POSTGRES_DB: research
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U research"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      TEST_DATABASE: postgres
+      REPOSITORY_DB_HOST: 127.0.0.1
+      REPOSITORY_DB_PORT: 5432
+      REPOSITORY_DB_USER: research
+      REPOSITORY_DB_NAME: research
+      REPOSITORY_DB_PASS: research
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install "poetry==2.2.1"
+      - run: |
+          script/bootstrap
+          script/test
