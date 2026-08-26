@@ -27,3 +27,5 @@ local.properties
 .classpath
 .settings/
 whoosh_index/
+.coverage
+.venv/
