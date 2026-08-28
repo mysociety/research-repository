@@ -8,7 +8,7 @@ from collections import Counter
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils.text import slugify
 from django.views.generic import DetailView, ListView, TemplateView
 
@@ -233,7 +233,7 @@ class TagView(DetailView):
     def get_object(self, queryset=None):
         queryset = self.get_queryset()
 
-        main_tag = queryset.filter(slug=self.kwargs["slug1"]).get()
+        main_tag = get_object_or_404(queryset, slug=self.kwargs["slug1"])
         main_tag.selected_items = main_tag.get_research_items()
         filters = list(main_tag.display_filters.all().prefetch_related("tag"))
         main_tag.filters = []
@@ -250,7 +250,7 @@ class TagView(DetailView):
 
         main_tag.secondary_tag = None
         if "slug2" in self.kwargs:
-            secondary_tag = queryset.filter(slug=self.kwargs["slug2"]).get()
+            secondary_tag = get_object_or_404(queryset, slug=self.kwargs["slug2"])
             main_tag.secondary_tag = secondary_tag
         else:
             if main_tag.filters:
