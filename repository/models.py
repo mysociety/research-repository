@@ -535,15 +535,20 @@ class ResearchItem(ThumbnailMixIn, models.Model):
         # and get the data from the blog
         items: List[SearchData] = []
         for url in urls:
-            if url.startswith("https://mysociety.org") or url.startswith(
-                "https://www.mysociety.org"
-            ):
+            parsed_url = urllib.parse.urlsplit(url)
+            if parsed_url.scheme == "https" and parsed_url.hostname in {
+                "mysociety.org",
+                "www.mysociety.org",
+            }:
                 print("getting data from blog: ", url, "for item: ", self.title, "")
                 items.extend(get_data_from_mysociety_blog(url, self.title))
             elif (
-                url.startswith("https://research.mysociety.org")
-                and url.endswith("/")
-                or url.endswith("index.html")
+                parsed_url.scheme == "https"
+                and parsed_url.hostname == "research.mysociety.org"
+                and (
+                    parsed_url.path.endswith("/")
+                    or parsed_url.path.endswith("index.html")
+                )
             ):
                 print(
                     "getting data from stringprint: ",
