@@ -1,5 +1,6 @@
 import base64
 import json
+import logging
 import random
 import re
 from collections import Counter
@@ -17,6 +18,8 @@ from mailchimp_marketing.api_client import ApiClientError
 
 from repository import models
 from repository.forms import BlogImport
+
+logger = logging.getLogger(__name__)
 
 
 def snippet_view(request, options):
@@ -375,19 +378,41 @@ def tracking_open_view(request):
                 campaign_slug = campaign_slug[4:]
             campaign_tracking_cache[campaign_id] = campaign_slug
         except ApiClientError:
+            logger.warning(
+                "Mailchimp could not resolve email-open campaign %s; using the raw ID",
+                campaign_id,
+                exc_info=True,
+            )
             campaign_slug = campaign_id
+        except Exception as exc:
+            logger.exception(
+                "Unexpected Mailchimp failure for email-open campaign %s", campaign_id
+            )
+            raise RuntimeError(
+                f"Could not resolve email-open campaign {campaign_id!r} through Mailchimp"
+            ) from exc
 
     # config for the google analytics measurement api
     measurement_id = "G-2X56VXTG0K"
     api_secret = settings.MEASUREMENT_SECRET_KEY
 
     # send event to be stored in google analytics
-    send_event(
-        measurement_id,
-        api_secret,
-        "email_open",
-        {"campaign": campaign_slug, "audience": audience_id},
-    )
+    try:
+        send_event(
+            measurement_id,
+            api_secret,
+            "email_open",
+            {"campaign": campaign_slug, "audience": audience_id},
+        )
+    except Exception as exc:
+        logger.exception(
+            "Failed to record email_open event for campaign %s and audience %s",
+            campaign_id,
+            audience_id,
+        )
+        raise RuntimeError(
+            f"Could not record email_open event for campaign {campaign_id!r}"
+        ) from exc
 
     # return the pixel
     return HttpResponse(
@@ -439,12 +464,20 @@ def send_event(
         "measurement_id": measurement_id,
         "api_secret": api_secret,
     }
-    response = requests.post(
-        url, headers=headers, params=params, data=json.dumps(payload)
-    )
+    try:
+        response = requests.post(
+            url,
+            headers=headers,
+            params=params,
+            data=json.dumps(payload),
+            timeout=10,
+        )
+    except requests.RequestException as exc:
+        raise RuntimeError(
+            f"Google Analytics request failed while sending {event_name!r}"
+        ) from exc
     if response.status_code not in [200, 204]:
-        raise Exception(
-            "Google Analytics Measurement Protocol API returned status code {}".format(
-                response.status_code
-            )
+        raise RuntimeError(
+            f"Google Analytics rejected {event_name!r} event "
+            f"(status {response.status_code})"
         )

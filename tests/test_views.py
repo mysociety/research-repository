@@ -344,6 +344,48 @@ def test_tracking_uses_campaign_title_and_sends_aggregate_event(client, monkeypa
     )
 
 
+def test_tracking_reports_unexpected_mailchimp_failure(client, monkeypatch, caplog):
+    """
+    Unexpected Mailchimp failures identify the campaign and lookup stage.
+    """
+    campaigns = SimpleNamespace(
+        get=lambda campaign_id: (_ for _ in ()).throw(ValueError("bad response"))
+    )
+    mailchimp = SimpleNamespace(set_config=lambda config: None, campaigns=campaigns)
+    monkeypatch.setattr(views.mailchimp_marketing, "Client", lambda: mailchimp)
+
+    with pytest.raises(RuntimeError, match="campaign-1.*Mailchimp"):
+        client.get(reverse("open_view"), {"campaign": "campaign-1"})
+
+    assert "Unexpected Mailchimp failure" in caplog.text
+    assert "campaign-1" in caplog.text
+
+
+def test_tracking_reports_google_analytics_failure(client, monkeypatch, caplog):
+    """
+    Event-submission failures identify the affected campaign and audience.
+    """
+    campaigns = SimpleNamespace(
+        get=lambda campaign_id: {
+            "settings": {"title": "Weekly Research", "subject_line": ""}
+        }
+    )
+    mailchimp = SimpleNamespace(set_config=lambda config: None, campaigns=campaigns)
+    monkeypatch.setattr(views.mailchimp_marketing, "Client", lambda: mailchimp)
+    monkeypatch.setattr(
+        views, "send_event", lambda *args: (_ for _ in ()).throw(OSError("offline"))
+    )
+
+    with pytest.raises(RuntimeError, match="campaign-1"):
+        client.get(
+            reverse("open_view"), {"campaign": "campaign-1", "audience": "impact"}
+        )
+
+    assert "Failed to record email_open event" in caplog.text
+    assert "campaign-1" in caplog.text
+    assert "impact" in caplog.text
+
+
 def test_send_event_builds_measurement_protocol_request(monkeypatch, settings):
     """
     Expected behavior: send event builds measurement protocol request.
@@ -370,6 +412,22 @@ def test_send_event_builds_measurement_protocol_request(monkeypatch, settings):
     assert payload["events"][0]["params"]["debug_mode"] == "1"
 
 
+def test_send_event_reports_network_failure(monkeypatch):
+    """
+    Network errors identify the event that Google Analytics did not receive.
+    """
+    monkeypatch.setattr(
+        views.requests,
+        "post",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            views.requests.ConnectionError("offline")
+        ),
+    )
+
+    with pytest.raises(RuntimeError, match="request failed.*email_open"):
+        views.send_event("G-TEST", "secret", "email_open", {})
+
+
 def test_send_event_raises_for_failed_measurement_request(monkeypatch):
     """
     Expected behavior: send event raises for failed measurement request.
@@ -378,5 +436,7 @@ def test_send_event_raises_for_failed_measurement_request(monkeypatch):
         views.requests, "post", lambda *args, **kwargs: SimpleNamespace(status_code=400)
     )
 
-    with pytest.raises(Exception, match="returned status code 400"):
+    with pytest.raises(
+        RuntimeError, match=r"rejected .email_open. event \(status 400\)"
+    ):
         views.send_event("G-TEST", "secret", "email_open", {})
