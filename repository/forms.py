@@ -17,7 +17,7 @@ class BlogImport(forms.Form):
 
     """
 
-    url = forms.URLField()
+    url = forms.URLField(assume_scheme="https")
     featured = forms.BooleanField(required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
 
