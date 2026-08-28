@@ -112,7 +112,7 @@ class TagGroup(models.Model):
         ordering = ["name"]
 
 
-class Tag(models.Model, ThumbnailMixIn):
+class Tag(ThumbnailMixIn, models.Model):
     label = models.CharField(
         max_length=30,
         blank=True,
@@ -406,7 +406,7 @@ class Person(models.Model):
         verbose_name_plural = "people"
 
 
-class ResearchItem(models.Model, ThumbnailMixIn):
+class ResearchItem(ThumbnailMixIn, models.Model):
     class Meta:
         ordering = ["-date"]
 
