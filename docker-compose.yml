@@ -22,10 +22,10 @@ services:
       - ${PORT:-8000}:8000
 
   postgres:
-    image: postgres:13
+    image: postgres:15
     volumes:
       - .:/app
-      - pgdata:/var/lib/postgresql/data
+      - pgdata15:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=${REPOSITORY_DB_USER:-research}
       - POSTGRES_PASSWORD=${REPOSITORY_DB_PASS:-research}
@@ -37,4 +37,4 @@ services:
       retries: 5
     working_dir: /app
 volumes:
-  pgdata:
+  pgdata15:
