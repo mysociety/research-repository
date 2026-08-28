@@ -674,9 +674,8 @@ class ResearchItem(models.Model, ThumbnailMixIn):
         if os.path.exists(dest):
             shutil.rmtree(dest)
         url_path = settings.SITE_BASE_URL + settings.ZIP_URL + upload_slug + "/"
-        zip_ref = zipfile.ZipFile(zip_location, "r")
-        zip_ref.extractall(dest)
-        zip_ref.close()
+        with zipfile.ZipFile(zip_location, "r") as zip_ref:
+            zip_ref.extractall(dest)
 
         # connect outputs if not already present
         gc = ResearchOutput.objects.get_or_create
@@ -701,26 +700,30 @@ class ResearchItem(models.Model, ThumbnailMixIn):
             self.save()
 
         settings_path = os.path.join(dest, "settings-for-render.json")
+        data = {}
         if os.path.exists(settings_path):
             with open(settings_path, "r") as f:
                 data = json.load(f)
 
             if self.licencing is None:
-                self.licencing = ResearchLicence.objects.get(slug="cc-by-4.0")
-            if not self.title:
+                self.licencing, _ = ResearchLicence.objects.get_or_create(
+                    slug="cc-by-4.0",
+                    defaults={"name": "Creative Commons Attribution 4.0"},
+                )
+            if not self.title and data.get("title"):
                 self.title = data["title"]
                 self.subtitle = data.get("subtitle", "")
-            if not self.date:
+            if not self.date and data.get("publish_date"):
                 self.date = datetime.fromisoformat(data["publish_date"])
-            if not self.abstract:
+            if not self.abstract.raw and data.get("description"):
                 self.abstract = data["description"]
-            if not self.photo_credit:
+            if not self.photo_credit.raw:
                 self.photo_credit = data.get("header", {}).get("credit", "")
         if data.get("authors", None):
             self.add_authors(data["authors"].split(","))
 
         url = url_path
-        if os.path.join(dest, "index.html") and url not in current_urls:
+        if os.path.exists(os.path.join(dest, "index.html")) and url not in current_urls:
             item, created = gc(title="Read Online", research_item=self)
             item.url = url
             item.order = 0
