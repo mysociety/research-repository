@@ -4,4 +4,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-poetry install --no-root
+if [[ ! -f conf/config.py ]]; then
+    echo "==> Creating conf/config.py from conf/config.py-example"
+    cp conf/config.py-example conf/config.py
+fi
+
+poetry install --no-root --no-interaction
