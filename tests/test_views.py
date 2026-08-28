@@ -7,7 +7,7 @@ from datetime import date
 from types import SimpleNamespace
 
 from django.contrib.auth import get_user_model
-from django.urls import reverse
+from django.urls import Resolver404, resolve, reverse
 
 import pytest
 
@@ -24,6 +24,24 @@ from .fixtures import (
 )
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "/email/open/extra",
+        "/sitemap.xml/extra",
+        "/publications/unexpected/suffix",
+        "/research/unexpected/suffix",
+        "/people/unexpected/suffix",
+        "/import_blog/extra",
+        "/tags/extra",
+        "/search/extra",
+    ],
+)
+def test_routes_reject_unexpected_suffixes(url):
+    with pytest.raises(Resolver404):
+        resolve(url)
 
 
 def test_embed_json_filters_by_all_tags_and_limit(client):
