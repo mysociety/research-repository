@@ -67,17 +67,17 @@ class SiteUploadView(APIView):
 
 urlpatterns = [
     re_path(
-        "^upload_zip/(?P<item_slug>[-\w]+)$",
+        r"^upload_zip/(?P<item_slug>[-\w]+)$",
         FileUploadView.as_view(),
         name="upload_zip",
     ),
     re_path(
-        "^upload_site/(?P<item_slug>[-\w]+)/$",
+        r"^upload_site/(?P<item_slug>[-\w]+)/$",
         SiteUploadView.as_view(),
         name="upload_site",
     ),
     re_path(
-        "^upload_site/(?P<item_slug>[-\w]+)/(?P<preserve_existing>[-\w]+)$",
+        r"^upload_site/(?P<item_slug>[-\w]+)/(?P<preserve_existing>[-\w]+)$",
         SiteUploadView.as_view(),
         name="upload_site",
     ),
